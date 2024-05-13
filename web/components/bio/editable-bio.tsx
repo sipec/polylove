@@ -1,11 +1,11 @@
 import { JSONContent } from '@tiptap/core'
-import { MAX_DESCRIPTION_LENGTH } from 'common/contract'
+import { MAX_DESCRIPTION_LENGTH } from 'common/envs/constants'
 import { Lover } from 'common/love/lover'
 import { Button } from 'web/components/buttons/button'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { TextEditor, useTextEditor } from 'web/components/widgets/editor'
-import { updateLover } from 'web/lib/firebase/love/api'
+import { updateLover } from 'web/lib/firebase/api'
 import { track } from 'web/lib/service/analytics'
 
 export function EditableBio(props: {

@@ -1,10 +1,16 @@
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { memo } from 'react'
 import { Tooltip } from 'web/components/widgets/tooltip'
 import { fromNow } from 'web/lib/util/time'
 
-export default function OnlineIcon(props: { last_online_time: string }) {
+export const OnlineIcon = memo(function OnlineIcon(props: {
+  last_online_time: string
+}) {
   const { last_online_time } = props
+
+  if (!last_online_time) return <></>
+
   const lastOnlineTime = dayjs(last_online_time)
   const currentTime = dayjs()
 
@@ -32,4 +38,4 @@ export default function OnlineIcon(props: { last_online_time: string }) {
       />
     </Tooltip>
   )
-}
+})

@@ -7,7 +7,7 @@ import DropdownMenu from 'web/components/comments/dropdown-menu'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { Content } from 'web/components/widgets/editor'
-import { updateLover } from 'web/lib/firebase/love/api'
+import { updateLover } from 'web/lib/firebase/api'
 import { EditableBio } from './editable-bio'
 
 export function BioBlock(props: {

@@ -25,16 +25,12 @@ import { LoverComment } from 'common/love/love-comment'
 import { CommentInputTextArea } from 'web/components/comments/comment-input'
 import { Editor } from '@tiptap/react'
 import { track } from 'web/lib/service/analytics'
-import {
-  createCommentOnLover,
-  hideCommentOnLover,
-} from 'web/lib/firebase/love/api'
-import { ReplyToUserInfo } from 'web/components/feed/feed-comments'
+import { createCommentOnLover, hideCommentOnLover } from 'web/lib/firebase/api'
 import { RelativeTimestamp } from 'web/components/relative-timestamp'
 import { useAdmin } from 'web/hooks/use-admin'
 import { EyeOffIcon } from '@heroicons/react/outline'
 import { useLoverByUserId } from 'love/hooks/use-lover'
-import { MAX_COMMENT_LENGTH } from 'common/comment'
+import { MAX_COMMENT_LENGTH, ReplyToUserInfo } from 'common/comment'
 import { safeLocalStorage } from 'web/lib/util/local'
 
 export function LoverProfileCommentThread(props: {

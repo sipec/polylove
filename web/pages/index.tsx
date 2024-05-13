@@ -8,7 +8,7 @@ import { Search } from 'love/components/filters/search'
 import { Gender, convertGender } from 'love/components/gender-icon'
 import { LovePage } from 'love/components/love-page'
 import { SignUpAsMatchmaker } from 'love/components/nav/love-sidebar'
-import OnlineIcon from 'love/components/online-icon'
+import { OnlineIcon } from 'love/components/online-icon'
 import { useLover } from 'love/hooks/use-lover'
 import { useCompatibleLovers } from 'love/hooks/use-lovers'
 import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
@@ -172,7 +172,7 @@ function ProfilePreview(props: {
         <Col className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent px-4 pb-2 pt-6">
           <div>
             <div className="flex flex-wrap items-center gap-x-1">
-              <OnlineIcon last_online_time={last_online_time} />
+              {/* <OnlineIcon last_online_time={last_online_time} /> */}
               <span>
                 <span className="break-words font-semibold">{user.name}</span>,
               </span>

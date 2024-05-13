@@ -10,8 +10,6 @@ import { buildArray } from 'common/util/array'
 import { useOnline } from 'love/hooks/use-online'
 import { ReactNode, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
-import { AddFundsModal } from 'web/components/add-funds-modal'
-import { MobileAppsQRCodeDialog } from 'web/components/buttons/mobile-apps-qr-code-button'
 import { Col } from 'web/components/layout/col'
 import { PrivateMessagesIcon } from 'web/components/messaging/messages-icon'
 import { BottomNavBar } from 'love/components/nav/love-bottom-nav-bar'
@@ -20,14 +18,6 @@ import { useTracking } from 'web/hooks/use-tracking'
 import { useUser } from 'web/hooks/use-user'
 import { GoogleOneTapLogin } from 'web/lib/firebase/google-onetap-login'
 import Sidebar from './nav/love-sidebar'
-import {
-  NotificationsIcon,
-  SolidNotificationsIcon,
-} from 'web/components/notifications-icon'
-import {
-  NOTIFICATION_REASONS_TO_SELECT,
-  NOTIFICATION_TYPES_TO_SELECT,
-} from 'love/pages/notifications'
 import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
 import { useLover } from 'love/hooks/use-lover'
 import { Lover } from 'common/love/lover'
@@ -103,15 +93,6 @@ export function LovePage(props: {
           navigationOptions={bottomNavOptions}
         />
       )}
-      <AddFundsModal
-        open={isAddFundsModalOpen}
-        setOpen={setIsAddFundsModalOpen}
-      />
-      <MobileAppsQRCodeDialog
-        key="mobile-apps-qr-code"
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      />
     </>
   )
 }
@@ -119,17 +100,6 @@ export function LovePage(props: {
 function getBottomNavigation(user: User, lover: Lover | null | undefined) {
   return buildArray(
     { name: 'Profiles', href: '/', icon: SolidHomeIcon },
-    {
-      name: 'Notifs',
-      href: `/notifications`,
-      icon: (props) => (
-        <SolidNotificationsIcon
-          {...props}
-          selectTypes={NOTIFICATION_TYPES_TO_SELECT}
-          selectReasons={NOTIFICATION_REASONS_TO_SELECT}
-        />
-      ),
-    },
     {
       name: 'Profile',
       href: lover === null ? '/signup' : `/${user.username}`,
@@ -157,17 +127,6 @@ const getDesktopNav = (user: User | null | undefined) => {
   if (user)
     return buildArray(
       { name: 'Profiles', href: '/', icon: HomeIcon },
-      {
-        name: 'Notifs',
-        href: `/notifications`,
-        icon: (props: any) => (
-          <NotificationsIcon
-            {...props}
-            selectTypes={NOTIFICATION_TYPES_TO_SELECT}
-            selectReasons={NOTIFICATION_REASONS_TO_SELECT}
-          />
-        ),
-      },
       {
         name: 'Messages',
         href: '/messages',

@@ -12,7 +12,7 @@ import {
   CACHED_REFERRAL_USERNAME_KEY,
   firebaseLogin,
 } from 'web/lib/firebase/users'
-import { createLover } from 'web/lib/firebase/love/api'
+import { createLover } from 'web/lib/firebase/api'
 import { useRouter } from 'next/router'
 import { Row as rowFor } from 'common/supabase/utils'
 import ManifoldLoveLogo from 'love/components/manifold-love-logo'
@@ -21,7 +21,6 @@ import { track } from 'web/lib/service/analytics'
 import { safeLocalStorage } from 'web/lib/util/local'
 import { removeUndefinedProps } from 'common/util/object'
 import { useLoverByUserId } from 'love/hooks/use-lover'
-import { requestAllSignupBonuses } from 'love/lib/util/signup'
 
 export default function SignupPage() {
   const [step, setStep] = useState(0)
@@ -90,8 +89,6 @@ export default function SignupPage() {
                   setStep(1)
                   scrollTo(0, 0)
                   track('submit love required profile')
-
-                  requestAllSignupBonuses()
                 }
               }}
             />

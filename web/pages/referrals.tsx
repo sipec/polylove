@@ -1,5 +1,3 @@
-import { REFERRAL_AMOUNT } from 'common/economy'
-import { formatMoney } from 'common/util/format'
 import { LovePage } from 'love/components/love-page'
 import { SEO } from 'web/components/SEO'
 import { CopyLinkRow } from 'web/components/buttons/copy-link-button'
@@ -19,17 +17,14 @@ export default function ReferralsPage() {
     <LovePage trackPageView={'love referrals'} className="items-center">
       <SEO
         title="Share the love"
-        description={`Invite someone to join Manifold Love and get ${formatMoney(
-          REFERRAL_AMOUNT
-        )} if they sign up and bet on love!`}
+        description={`Invite someone to join Manifold Love!`}
       />
 
       <Col className="bg-canvas-0 rounded-lg p-4 sm:p-8">
         <Title>Share the love!</Title>
 
         <div className="mb-4">
-          Invite someone to join manifold.love and get{' '}
-          {formatMoney(REFERRAL_AMOUNT)} if they sign up and bet on love!
+          Invite someone to join manifold.love
         </div>
 
         <CopyLinkRow url={url} eventTrackingName="copy love referral" />

@@ -1,8 +1,6 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 import { HeartIcon } from '@heroicons/react/solid'
-
-import { Page } from 'web/components/layout/page'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { Button, outline } from 'web/components/buttons/button'
@@ -11,7 +9,7 @@ import { db } from 'web/lib/supabase/db'
 
 export default function ManifoldLove() {
   return (
-    <Page trackPageView={'signed out home page'} hideSidebar hideBottomBar>
+    <div>
       <Col className="mx-auto w-full gap-8 px-4 pt-4 sm:pt-0">
         <Col className="gap-4">
           <Row className="border-scarlet-800 max-w-md items-center gap-2 border-b border-solid p-2">
@@ -65,7 +63,7 @@ export default function ManifoldLove() {
           </Row>
         </Col>
       </Col>
-    </Page>
+    </div>
   )
 }
 

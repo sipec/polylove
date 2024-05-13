@@ -11,11 +11,9 @@ import { buildArray } from 'common/util/array'
 import { capitalize } from 'lodash'
 import Router, { useRouter } from 'next/router'
 import { useState } from 'react'
-import { AddFundsModal } from 'web/components/add-funds-modal'
 import { useUser } from 'web/hooks/use-user'
 import { firebaseLogin, firebaseLogout } from 'web/lib/firebase/users'
 import { withTracking } from 'web/lib/service/analytics'
-import { MobileAppsQRCodeDialog } from 'web/components/buttons/mobile-apps-qr-code-button'
 import { ProfileSummary } from './love-profile-summary'
 import { Item, SidebarItem } from './love-sidebar-item'
 import ManifoldLoveLogo from '../manifold-love-logo'
@@ -63,12 +61,6 @@ export default function Sidebar(props: {
           <SidebarItem key={item.name} item={item} currentPage={currentPage} />
         ))}
 
-        <MobileAppsQRCodeDialog
-          key="mobile-apps-qr-code"
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        />
-
         {user === null && <SignUpButton className="mt-4" text="Sign up" />}
         {user === null && <SignUpAsMatchmaker className="mt-2" />}
 
@@ -83,10 +75,6 @@ export default function Sidebar(props: {
           <SidebarItem key={item.name} item={item} currentPage={currentPage} />
         ))}
       </div>
-      <AddFundsModal
-        open={isAddFundsModalOpen}
-        setOpen={setIsAddFundsModalOpen}
-      />
     </nav>
   )
 }

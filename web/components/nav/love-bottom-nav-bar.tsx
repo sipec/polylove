@@ -1,21 +1,17 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 import { MenuAlt3Icon } from '@heroicons/react/solid'
-import { animated } from '@react-spring/web'
 import { Transition, Dialog } from '@headlessui/react'
 import { useState, Fragment } from 'react'
 import { useRouter } from 'next/router'
-
 import Sidebar from './love-sidebar'
 import { Item } from './love-sidebar-item'
 import { useUser } from 'web/hooks/use-user'
-import { formatMoney } from 'common/util/format'
 import { Avatar } from 'web/components/widgets/avatar'
 import { useIsIframe } from 'web/hooks/use-is-iframe'
 import { trackCallback } from 'web/lib/service/analytics'
 import { User } from 'common/user'
 import { Col } from 'web/components/layout/col'
-import { useAnimatedNumber } from 'web/hooks/use-animated-number'
 import { useLover } from 'love/hooks/use-lover'
 
 const itemClass =
@@ -84,9 +80,7 @@ function ProfileItem(props: {
   track: () => void
 }) {
   const { user, item, touched, setTouched, currentPage, track } = props
-  const balance = useAnimatedNumber(user?.balance ?? 0)
   const lover = useLover()
-  const manaEnabled = true
   return (
     <Link
       href={item.href ?? '#'}
@@ -102,15 +96,12 @@ function ProfileItem(props: {
       <Col>
         <div className="mx-auto my-1">
           <Avatar
-            size={manaEnabled ? 'xs' : 'md'}
+            size={'md'}
             username={user.username}
             avatarUrl={lover?.pinned_url ?? user.avatarUrl}
             noLink
           />
         </div>
-        {manaEnabled && (
-          <animated.div>{balance.to((b) => formatMoney(b))}</animated.div>
-        )}
       </Col>
     </Link>
   )

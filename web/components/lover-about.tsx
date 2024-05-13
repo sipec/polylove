@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import {
-  RelationshipType,
+  type RelationshipType,
   convertRelationshipType,
 } from 'love/lib/util/convert-relationship-type'
 import stringOrStringArrayToText from 'love/lib/util/string-or-string-array-to-text'

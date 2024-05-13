@@ -14,8 +14,8 @@ import { filterKeys } from '../questions-form'
 import { QuestionWithCountType } from 'love/hooks/use-questions'
 import { UserIcon } from '@heroicons/react/solid'
 import { Tooltip } from 'web/components/widgets/tooltip'
-import { shortenNumber } from 'web/lib/util/formatNumber'
 import { track } from 'web/lib/service/analytics'
+import { shortenNumber } from 'common/util/format'
 
 export type CompatibilityAnswerSubmitType = Omit<
   rowFor<'love_compatibility_answers'>,

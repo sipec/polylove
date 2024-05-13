@@ -3,11 +3,9 @@ import Head from 'next/head'
 import Script from 'next/script'
 import { useEffect } from 'react'
 import { AuthProvider, AuthUser } from 'web/components/auth-context'
-import { NativeMessageListener } from 'web/components/native-message-listener'
 import { useHasLoaded } from 'web/hooks/use-has-loaded'
 import '../styles/globals.css'
 import { getIsNative } from 'web/lib/native/is-native'
-import { useRefreshAllClients } from 'web/hooks/use-refresh-all-clients'
 import { postMessageToNative } from 'web/lib/native/post-message'
 import { Major_Mono_Display, Figtree } from 'next/font/google'
 import clsx from 'clsx'
@@ -63,7 +61,6 @@ type ManifoldPageProps = { auth?: AuthUser }
 function MyApp({ Component, pageProps }: AppProps<ManifoldPageProps>) {
   useEffect(printBuildInfo, [])
   useHasLoaded()
-  useRefreshAllClients()
 
   const title = 'Manifold.love — Bet on love!'
   const description =
@@ -114,7 +111,6 @@ function MyApp({ Component, pageProps }: AppProps<ManifoldPageProps>) {
         )}
       >
         <AuthProvider serverUser={pageProps.auth}>
-          <NativeMessageListener />
           <Component {...pageProps} />
         </AuthProvider>
         {/* Workaround for https://github.com/tailwindlabs/headlessui/discussions/666, to allow font CSS variable */}

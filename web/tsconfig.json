@@ -16,7 +16,7 @@
     "incremental": true,
     "paths": {
       "common/*": ["../common/src/*"],
-      "web/*": ["../web/*"],
+      "web/*": ["./*"],
       "love/*": ["./*"],
       "react": ["./node_modules/@types/react"]
     }
