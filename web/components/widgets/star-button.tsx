@@ -42,7 +42,7 @@ export const StarButton = (props: {
     <button
       className={clsx(
         buttonClass('xs', 'none'),
-        'text-ink-500 !rounded-full',
+        'text-ink-500 group !rounded-full',
         className
       )}
       onClick={(e) => {
@@ -52,7 +52,7 @@ export const StarButton = (props: {
     >
       <StarIcon
         className={clsx(
-          'h-10 w-10',
+          'h-10 w-10 transition-colors group-hover:fill-yellow-400/70',
           isStarred &&
             'fill-yellow-400 stroke-yellow-500 dark:stroke-yellow-600'
         )}
