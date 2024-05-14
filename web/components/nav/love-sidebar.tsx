@@ -33,8 +33,6 @@ export default function Sidebar(props: {
 
   const user = useUser()
   const lover = useLover()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false)
 
   const { theme, setTheme } = useTheme()
 
@@ -91,7 +89,7 @@ const bottomNav = (
   theme: 'light' | 'dark' | 'auto' | 'loading',
   toggleTheme: () => void
 ) =>
-  buildArray(
+  buildArray<Item>(
     loggedIn && {
       name: 'Share with friends',
       href: '/referrals',
@@ -99,13 +97,30 @@ const bottomNav = (
     },
     !loggedIn && { name: 'Sign in', icon: LoginIcon, onClick: firebaseLogin },
     {
-      name: theme === 'loading' ? 'Auto' : capitalize(theme),
-      icon:
-        theme === 'light'
-          ? SunIcon
-          : theme === 'dark'
-          ? MoonIcon
-          : SparklesIcon,
+      name: theme ?? 'auto',
+      children:
+        theme === 'light' ? (
+          'Light'
+        ) : theme === 'dark' ? (
+          'Dark'
+        ) : (
+          <>
+            <span className="hidden dark:inline">Dark</span>
+            <span className="inline dark:hidden">Light</span> (auto)
+          </>
+        ),
+      icon: ({ className, ...props }) => (
+        <>
+          <MoonIcon
+            className={clsx(className, 'hidden dark:block')}
+            {...props}
+          />
+          <SunIcon
+            className={clsx(className, 'block dark:hidden')}
+            {...props}
+          />
+        </>
+      ),
       onClick: toggleTheme,
     },
     loggedIn && { name: 'Sign out', icon: LogoutIcon, onClick: logout }

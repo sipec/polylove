@@ -5,6 +5,7 @@ import { track } from 'web/lib/service/analytics'
 
 export type Item = {
   name: string
+  children?: React.ReactNode
   trackingEventName?: string
   href?: string
   onClick?: () => void
@@ -44,7 +45,7 @@ export function SidebarItem(props: { item: Item; currentPage?: string }) {
           aria-hidden="true"
         />
       )}
-      <span className="truncate">{item.name}</span>
+      <span className="truncate">{item.children ?? item.name}</span>
     </>
   )
 
