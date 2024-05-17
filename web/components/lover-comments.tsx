@@ -237,7 +237,6 @@ const ParentProfileComment = memo(function ParentFeedComment(props: {
   onReplyClick?: (comment: LoverComment) => void
   onSeeReplyClick: () => void
   trackingLocation: string
-  childrenBountyTotal?: number
 }) {
   const {
     onUser,
@@ -248,7 +247,6 @@ const ParentProfileComment = memo(function ParentFeedComment(props: {
     seeReplies,
     numReplies,
     trackingLocation,
-    childrenBountyTotal,
   } = props
 
   return (
@@ -263,7 +261,6 @@ const ParentProfileComment = memo(function ParentFeedComment(props: {
       <ReplyToggle
         seeReplies={seeReplies}
         numComments={numReplies}
-        childrenBountyTotal={childrenBountyTotal}
         onSeeReplyClick={onSeeReplyClick}
       />
     </ProfileComment>

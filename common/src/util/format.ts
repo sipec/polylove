@@ -1,30 +1,3 @@
-import { ENV_CONFIG } from '../envs/constants'
-
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0,
-  minimumFractionDigits: 0,
-})
-
-export function formatMoney(amount: number) {
-  const newAmount = getMoneyNumber(amount)
-  return formatter.format(newAmount).replace('$', ENV_CONFIG.moneyMoniker)
-}
-
-export function formatMoneyNumber(amount: number) {
-  const newAmount = getMoneyNumber(amount)
-  return formatter.format(newAmount).replace('$', '')
-}
-
-export function getMoneyNumber(amount: number) {
-  // Handle 499.9999999999999 case
-  const plusEpsilon = (amount > 0 ? Math.floor : Math.ceil)(
-    amount + 0.00000000001 * Math.sign(amount)
-  )
-  return Math.round(plusEpsilon) === 0 ? 0 : plusEpsilon
-}
-
 function getPercentDecimalPlaces(zeroToOne: number) {
   return zeroToOne < 0.02 || zeroToOne > 0.98 ? 1 : 0
 }

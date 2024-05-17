@@ -6,8 +6,6 @@ import { api } from 'web/lib/firebase/api'
 import { Button, buttonClass } from 'web/components/buttons/button'
 import { track } from 'web/lib/service/analytics'
 import { Tooltip } from 'web/components/widgets/tooltip'
-import { formatMoney } from 'common/util/format'
-import { LIKE_COST } from 'common/love/constants'
 import { Col } from 'web/components/layout/col'
 import { MODAL_CLASS, Modal } from 'web/components/layout/modal'
 import { Row } from 'web/components/layout/row'
@@ -16,7 +14,6 @@ import { useUserById } from 'web/hooks/use-user-supabase'
 import { MatchAvatars } from '../matches/match-avatars'
 import { useLover } from 'love/hooks/use-lover'
 import { useAPIGetter } from 'web/hooks/use-api-getter'
-import { useUser } from 'web/hooks/use-user'
 
 export const LikeButton = (props: {
   targetLover: Lover
@@ -69,13 +66,7 @@ export const LikeButton = (props: {
                 'fill-primary-400 stroke-primary-500 dark:stroke-primary-600'
             )}
           />
-          <div className="p-2 pb-0 pt-0">
-            {liked ? (
-              <>Liked!</>
-            ) : (
-              <>{hasFreeLike ? 'Like' : formatMoney(LIKE_COST)}</>
-            )}
-          </div>
+          <div className="p-2 pb-0 pt-0">{liked ? <>Liked!</> : <>Like</>}</div>
         </Col>
       </button>
       <LikeConfimationDialog
@@ -105,7 +96,6 @@ const LikeConfimationDialog = (props: {
   const { open, setOpen, targetLover, hasFreeLike, submit } = props
   const youLover = useLover()
   const user = useUserById(targetLover.user_id)
-  const currentUser = useUser()
 
   return (
     <Modal
@@ -122,7 +112,7 @@ const LikeConfimationDialog = (props: {
           <div className="text-ink-500">
             They will get a notification. Unlocks messaging them.
           </div>
-          <div className="text-ink-500">(You get one free like per day.)</div>
+          <div className="text-ink-500">You get one like per day</div>
         </Col>
 
         {youLover && user && (
@@ -132,31 +122,15 @@ const LikeConfimationDialog = (props: {
           />
         )}
 
-        {!hasFreeLike && currentUser && (
-          <div className="text-ink-500 mt-4 whitespace-nowrap text-sm">
-            Balance{' '}
-            <span className="text-ink-800">
-              {formatMoney(currentUser.balance)}
-            </span>
-          </div>
-        )}
-
         <Row className="mt-2 items-center justify-between">
           <Button color="gray-outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button
-            onClick={() => submit()}
-            disabled={
-              !hasFreeLike && !!currentUser && currentUser.balance < LIKE_COST
-            }
-          >
-            {hasFreeLike ? (
-              <>Use free like & submit</>
-            ) : (
-              <>Pay {formatMoney(LIKE_COST)} & submit</>
-            )}
-          </Button>
+          {
+            <Button onClick={() => submit()} disabled={!hasFreeLike}>
+              {hasFreeLike ? 'Use like for today' : 'Come back tomorrow!'}
+            </Button>
+          }
         </Row>
       </Col>
     </Modal>
@@ -182,8 +156,6 @@ const CancelLikeConfimationDialog = (props: {
     >
       <Col className="gap-4">
         <div className="text-xl">Remove like of {user ? user.name : ''}</div>
-
-        <div className="text-ink-500">You will not be refunded the cost.</div>
 
         <Row className="mt-2 items-center justify-between">
           <Button color="gray-outline" onClick={() => setOpen(false)}>

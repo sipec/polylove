@@ -1,17 +1,14 @@
 import clsx from 'clsx'
 import TriangleDownFillIcon from 'web/lib/icons/triangle-down-fill-icon.svg'
-import { formatMoney } from 'common/util/format'
 
 export function ReplyToggle(props: {
   seeReplies: boolean
   numComments: number
-  childrenBountyTotal?: number
   onSeeReplyClick?: () => void
 }) {
-  const { seeReplies, numComments, childrenBountyTotal, onSeeReplyClick } =
-    props
+  const { seeReplies, numComments, onSeeReplyClick } = props
 
-  if (numComments === 0 && !childrenBountyTotal) return null
+  if (numComments === 0) return null
 
   return (
     <button
@@ -31,11 +28,6 @@ export function ReplyToggle(props: {
         />
         {numComments} {numComments === 1 ? 'reply' : 'replies'}
       </div>
-      {childrenBountyTotal != null && childrenBountyTotal > 0 && (
-        <span className="text-teal-600 opacity-70">
-          +{formatMoney(childrenBountyTotal)}
-        </span>
-      )}
     </button>
   )
 }
