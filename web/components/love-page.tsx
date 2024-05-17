@@ -21,6 +21,7 @@ import Sidebar from './nav/love-sidebar'
 import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
 import { useLover } from 'love/hooks/use-lover'
 import { Lover } from 'common/love/lover'
+import { NotificationsIcon, SolidNotificationsIcon } from './notifications-icon'
 
 export function LovePage(props: {
   trackPageView: string | false
@@ -101,6 +102,11 @@ function getBottomNavigation(user: User, lover: Lover | null | undefined) {
   return buildArray(
     { name: 'Profiles', href: '/', icon: SolidHomeIcon },
     {
+      name: 'Notifs',
+      href: `/notifications`,
+      icon: SolidNotificationsIcon,
+    },
+    {
       name: 'Profile',
       href: lover === null ? '/signup' : `/${user.username}`,
     },
@@ -127,6 +133,11 @@ const getDesktopNav = (user: User | null | undefined) => {
   if (user)
     return buildArray(
       { name: 'Profiles', href: '/', icon: HomeIcon },
+      {
+        name: 'Notifs',
+        href: `/notifications`,
+        icon: NotificationsIcon,
+      },
       {
         name: 'Messages',
         href: '/messages',
