@@ -31,6 +31,18 @@ type APIGenericSchema = {
 
 let _apiTypeCheck: { [x: string]: APIGenericSchema }
 export const API = (_apiTypeCheck = {
+  'user/by-id/:id/block': {
+    method: 'POST',
+    visibility: 'public',
+    authed: true,
+    props: z.object({ id: z.string() }).strict(),
+  },
+  'user/by-id/:id/unblock': {
+    method: 'POST',
+    visibility: 'public',
+    authed: true,
+    props: z.object({ id: z.string() }).strict(),
+  },
   comment: {
     method: 'POST',
     visibility: 'public',
@@ -120,8 +132,7 @@ export const API = (_apiTypeCheck = {
     returns: {} as { number: string },
     props: z.object({}).strict(),
   },
-  
- 
+
   me: {
     method: 'GET',
     visibility: 'public',
@@ -380,7 +391,7 @@ export const API = (_apiTypeCheck = {
     props: z.object({}),
     returns: {} as { success: true },
   },
-  
+
   'create-public-chat-message': {
     method: 'POST',
     visibility: 'undocumented',
