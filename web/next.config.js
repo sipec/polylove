@@ -61,7 +61,11 @@ module.exports = {
         destination: '/terms.html',
         permanent: true,
       },
-      // NOTE: add any external redirects at common/envs/constants.ts and update native apps.
+      {
+        source: '/Bet_On_Love.pdf',
+        destination: 'https://manifold.markets/Bet_On_Love.pdf',
+        permanent: false,
+      },
     ]
   },
 }
