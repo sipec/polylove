@@ -2,11 +2,7 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { pickBy } from 'lodash'
 import { onIdTokenChanged, User as FirebaseUser } from 'firebase/auth'
-import {
-  auth,
-  getUserAndPrivateUser,
-  listenForPrivateUser,
-} from 'web/lib/firebase/users'
+import { auth } from 'web/lib/firebase/users'
 import { createUser } from 'web/lib/firebase/api'
 import { randomString } from 'common/util/random'
 import { identifyUser, setUserProperty } from 'web/lib/service/analytics'
@@ -22,8 +18,9 @@ import { nativePassUsers, nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from 'web/lib/util/local'
 import { getSupabaseToken } from 'web/lib/firebase/api'
 import { updateSupabaseAuth } from 'web/lib/supabase/db'
-import { usePollUser } from 'web/hooks/use-user'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
+import { getPrivateUserSafe, getUserSafe } from 'web/lib/supabase/users'
+import { useWebsocketPrivateUser, useWebsocketUser } from 'web/hooks/use-user'
 
 // Either we haven't looked up the logged in user yet (undefined), or we know
 // the user is not logged in (null), or we know the user is logged in.
@@ -119,15 +116,19 @@ export function AuthProvider(props: {
     }
   }, [authUser])
 
-  const onAuthLoad = (fbUser: FirebaseUser, newUser: UserAndPrivateUser) => {
-    setUser(newUser.user)
-    setPrivateUser(newUser.privateUser)
+  const onAuthLoad = (
+    fbUser: FirebaseUser,
+    user: User,
+    privateUser: PrivateUser
+  ) => {
+    setUser(user)
+    setPrivateUser(privateUser)
     setAuthLoaded(true)
 
     nativePassUsers(
       JSON.stringify({
         fbUser: fbUser.toJSON(),
-        privateUser: newUser.privateUser,
+        privateUser: privateUser,
       })
     )
 
@@ -142,8 +143,9 @@ export function AuthProvider(props: {
         if (fbUser) {
           setUserCookie(fbUser.toJSON())
 
-          const [currentAuthUser, supabaseJwt] = await Promise.all([
-            getUserAndPrivateUser(fbUser.uid),
+          const [user, privateUser, supabaseJwt] = await Promise.all([
+            getUserSafe(fbUser.uid),
+            getPrivateUserSafe(),
             getSupabaseToken().catch((e) => {
               console.error('Error getting supabase token', e)
               return null
@@ -152,7 +154,7 @@ export function AuthProvider(props: {
           // When testing on a mobile device, we'll be pointed at a local ip or ngrok address, so this will fail
           if (supabaseJwt) updateSupabaseAuth(supabaseJwt.jwt)
 
-          if (!currentAuthUser.user || !currentAuthUser.privateUser) {
+          if (!user || !privateUser) {
             const deviceToken = ensureDeviceToken()
             const adminToken = getAdminToken()
 
@@ -161,9 +163,9 @@ export function AuthProvider(props: {
               adminToken,
             })) as UserAndPrivateUser
 
-            onAuthLoad(fbUser, newUser)
+            onAuthLoad(fbUser, newUser.user, newUser.privateUser)
           } else {
-            onAuthLoad(fbUser, currentAuthUser)
+            onAuthLoad(fbUser, user, privateUser)
           }
         } else {
           // User logged out; reset to null
@@ -191,21 +193,15 @@ export function AuthProvider(props: {
     }
   }, [uid])
 
-  useEffect(() => {
-    if (authLoaded && uid) {
-      const privateUserListener = listenForPrivateUser(uid, (privateUser) => {
-        setPrivateUser(privateUser ?? undefined)
-      })
-      return () => {
-        privateUserListener()
-      }
-    }
-  }, [authLoaded, uid])
-
-  const listenUser = usePollUser(uid ?? undefined)
+  const listenUser = useWebsocketUser(uid ?? undefined)
   useEffectCheckEquality(() => {
     if (authLoaded && listenUser) setUser(listenUser)
   }, [authLoaded, listenUser])
+
+  const listenPrivateUser = useWebsocketPrivateUser(uid ?? undefined)
+  useEffectCheckEquality(() => {
+    if (authLoaded && listenPrivateUser) setPrivateUser(listenPrivateUser)
+  }, [authLoaded, listenPrivateUser])
 
   const username = authUser?.user.username
   useEffect(() => {

@@ -171,6 +171,13 @@ export const API = (_apiTypeCheck = {
       username: z.string(), // just so you're sure
     }),
   },
+  'me/private': {
+    method: 'GET',
+    visibility: 'public',
+    authed: true,
+    props: z.object({}),
+    returns: {} as PrivateUser,
+  },
   'user/:username': {
     method: 'GET',
     visibility: 'public',

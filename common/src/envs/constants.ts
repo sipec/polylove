@@ -332,10 +332,6 @@ export const HIDE_FROM_LEADERBOARD_USER_IDS = [
 
 export const HOUSE_BOT_USERNAME = 'acc'
 
-export function firestoreConsolePath(contractId: string) {
-  return `https://console.firebase.google.com/project/${PROJECT_ID}/firestore/data/~2Fcontracts~2F${contractId}`
-}
-
 export const GOOGLE_PLAY_APP_URL =
   'https://play.google.com/store/apps/details?id=com.markets.manifold'
 export const APPLE_APP_URL =

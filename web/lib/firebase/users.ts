@@ -13,50 +13,19 @@ import {
   getAuth,
   signInWithPopup,
 } from 'firebase/auth'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { getIsNative } from 'web/lib/native/is-native'
 import { nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from '../util/local'
-import { api, referUser } from './api'
+import { referUser } from './api'
 import { app } from './init'
-import { coll, listenForValue } from './utils'
 import { removeUndefinedProps } from 'common/util/object'
 import { postMessageToNative } from 'web/lib/native/post-message'
 
 dayjs.extend(utc)
 
-export const privateUsers = coll<PrivateUser>('private-users')
-
 export type { User }
 
 export const auth = getAuth(app)
-
-export async function getPrivateUser(userId: string) {
-  return (await getDoc(doc(privateUsers, userId))).data()!
-}
-
-export async function getUserAndPrivateUser(userId: string) {
-  const [user, privateUser] = await Promise.all([
-    api('user/by-id/:id', { id: userId }),
-    getPrivateUser(userId),
-  ])
-  return { user, privateUser } as UserAndPrivateUser
-}
-
-export async function updatePrivateUser(
-  userId: string,
-  update: Partial<PrivateUser>
-) {
-  await updateDoc(doc(privateUsers, userId), { ...update })
-}
-
-export function listenForPrivateUser(
-  userId: string,
-  setPrivateUser: (privateUser: PrivateUser | null) => void
-) {
-  const userRef = doc(privateUsers, userId)
-  return listenForValue<PrivateUser>(userRef, setPrivateUser)
-}
 
 export const CACHED_REFERRAL_USERNAME_KEY = 'CACHED_REFERRAL_KEY'
 

@@ -1,10 +1,29 @@
 import { db } from './db'
 import { run, selectFrom } from 'common/supabase/utils'
 import { type User } from 'common/user'
-import { api } from 'web/lib/firebase/api'
+import { APIError, api } from 'web/lib/firebase/api'
 import { DAY_MS, WEEK_MS } from 'common/util/time'
 import { HIDE_FROM_LEADERBOARD_USER_IDS } from 'common/envs/constants'
 export type { DisplayUser } from 'common/api/user-types'
+
+export async function getUserSafe(userId: string) {
+  try {
+    return await getFullUserById(userId)
+  } catch (e) {
+    if (e instanceof APIError && e.code === 404) {
+      return null
+    }
+    throw e
+  }
+}
+
+export async function getPrivateUserSafe() {
+  try {
+    return await api('me/private')
+  } catch (e) {
+    return null
+  }
+}
 
 const defaultFields = ['id', 'name', 'username', 'avatarUrl'] as const
 

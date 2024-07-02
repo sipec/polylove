@@ -36,6 +36,15 @@ export function pathWithPrefix(path: APIPath) {
   return API[path].visibility === 'public' ? `v0/${path}` : path
 }
 
+export function getWebsocketUrl() {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return `ws://${process.env.NEXT_PUBLIC_API_URL}/ws`
+  } else {
+    const { apiEndpoint } = ENV_CONFIG
+    return `wss://${apiEndpoint}/ws`
+  }
+}
+
 // TODO: strictly type
 export function getApiUrl(path: string) {
   if (path in API) {

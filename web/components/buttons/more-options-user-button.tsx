@@ -86,26 +86,12 @@ export function MoreOptionsUserButton(props: { user: User }) {
               Calibration
             </Link>
             {isAdmin && (
-              <>
-                <a
-                  className="text-primary-400 text-sm hover:underline"
-                  href={firestoreUserConsolePath(user.id)}
-                >
-                  firestore user
-                </a>
-                <a
-                  className="text-primary-400 text-sm hover:underline"
-                  href={firestorePrivateConsolePath(user.id)}
-                >
-                  private user
-                </a>
-                <SimpleCopyTextButton
-                  text={user.id}
-                  tooltip="Copy user id"
-                  className="!px-1 !py-px"
-                  eventTrackingName={'admin copy user id'}
-                />
-              </>
+              <SimpleCopyTextButton
+                text={user.id}
+                tooltip="Copy user id"
+                className="!px-1 !py-px"
+                eventTrackingName={'admin copy user id'}
+              />
             )}
           </Row>
           <UncontrolledTabs
@@ -159,12 +145,4 @@ export function MoreOptionsUserButton(props: { user: User }) {
       </Modal>
     </>
   )
-}
-
-function firestoreUserConsolePath(userId: string) {
-  return `https://console.firebase.google.com/project/${PROJECT_ID}/firestore/data/~2Fusers~2F${userId}`
-}
-
-function firestorePrivateConsolePath(userId: string) {
-  return `https://console.firebase.google.com/project/${PROJECT_ID}/firestore/data/~2Fprivate-users~2F${userId}`
 }
