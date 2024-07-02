@@ -14,7 +14,7 @@ import { Pagination } from 'web/components/widgets/pagination'
 import { Title } from 'web/components/widgets/title'
 import { useGroupedNotifications } from 'web/hooks/use-notifications'
 import { usePrivateUser, useUser } from 'web/hooks/use-user'
-import { markAllNotifications } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 
 export default function NotificationsPage() {
   const user = useUser()
@@ -46,7 +46,7 @@ function NotificationsContent({ user }: { user: User }) {
   // Mark all notifications as seen. Rerun as new notifications come in.
   useEffect(() => {
     if (!privateUser) return
-    markAllNotifications({ seen: true })
+    api('mark-all-notifs-read', { seen: true })
     groupedNotifications
       ?.map((ng) => ng.notifications)
       .flat()

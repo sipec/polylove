@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { HeartIcon } from '@heroicons/react/outline'
 
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { baseButtonClasses } from 'web/components/buttons/button'
 import { track } from 'web/lib/service/analytics'
 import { Tooltip } from 'web/components/widgets/tooltip'

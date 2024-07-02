@@ -45,16 +45,8 @@ export function getWebsocketUrl() {
   }
 }
 
-// TODO: strictly type
 export function getApiUrl(path: string) {
-  if (path in API) {
-    path = pathWithPrefix(path as APIPath)
-  }
+  const endpoint = process.env.NEXT_PUBLIC_API_URL ?? ENV_CONFIG.apiEndpoint
 
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return `${process.env.NEXT_PUBLIC_API_URL}/${path}`
-  } else {
-    const { apiEndpoint } = ENV_CONFIG
-    return `${apiEndpoint}/${path}`
-  }
+  return `${endpoint}/v0/${path}`
 }

@@ -9,7 +9,7 @@ import { ChoicesToggleGroup } from 'web/components/widgets/choices-toggle-group'
 import { Button } from 'web/components/buttons/button'
 import { colClassName, labelClassName } from 'love/pages/signup'
 import { useRouter } from 'next/router'
-import { updateLover } from 'web/lib/firebase/api'
+import { updateLover } from 'web/lib/api'
 import { Row as rowFor } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { track } from 'web/lib/service/analytics'
@@ -43,7 +43,7 @@ export const OptionalLoveUserForm = (props: {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const { bio: _, ...otherLoverProps } = lover
-    const res = await updateLover(otherLoverProps).catch((e) => {
+    const res = await updateLover(otherLoverProps).catch((e: unknown) => {
       console.error(e)
       return false
     })

@@ -1,10 +1,4 @@
-import {
-  isVerified,
-  MINUTES_ALLOWED_TO_REFER,
-  PrivateUser,
-  User,
-  UserAndPrivateUser,
-} from 'common/user'
+import { isVerified, MINUTES_ALLOWED_TO_REFER, User } from 'common/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import {
@@ -16,10 +10,9 @@ import {
 import { getIsNative } from 'web/lib/native/is-native'
 import { nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from '../util/local'
-import { referUser } from './api'
 import { app } from './init'
-import { removeUndefinedProps } from 'common/util/object'
 import { postMessageToNative } from 'web/lib/native/post-message'
+import { api } from '../api'
 
 dayjs.extend(utc)
 
@@ -69,11 +62,9 @@ export async function setCachedReferralInfoForUser(user: User) {
     `User created in last ${MINUTES_ALLOWED_TO_REFER} minutes, trying to set referral`
   )
   // get user via username
-  referUser(
-    removeUndefinedProps({
-      referredByUsername: cachedReferralUsername,
-    })
-  )
+  api('refer-user', {
+    referredByUsername: cachedReferralUsername,
+  })
     .then((resp) => {
       console.log('referral resp', resp)
       local?.setItem('referral-complete', 'true')

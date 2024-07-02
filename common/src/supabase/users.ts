@@ -1,5 +1,5 @@
 import { Row, run, SupabaseClient } from './utils'
-import { User } from 'common/user'
+import { PrivateUser, User } from 'common/user'
 
 export async function getUserForStaticProps(
   db: SupabaseClient,
@@ -22,4 +22,12 @@ export function convertUser(row: Row<'users'> | null): User | null {
     spiceBalance: row.spice_balance,
     totalDeposits: row.total_deposits,
   } as User
+}
+
+export function convertPrivateUser(row: Row<'private_users'>): PrivateUser
+export function convertPrivateUser(
+  row: Row<'private_users'> | null
+): PrivateUser | null {
+  if (!row) return null
+  return row.data as PrivateUser
 }

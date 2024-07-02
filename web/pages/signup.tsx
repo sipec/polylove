@@ -12,7 +12,7 @@ import {
   CACHED_REFERRAL_USERNAME_KEY,
   firebaseLogin,
 } from 'web/lib/firebase/users'
-import { createLover } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { useRouter } from 'next/router'
 import { Row as rowFor } from 'common/supabase/utils'
 import ManifoldLoveLogo from 'love/components/manifold-love-logo'
@@ -74,18 +74,19 @@ export default function SignupPage() {
                   : undefined
 
                 setIsSubmitting(true)
-                const res = await createLover(
+                const lover = await api(
+                  'create-lover',
                   removeUndefinedProps({
                     ...loverForm,
                     referred_by_username: referredByUsername,
-                  })
-                ).catch((e) => {
+                  }) as any
+                ).catch((e: unknown) => {
                   console.error(e)
                   return null
                 })
                 setIsSubmitting(false)
-                if (res && res.lover) {
-                  setLoverForm(res.lover)
+                if (lover) {
+                  setLoverForm(lover)
                   setStep(1)
                   scrollTo(0, 0)
                   track('submit love required profile')

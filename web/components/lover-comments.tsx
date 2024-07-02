@@ -25,7 +25,7 @@ import { LoverComment } from 'common/love/love-comment'
 import { CommentInputTextArea } from 'web/components/comments/comment-input'
 import { Editor } from '@tiptap/react'
 import { track } from 'web/lib/service/analytics'
-import { createCommentOnLover, hideCommentOnLover } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { RelativeTimestamp } from 'web/components/relative-timestamp'
 import { useAdmin } from 'web/hooks/use-admin'
 import { EyeOffIcon } from '@heroicons/react/outline'
@@ -318,7 +318,7 @@ function DotMenu(props: {
             onClick: async () => {
               onHide()
               await toast.promise(
-                hideCommentOnLover({
+                api('hide-comment', {
                   commentId: comment.id,
                   hide: !comment.hidden,
                 }),
@@ -398,7 +398,7 @@ export function LoverCommentInput(props: {
       await firebaseLogin()
       return
     }
-    await createCommentOnLover({
+    await api('create-comment', {
       userId: onUserId,
       content: editor.getJSON(),
       replyToCommentId: parentCommentId,

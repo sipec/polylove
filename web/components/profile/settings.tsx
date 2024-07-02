@@ -1,6 +1,6 @@
 import { PrivateUser, User } from 'common/user'
 import { useState } from 'react'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { Col } from '../layout/col'
 import { InfoTooltip } from '../widgets/info-tooltip'
 import ShortToggle from '../widgets/short-toggle'

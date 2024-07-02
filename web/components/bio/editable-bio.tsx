@@ -5,7 +5,7 @@ import { Button } from 'web/components/buttons/button'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { TextEditor, useTextEditor } from 'web/components/widgets/editor'
-import { updateLover } from 'web/lib/firebase/api'
+import { updateLover } from 'web/lib/api'
 import { track } from 'web/lib/service/analytics'
 
 export function EditableBio(props: {
@@ -27,7 +27,7 @@ export function EditableBio(props: {
     const res = await updateLover({
       ...lover,
       bio: editor.getJSON(),
-    }).catch((e) => {
+    }).catch((e: unknown) => {
       console.error(e)
       return false
     })

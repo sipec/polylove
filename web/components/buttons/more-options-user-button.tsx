@@ -13,9 +13,8 @@ import { BlockUser } from 'web/components/profile/block-user'
 import { ReportUser } from 'web/components/profile/report-user'
 import { Title } from 'web/components/widgets/title'
 import { Row } from '../layout/row'
-import { PROJECT_ID } from 'common/envs/constants'
 import { SimpleCopyTextButton } from 'web/components/buttons/copy-link-button'
-import { banUser } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import Link from 'next/link'
 import { linkClass } from '../widgets/site-link'
 import { buildArray } from 'common/util/array'
@@ -61,7 +60,7 @@ export function MoreOptionsUserButton(props: { user: User }) {
                   color={'red'}
                   size="xs"
                   onClick={() => {
-                    banUser({
+                    api('ban-user', {
                       userId,
                       unban: user.isBannedFromPosting ?? false,
                     })

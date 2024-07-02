@@ -3,7 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 import { pickBy } from 'lodash'
 import { onIdTokenChanged, User as FirebaseUser } from 'firebase/auth'
 import { auth } from 'web/lib/firebase/users'
-import { createUser } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { randomString } from 'common/util/random'
 import { identifyUser, setUserProperty } from 'web/lib/service/analytics'
 import { useStateCheckEquality } from 'web/hooks/use-state-check-equality'
@@ -16,11 +16,11 @@ import {
 } from 'common/user'
 import { nativePassUsers, nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from 'web/lib/util/local'
-import { getSupabaseToken } from 'web/lib/firebase/api'
 import { updateSupabaseAuth } from 'web/lib/supabase/db'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
 import { getPrivateUserSafe, getUserSafe } from 'web/lib/supabase/users'
 import { useWebsocketPrivateUser, useWebsocketUser } from 'web/hooks/use-user'
+import { unauthedApi } from 'common/util/api'
 
 // Either we haven't looked up the logged in user yet (undefined), or we know
 // the user is not logged in (null), or we know the user is logged in.
@@ -146,7 +146,7 @@ export function AuthProvider(props: {
           const [user, privateUser, supabaseJwt] = await Promise.all([
             getUserSafe(fbUser.uid),
             getPrivateUserSafe(),
-            getSupabaseToken().catch((e) => {
+            api('get-supabase-token').catch((e) => {
               console.error('Error getting supabase token', e)
               return null
             }),
@@ -158,7 +158,7 @@ export function AuthProvider(props: {
             const deviceToken = ensureDeviceToken()
             const adminToken = getAdminToken()
 
-            const newUser = (await createUser({
+            const newUser = (await api('create-user', {
               deviceToken,
               adminToken,
             })) as UserAndPrivateUser

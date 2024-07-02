@@ -1,9 +1,10 @@
 import { db } from './db'
 import { run, selectFrom } from 'common/supabase/utils'
 import { type User } from 'common/user'
-import { APIError, api } from 'web/lib/firebase/api'
+import { APIError, api } from 'web/lib/api'
 import { DAY_MS, WEEK_MS } from 'common/util/time'
 import { HIDE_FROM_LEADERBOARD_USER_IDS } from 'common/envs/constants'
+import { unauthedApi } from 'common/util/api'
 export type { DisplayUser } from 'common/api/user-types'
 
 export async function getUserSafe(userId: string) {
@@ -28,23 +29,23 @@ export async function getPrivateUserSafe() {
 const defaultFields = ['id', 'name', 'username', 'avatarUrl'] as const
 
 export async function getUserById(id: string) {
-  return api('user/by-id/:id/lite', { id })
+  return unauthedApi('user/by-id/:id/lite', { id })
 }
 
 export async function getUserByUsername(username: string) {
-  return api('user/:username/lite', { username })
+  return unauthedApi('user/:username/lite', { username })
 }
 
 export async function getFullUserByUsername(username: string) {
-  return api('user/:username', { username })
+  return unauthedApi('user/:username', { username })
 }
 
 export async function getFullUserById(id: string) {
-  return api('user/by-id/:id', { id })
+  return unauthedApi('user/by-id/:id', { id })
 }
 
 export async function searchUsers(prompt: string, limit: number) {
-  return api('search-users', { term: prompt, limit: limit })
+  return unauthedApi('search-users', { term: prompt, limit: limit })
 }
 
 export async function getDisplayUsers(userIds: string[]) {

@@ -66,7 +66,7 @@ export const PROD_CONFIG: EnvConfig = {
     measurementId: 'G-SSFK1Q138D',
   },
   twitchBotEndpoint: 'https://twitch-bot.manifold.markets',
-  apiEndpoint: 'https://api.manifold.markets',
+  apiEndpoint: 'https://api.manifold.love',
   cloudRunId: 'nggbo3neva',
   cloudRunRegion: 'uc',
 

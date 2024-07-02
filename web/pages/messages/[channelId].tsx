@@ -171,7 +171,7 @@ export const PrivateChat = (props: {
     if (!editor || editor.isEmpty || isSubmitting || !channelId) return
     setIsSubmitting(true)
 
-    await sendUserPrivateMessage({
+    await api('create-private-user-message', {
       channelId,
       content: editor.getJSON(),
     })
@@ -238,7 +238,7 @@ export const PrivateChat = (props: {
               name: 'Mute 1 day',
               onClick: async () => {
                 await toast.promise(
-                  updatePrivateMessageChannel({
+                  api('update-private-user-message-channel', {
                     channelId: channelId,
                     notifyAfterTime: Date.now() + DAY_MS,
                   }),
@@ -255,7 +255,7 @@ export const PrivateChat = (props: {
               name: 'Mute forever',
               onClick: async () => {
                 await toast.promise(
-                  updatePrivateMessageChannel({
+                  api('update-private-user-message-channel', {
                     channelId: channelId,
                     notifyAfterTime: Date.now() + 100 * YEAR_MS,
                   }),
@@ -271,7 +271,9 @@ export const PrivateChat = (props: {
               icon: <FaUserMinus className="h-5 w-5" />,
               name: 'Leave chat',
               onClick: async () => {
-                await leavePrivateMessageChannel({ channelId: channelId })
+                await api('leave-private-user-message-channel', {
+                  channelId: channelId,
+                })
                 router.push('/messages')
               },
             }

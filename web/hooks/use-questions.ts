@@ -9,7 +9,7 @@ import {
   getUserCompatibilityAnswers,
 } from 'love/lib/supabase/questions'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 
 export const useQuestions = () => {
   const [questions, setQuestions] = useState<Row<'love_questions'>[]>([])

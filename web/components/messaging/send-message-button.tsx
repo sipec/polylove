@@ -9,10 +9,7 @@ import { findKey } from 'lodash'
 import { useState } from 'react'
 import { Modal, MODAL_CLASS } from 'web/components/layout/modal'
 import { Col } from 'web/components/layout/col'
-import {
-  createPrivateMessageChannelWithUsers,
-  sendUserPrivateMessage,
-} from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { useTextEditor } from 'web/components/widgets/editor'
 import { MAX_COMMENT_LENGTH } from 'common/comment'
 import { CommentInputTextArea } from 'web/components/comments/comment-input'
@@ -61,7 +58,7 @@ export const SendMessageButton = (props: {
   const sendMessage = async () => {
     if (!editor) return
     setSubmitting(true)
-    const res = await createPrivateMessageChannelWithUsers({
+    const res = await api('create-private-user-message-channel', {
       userIds: [toUser.id],
     }).catch((e) => {
       setError(e.message)
@@ -70,7 +67,7 @@ export const SendMessageButton = (props: {
     })
     if (!res) return
 
-    const msgRes = await sendUserPrivateMessage({
+    const msgRes = await api('create-private-user-message', {
       channelId: res.channelId,
       content: editor.getJSON(),
     }).catch((e: any) => {

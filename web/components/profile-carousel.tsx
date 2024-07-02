@@ -12,13 +12,13 @@ import { SignUpButton } from './nav/love-sidebar'
 import { Lover } from 'common/love/lover'
 import { useAdmin } from 'web/hooks/use-admin'
 import { Button } from 'web/components/buttons/button'
-import { updateLover } from 'web/lib/firebase/api'
+import { updateLover } from 'web/lib/api'
 import { AddPhotosWidget } from './widgets/add-photos'
 import { Row as rowFor } from 'common/supabase/utils'
 import { Row } from 'web/components/layout/row'
 import { useUser } from 'web/hooks/use-user'
 import { PencilIcon } from '@heroicons/react/solid'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 
 export default function ProfileCarousel(props: {
   lover: Lover

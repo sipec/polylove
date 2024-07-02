@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import { Col } from 'web/components/layout/col'
 import { Input } from 'web/components/widgets/input'
-import { searchLocation } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { Row as rowFor } from 'common/supabase/utils'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
 import { ReactNode } from 'react'
@@ -57,7 +57,7 @@ export function CitySearchBox(props: {
         setLoading(true)
         searchCountRef.current++
         const thisSearchCount = searchCountRef.current
-        const response = await searchLocation({ term: query, limit: 5 })
+        const response = await api('search-location', { term: query, limit: 5 })
         if (thisSearchCount == searchCountRef.current) {
           setCities(
             response.data.data.map((city: any) => ({

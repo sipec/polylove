@@ -66,3 +66,5 @@ export async function getUnseenNotifications(
 
   return data?.map((d: Row<'user_notifications'>) => d) ?? []
 }
+
+export type NotificationReason = any // TODO
