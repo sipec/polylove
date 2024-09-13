@@ -1,21 +1,10 @@
-import {
-  NOTIFICATIONS_PER_PAGE,
-  getNotifications,
-  type Notification,
-  getUnseenNotifications,
-} from 'common/notifications'
-import { Row } from 'common/supabase/utils'
+import { NOTIFICATIONS_PER_PAGE, type Notification } from 'common/notifications'
 import { type User } from 'common/user'
 import { first, groupBy, sortBy } from 'lodash'
 import { useEffect, useMemo } from 'react'
-import { db } from 'web/lib/supabase/db'
-import {
-  usePersistentSubscription,
-  useSubscription,
-} from 'web/lib/supabase/realtime/use-subscription'
-import { safeLocalStorage } from 'web/lib/util/local'
-
-const NOTIFICATIONS_KEY = 'notifications_1'
+import { api } from 'web/lib/firebase/api'
+import { useApiSubscription } from './use-api-subscription'
+import { usePersistentLocalState } from './use-persistent-local-state'
 
 export function useGroupedUnseenNotifications(
   userId: string,
@@ -80,60 +69,35 @@ function groupGeneralNotifications(
   return [groupedNotifications, mostRecentNotification] as const
 }
 
-function useNotifications(
-  userId: string,
-  // Nobody's going through 10 pages of notifications, right?
-  count = 15 * NOTIFICATIONS_PER_PAGE
-) {
-  const { rows } = usePersistentSubscription(
-    NOTIFICATIONS_KEY,
-    'user_notifications',
-    safeLocalStorage,
-    { k: 'user_id', v: userId },
-    () => getNotifications(db, userId, count)
-  )
-  return useMemo(
-    () => rows?.map((r) => r.data as unknown as Notification),
-    [rows]
-  )
+function useNotifications(userId: string, count = 15 * NOTIFICATIONS_PER_PAGE) {
+  const [notifications, setNotifications] = usePersistentLocalState<
+    Notification[] | undefined
+  >(undefined, 'notifications-' + userId)
+  useEffect(() => {
+    if (userId)
+      api('get-notifications', { limit: count }).then((data) => {
+        setNotifications(data)
+      })
+  }, [userId])
+
+  useApiSubscription({
+    topics: [`user-notifications/${userId}`],
+    onBroadcast: ({ data }) => {
+      setNotifications((notifs) => [
+        data.notification as Notification,
+        ...(notifs ?? []),
+      ])
+    },
+  })
+  return notifications
 }
 
 function useUnseenNotifications(
   userId: string,
   count = NOTIFICATIONS_PER_PAGE
 ) {
-  const { status, rows } = useSubscription(
-    'user_notifications',
-    { k: 'user_id', v: userId },
-    () => getUnseenNotifications(db, userId, count)
-  )
-
-  // hack: we tack the unseen notifications we got onto the end of the persisted
-  // notifications state so that when you navigate to the notifications page,
-  // you see the new ones immediately
-
-  useEffect(() => {
-    if (status === 'live' && rows != null) {
-      const json = safeLocalStorage?.getItem(NOTIFICATIONS_KEY)
-      const existing = json != null ? JSON.parse(json) : []
-      const newNotifications =
-        rows?.filter(
-          (n) =>
-            !existing.some(
-              (n2: Row<'user_notifications'>) =>
-                n2.notification_id === n.notification_id
-            )
-        ) ?? []
-      safeLocalStorage?.setItem(
-        NOTIFICATIONS_KEY,
-        JSON.stringify([...newNotifications, ...existing])
-      )
-    }
-  }, [status, rows])
-
-  return useMemo(() => {
-    return rows?.map((r) => r.data as Notification).filter((r) => !r.isSeen)
-  }, [rows])
+  const notifs = useNotifications(userId, count)
+  return notifs?.filter((n) => !n.isSeen)
 }
 
 const groupNotifications = (notifications: Record<string, Notification[]>) => {

@@ -1,6 +1,6 @@
 import { Col } from 'web/components/layout/col'
 import { groupBy, orderBy } from 'lodash'
-import { useRealtimeCommentsOnLover } from 'love/hooks/use-comments-on-lover'
+import { useLiveCommentsOnLover } from 'love/hooks/use-comments-on-lover'
 import {
   LoverCommentInput,
   LoverProfileCommentThread,
@@ -22,7 +22,7 @@ export const LoverCommentSection = (props: {
   simpleView?: boolean
 }) => {
   const { onUser, currentUser, simpleView } = props
-  const comments = (useRealtimeCommentsOnLover(onUser.id) ?? []).filter(
+  const comments = (useLiveCommentsOnLover(onUser.id) ?? []).filter(
     (c) => !c.hidden
   )
   const parentComments = comments.filter((c) => !c.replyToCommentId)

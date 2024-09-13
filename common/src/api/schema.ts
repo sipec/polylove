@@ -1,5 +1,5 @@
 import { contentSchema } from 'common/api/zod-types'
-import { ChatMessage } from 'common/chat-message'
+import { ChatMessage, PrivateChatMessage } from 'common/chat-message'
 import type { ContractComment } from 'common/comment'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { Lover } from 'common/love/lover'
@@ -8,6 +8,8 @@ import { PrivateUser, User } from 'common/user'
 import { z } from 'zod'
 import { LikeData, ShipData } from './love-types'
 import { DisplayUser, FullUser } from './user-types'
+import { PrivateMessageChannel } from 'common/supabase/private-messages'
+import { Notification } from 'common/notifications'
 
 // mqp: very unscientific, just balancing our willingness to accept load
 // with user willingness to put up with stale data
@@ -408,6 +410,61 @@ export const API = (_apiTypeCheck = {
       content: contentSchema,
       channelId: z.string(),
     }),
+  },
+  'get-channel-memberships': {
+    method: 'GET',
+    visibility: 'undocumented',
+    authed: true,
+    props: z.object({
+      channelId: z.coerce.number().optional(),
+      createdTime: z.string().optional(),
+      lastUpdatedTime: z.string().optional(),
+      limit: z.coerce.number(),
+    }),
+    returns: {
+      channels: [] as PrivateMessageChannel[],
+      memberIdsByChannelId: {} as { [channelId: string]: string[] },
+    },
+  },
+  'get-channel-messages': {
+    method: 'GET',
+    visibility: 'undocumented',
+    authed: true,
+    props: z.object({
+      channelId: z.coerce.number(),
+      limit: z.coerce.number(),
+      id: z.coerce.number().optional(),
+    }),
+    returns: [] as PrivateChatMessage[],
+  },
+  'get-channel-seen-time': {
+    method: 'GET',
+    visibility: 'undocumented',
+    authed: true,
+    props: z.object({
+      channelIds: z.array(z.coerce.number()),
+    }),
+    returns: [] as [number, string][],
+  },
+  'set-channel-seen-time': {
+    method: 'POST',
+    visibility: 'undocumented',
+    authed: true,
+    props: z.object({
+      channelId: z.coerce.number(),
+    }),
+  },
+  'get-notifications': {
+    method: 'GET',
+    visibility: 'undocumented',
+    authed: true,
+    returns: [] as Notification[],
+    props: z
+      .object({
+        after: z.coerce.number().optional(),
+        limit: z.coerce.number().gte(0).lte(1000).default(100),
+      })
+      .strict(),
   },
 } as const)
 
