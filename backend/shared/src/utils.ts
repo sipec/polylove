@@ -32,6 +32,29 @@ export const getPrivateUser = async (
   )
 }
 
+export const getUserByUsername = async (
+  username: string,
+  pg: SupabaseDirectClient = createSupabaseDirectClient()
+) => {
+  const res = await pg.oneOrNone(
+    `select * from users where username = $1`,
+    username
+  )
+
+  return res ? convertUser(res) : null
+}
+
+export const getPrivateUserByKey = async (
+  apiKey: string,
+  pg: SupabaseDirectClient = createSupabaseDirectClient()
+) => {
+  return await pg.oneOrNone(
+    `select * from private_users where data->>'apiKey' = $1 limit 1`,
+    [apiKey],
+    convertPrivateUser
+  )
+}
+
 // TODO: deprecate in favor of common/src/envs/is-prod.ts
 export const isProd = () => {
   // mqp: kind of hacky rn. the first clause is for cloud run API service,

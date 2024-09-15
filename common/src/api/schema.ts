@@ -23,8 +23,6 @@ export const DEFAULT_CACHE_STRATEGY =
 type APIGenericSchema = {
   // GET is for retrieval, POST is to mutate something, PUT is idempotent mutation (can be repeated safely)
   method: 'GET' | 'POST' | 'PUT'
-  //private APIs can only be called from manifold. undocumented endpoints can change or be deleted at any time!
-  visibility: 'public' | 'undocumented' | 'private'
   // whether the endpoint requires authentication
   authed: boolean
   // zod schema for the request body (or for params for GET requests)
@@ -36,41 +34,36 @@ type APIGenericSchema = {
 }
 
 let _apiTypeCheck: { [x: string]: APIGenericSchema }
+
 export const API = (_apiTypeCheck = {
   health: {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({}),
   },
   'get-supabase-token': {
     method: 'GET',
-    visibility: 'public',
     authed: true,
     props: z.object({}),
     returns: {} as { jwt: string },
   },
   'mark-all-notifs-read': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({}),
   },
   'user/by-id/:id/block': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({ id: z.string() }).strict(),
   },
   'user/by-id/:id/unblock': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({ id: z.string() }).strict(),
   },
   'ban-user': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z
       .object({
@@ -81,14 +74,12 @@ export const API = (_apiTypeCheck = {
   },
   'refer-user': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({ referredByUsername: z.string() }).strict(),
   },
   'create-user': {
     // TODO rest
     method: 'POST',
-    visibility: 'public',
     authed: true,
     returns: {} as { user: User; privateUser: PrivateUser },
     props: z
@@ -101,20 +92,27 @@ export const API = (_apiTypeCheck = {
   },
   'create-lover': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     returns: {} as Row<'lovers'>,
     props: baseLoversSchema,
   },
   report: {
     method: 'POST',
-    visibility: 'public',
     authed: true,
-    props: z.any(),
+    props: z
+      .object({
+        contentOwnerId: z.string(),
+        contentType: z.enum(['user', 'comment', 'contract']),
+        contentId: z.string(),
+        description: z.string().optional(),
+        parentId: z.string().optional(),
+        parentType: z.enum(['contract', 'post', 'user']).optional(),
+      })
+      .strict(),
+    returns: {} as any,
   },
   me: {
     method: 'GET',
-    visibility: 'public',
     authed: true,
     cache: DEFAULT_CACHE_STRATEGY,
     props: z.object({}),
@@ -122,7 +120,6 @@ export const API = (_apiTypeCheck = {
   },
   'me/update': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       name: z.string().trim().min(1).optional(),
@@ -144,14 +141,12 @@ export const API = (_apiTypeCheck = {
   },
   'update-lover': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: combinedLoveUsersSchema,
     returns: {} as any,
   },
   'me/delete': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       username: z.string(), // just so you're sure
@@ -159,14 +154,12 @@ export const API = (_apiTypeCheck = {
   },
   'me/private': {
     method: 'GET',
-    visibility: 'public',
     authed: true,
     props: z.object({}),
     returns: {} as PrivateUser,
   },
   'user/:username': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as FullUser,
@@ -174,7 +167,6 @@ export const API = (_apiTypeCheck = {
   },
   'user/:username/lite': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as DisplayUser,
@@ -182,7 +174,6 @@ export const API = (_apiTypeCheck = {
   },
   'user/by-id/:id': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as FullUser,
@@ -190,7 +181,6 @@ export const API = (_apiTypeCheck = {
   },
   'user/by-id/:id/lite': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as DisplayUser,
@@ -198,7 +188,6 @@ export const API = (_apiTypeCheck = {
   },
   'search-users': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: [] as FullUser[],
@@ -212,7 +201,6 @@ export const API = (_apiTypeCheck = {
   },
   'compatible-lovers': {
     method: 'GET',
-    visibility: 'private',
     authed: false,
     props: z.object({ userId: z.string() }),
     returns: {} as {
@@ -225,7 +213,6 @@ export const API = (_apiTypeCheck = {
   },
   'remove-pinned-photo': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     returns: { success: true },
     props: z
@@ -236,7 +223,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-compatibility-questions': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({}),
     returns: {} as {
@@ -249,7 +235,6 @@ export const API = (_apiTypeCheck = {
   },
   'like-lover': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId: z.string(),
@@ -261,7 +246,6 @@ export const API = (_apiTypeCheck = {
   },
   'ship-lovers': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId1: z.string(),
@@ -274,7 +258,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-likes-and-ships': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z
       .object({
@@ -290,7 +273,6 @@ export const API = (_apiTypeCheck = {
   },
   'has-free-like': {
     method: 'GET',
-    visibility: 'private',
     authed: true,
     props: z.object({}).strict(),
     returns: {} as {
@@ -300,7 +282,6 @@ export const API = (_apiTypeCheck = {
   },
   'star-lover': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId: z.string(),
@@ -312,7 +293,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-lovers': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({}).strict(),
     returns: {} as {
@@ -322,7 +302,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-lover-answers': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({ userId: z.string() }).strict(),
     returns: {} as {
@@ -332,7 +311,6 @@ export const API = (_apiTypeCheck = {
   },
   'create-comment': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       userId: z.string(),
@@ -343,7 +321,6 @@ export const API = (_apiTypeCheck = {
   },
   'hide-comment': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       commentId: z.string(),
@@ -353,7 +330,6 @@ export const API = (_apiTypeCheck = {
   },
   'create-public-chat-message': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as ChatMessage,
     props: z.object({
@@ -363,7 +339,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-memberships': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number().optional(),
@@ -378,7 +353,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-messages': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number(),
@@ -389,7 +363,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-seen-time': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelIds: z.array(z.coerce.number()),
@@ -398,7 +371,6 @@ export const API = (_apiTypeCheck = {
   },
   'set-channel-seen-time': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number(),
@@ -406,7 +378,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-notifications': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     returns: [] as Notification[],
     props: z
@@ -415,9 +386,9 @@ export const API = (_apiTypeCheck = {
         limit: z.coerce.number().gte(0).lte(1000).default(100),
       })
       .strict(),
+  },
   'create-private-user-message': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as ChatMessage,
     props: z.object({
@@ -427,7 +398,6 @@ export const API = (_apiTypeCheck = {
   },
   'create-private-user-message-channel': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as any,
     props: z.object({
@@ -436,7 +406,6 @@ export const API = (_apiTypeCheck = {
   },
   'update-private-user-message-channel': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as any,
     props: z.object({
@@ -446,7 +415,6 @@ export const API = (_apiTypeCheck = {
   },
   'leave-private-user-message-channel': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as any,
     props: z.object({
@@ -455,7 +423,6 @@ export const API = (_apiTypeCheck = {
   },
   'create-compatibility-question': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as any,
     props: z.object({
@@ -465,7 +432,7 @@ export const API = (_apiTypeCheck = {
   },
   'search-location': {
     method: 'POST', // TODO: should be GET
-    visibility: 'public',
+
     authed: false,
     returns: {} as any,
     props: z.object({
@@ -475,7 +442,6 @@ export const API = (_apiTypeCheck = {
   },
   'search-near-city': {
     method: 'POST',
-    visibility: 'public',
     authed: false,
     returns: {} as any,
     props: z.object({
@@ -485,7 +451,6 @@ export const API = (_apiTypeCheck = {
   },
   searchgiphy: {
     method: 'POST',
-    visibility: 'public',
     authed: false,
     returns: {} as any,
     props: z.object({

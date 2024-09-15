@@ -8,7 +8,6 @@ import { Search } from 'love/components/filters/search'
 import { Gender, convertGender } from 'love/components/gender-icon'
 import { LovePage } from 'love/components/love-page'
 import { SignUpAsMatchmaker } from 'love/components/nav/love-sidebar'
-import { OnlineIcon } from 'love/components/online-icon'
 import { useLover } from 'love/hooks/use-lover'
 import { useCompatibleLovers } from 'love/hooks/use-lovers'
 import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
@@ -126,7 +125,7 @@ function ProfilePreview(props: {
   refreshStars: () => Promise<void>
 }) {
   const { lover, compatibilityScore, hasStar, refreshStars } = props
-  const { user, gender, age, pinned_url, city, last_online_time } = lover
+  const { user, gender, age, pinned_url, city } = lover
   const currentUser = useUser()
 
   return (

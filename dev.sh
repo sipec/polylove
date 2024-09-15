@@ -4,10 +4,8 @@ ENV=${1:-dev}
 PROJECT=$2
 case $ENV in
     dev)
-      FIREBASE_PROJECT=dev
       NEXT_ENV=DEV ;;
     prod)
-      FIREBASE_PROJECT=prod
       NEXT_ENV=PROD ;;
     *)
       echo "Invalid environment; must be dev or prod."
@@ -20,7 +18,6 @@ if [ "$PROJECT" == "love" ]; then
     DIR=love
     echo "Building Manifold.love..."
 fi
-firebase use $FIREBASE_PROJECT
 
 npx concurrently \
     -n API,NEXT,TS \

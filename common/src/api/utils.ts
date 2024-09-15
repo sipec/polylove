@@ -33,7 +33,7 @@ export function getReplicatorUrl() {
 }
 
 export function pathWithPrefix(path: APIPath) {
-  return API[path].visibility === 'public' ? `v0/${path}` : path
+  return `v0/${path}`
 }
 
 export function getWebsocketUrl() {

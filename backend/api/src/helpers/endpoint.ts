@@ -3,8 +3,8 @@ import { z } from 'zod'
 import { Request, Response, NextFunction } from 'express'
 
 import { PrivateUser } from 'common/user'
-import { APIError } from 'common//api/utils'
-export { APIError } from 'common//api/utils'
+import { APIError } from 'common/api/utils'
+export { APIError } from 'common/api/utils'
 import {
   API,
   APIPath,

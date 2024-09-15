@@ -12,12 +12,7 @@ import { firebaseLogin } from 'web/lib/firebase/users'
 import { uniq } from 'lodash'
 import { useUser } from 'web/hooks/use-user'
 import { useTextEditor } from 'web/components/widgets/editor'
-import {
-  api,
-  leavePrivateMessageChannel,
-  sendUserPrivateMessage,
-  updatePrivateMessageChannel,
-} from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import {
   ChatMessageItem,
   SystemChatMessageItem,

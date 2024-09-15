@@ -21,6 +21,7 @@ import { getLoverAnswers } from './get-lover-answers'
 import { getLovers } from './get-lovers'
 import { getSupabaseToken } from './get-supabase-token'
 import { getDisplayUser, getUser } from './get-user'
+import { getMe } from './get-me'
 import { hasFreeLike } from './has-free-like'
 import { health } from './health'
 import { typedEndpoint, type APIHandler } from './helpers/endpoint'
@@ -99,7 +100,7 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   report: report,
   'create-user': createUser,
   'create-lover': createLover,
-  me: getUser,
+  me: getMe,
   'me/update': updateMe,
   'update-lover': updateLovers,
   'like-lover': likeLover,
@@ -140,6 +141,6 @@ Object.entries(handlers).forEach(([path, handler]) => {
     // } else if (api.method === 'PUT') {
     //   app.put(...apiRoute)
   } else {
-    assertUnreachable(api, 'Unsupported API method')
+    throw new Error('Unsupported API method')
   }
 })

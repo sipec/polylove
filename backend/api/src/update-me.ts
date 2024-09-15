@@ -1,12 +1,10 @@
 import { toUserAPIResponse } from 'common/api/user-types'
-import { ContractComment } from 'common/comment'
-import { Contract } from 'common/contract'
 import { RESERVED_PATHS } from 'common/envs/constants'
 import { cleanDisplayName, cleanUsername } from 'common/util/clean-username'
 import { removeUndefinedProps } from 'common/util/object'
 import { cloneDeep } from 'lodash'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
-import { getUser, getUserByUsername, log } from 'shared/utils'
+import { getUser, getUserByUsername } from 'shared/utils'
 import { APIError, APIHandler } from './helpers/endpoint'
 import { updateUser } from 'shared/supabase/users'
 import { broadcastUpdatedUser } from 'shared/websockets/helpers'
@@ -55,52 +53,7 @@ export const updateMe: APIHandler<'me/update'> = async (props, auth) => {
     broadcastUpdatedUser(
       removeUndefinedProps({ id: auth.uid, name, username, avatarUrl })
     )
-    await updateUserDenormalizedFields(auth.uid, { name, username, avatarUrl })
   }
 
   return toUserAPIResponse({ ...user, ...update })
-}
-
-const updateUserDenormalizedFields = async (
-  userId: string,
-  update: {
-    username?: string
-    name?: string
-    avatarUrl?: string
-  }
-) => {
-  const pg = createSupabaseDirectClient()
-
-  log('Updating denormalized user data on contracts...')
-
-  const contractUpdate: Partial<Contract> = removeUndefinedProps({
-    creatorName: update.name,
-    creatorUsername: update.username,
-    creatorAvatarUrl: update.avatarUrl,
-  })
-
-  const contractIds = await pg.map(
-    `update contracts set data = data || $1 where creator_id = $2 returning id`,
-    [JSON.stringify(contractUpdate), userId],
-    (row) => row.id
-  )
-  log(`Updated ${contractIds} contracts.`)
-
-  const commentUpdate: Partial<ContractComment> = removeUndefinedProps({
-    userName: update.name,
-    userUsername: update.username,
-    userAvatarUrl: update.avatarUrl,
-  })
-
-  const commentIds = await pg.map(
-    `update contract_comments
-     set data = data || $2
-     where user_id = $1
-     returning comment_id`,
-    [userId, JSON.stringify(commentUpdate)],
-    (row) => row.comment_id
-  )
-  log(`Updated ${commentIds.length} comments.`)
-
-  log('Done denormalizing!')
 }
