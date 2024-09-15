@@ -2,7 +2,7 @@ import {
   createSupabaseClient,
   createSupabaseDirectClient,
 } from 'shared/supabase/init'
-import { APIError, APIHandler } from '../helpers/endpoint'
+import { APIError, APIHandler } from './helpers/endpoint'
 import { createLoveShipNotification } from 'shared/create-love-notification'
 import { log } from 'shared/utils'
 

@@ -5,7 +5,7 @@ import {
   createSupabaseDirectClient,
 } from './supabase/init'
 import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
-import { Notification } from 'common/notification'
+import { Notification } from 'common/notifications'
 import { getLoverRow } from 'common/love/lover'
 import { insertNotificationToSupabase } from './supabase/notifications'
 

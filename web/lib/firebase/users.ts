@@ -12,7 +12,6 @@ import { nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from '../util/local'
 import { app } from './init'
 import { postMessageToNative } from 'web/lib/native/post-message'
-import { api } from '../api'
 
 dayjs.extend(utc)
 
@@ -49,29 +48,6 @@ export function writeReferralInfo(
   if (explicitReferrer) {
     local?.setItem(CACHED_REFERRAL_USERNAME_KEY, explicitReferrer)
   }
-}
-
-export async function setCachedReferralInfoForUser(user: User) {
-  if (!canSetReferrer(user)) return
-
-  const local = safeLocalStorage
-  const cachedReferralUsername = local?.getItem(CACHED_REFERRAL_USERNAME_KEY)
-  const referralComplete = local?.getItem('referral-complete') == 'true'
-  if (!cachedReferralUsername || referralComplete) return
-  console.log(
-    `User created in last ${MINUTES_ALLOWED_TO_REFER} minutes, trying to set referral`
-  )
-  // get user via username
-  api('refer-user', {
-    referredByUsername: cachedReferralUsername,
-  })
-    .then((resp) => {
-      console.log('referral resp', resp)
-      local?.setItem('referral-complete', 'true')
-    })
-    .catch((err) => {
-      console.log('error setting referral details', err)
-    })
 }
 
 export async function firebaseLogin() {

@@ -24,27 +24,6 @@ export type Column<T extends Selectable> = keyof Row<T> & string
 
 export type SupabaseClient = SupabaseClientGeneric<Database, 'public', Schema>
 
-export type CollectionTableMapping = { [coll: string]: TableName }
-export const collectionTables: CollectionTableMapping = {
-  users: 'users',
-  'private-users': 'private_users',
-  contracts: 'contracts',
-  manalinks: 'manalinks',
-}
-
-export type SubcollectionTableMapping = {
-  [parent: string]: { [child: string]: TableName }
-}
-export const subcollectionTables: SubcollectionTableMapping = {
-  contracts: {
-    answers: 'contract_answers',
-    answersCpmm: 'answers',
-    bets: 'contract_bets',
-    follows: 'contract_follows',
-    liquidity: 'contract_liquidity',
-  },
-}
-
 export function createClient(
   instanceId: string,
   key: string,

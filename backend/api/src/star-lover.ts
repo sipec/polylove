@@ -1,5 +1,5 @@
 import { createSupabaseClient } from 'shared/supabase/init'
-import { APIError, APIHandler } from '../helpers/endpoint'
+import { APIError, APIHandler } from './helpers/endpoint'
 import { log } from 'shared/utils'
 
 export const starLover: APIHandler<'star-lover'> = async (props, auth) => {

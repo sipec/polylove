@@ -1,7 +1,6 @@
 import { partition } from 'lodash'
 import { Expo, ExpoPushMessage, ExpoPushSuccessTicket } from 'expo-server-sdk'
-
-import { Notification } from 'common/notification'
+import { Notification } from 'common/notifications'
 import { PrivateUser } from 'common/user'
 import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
 import { log } from 'shared/utils'

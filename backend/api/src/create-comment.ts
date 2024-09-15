@@ -6,7 +6,7 @@ import {
   SupabaseDirectClient,
 } from 'shared/supabase/init'
 import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
-import { Notification } from 'common/notification'
+import { Notification } from 'common/notifications'
 import { insertNotificationToSupabase } from 'shared/supabase/notifications'
 import { User } from 'common/user'
 import { createPushNotification } from 'shared/create-push-notification'

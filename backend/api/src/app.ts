@@ -36,6 +36,22 @@ import { shipLovers } from './ship-lovers'
 import { starLover } from './star-lover'
 import { updateLovers } from './update-lover'
 import { updateMe } from './update-me'
+import { deleteMe } from './delete-me'
+import { getCurrentPrivateUser } from './get-current-private-user'
+import { createPublicChatMessage } from './create-public-chat-message'
+import { createPrivateUserMessage } from './create-private-user-message'
+import {
+  getChannelMemberships,
+  getChannelMessages,
+  getLastSeenChannelTime,
+  setChannelLastSeenTime,
+} from 'api/get-private-messages'
+import { searchUsers } from './search-users'
+import { searchGiphy } from './search-giphy'
+import { createPrivateUserMessageChannel } from './create-private-user-message-channel'
+import { leavePrivateUserMessageChannel } from './leave-private-user-message-channel'
+import { updatePrivateUserMessageChannel } from './update-private-user-message-channel'
+import { getNotifications } from './get-notifications'
 
 const allowCorsUnrestricted: RequestHandler = cors({})
 
@@ -89,6 +105,7 @@ app.options('*', allowCorsUnrestricted)
 const handlers: { [k in APIPath]: APIHandler<k> } = {
   health: health,
   'get-supabase-token': getSupabaseToken,
+  'get-notifications': getNotifications,
   'mark-all-notifs-read': markAllNotifsRead,
   'user/:username': getUser,
   'user/:username/lite': getDisplayUser,
@@ -96,12 +113,15 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'user/by-id/:id/lite': getDisplayUser,
   'user/by-id/:id/block': blockUser,
   'user/by-id/:id/unblock': unblockUser,
+  'search-users': searchUsers,
   'ban-user': banUser,
   report: report,
   'create-user': createUser,
   'create-lover': createLover,
   me: getMe,
+  'me/private': getCurrentPrivateUser,
   'me/update': updateMe,
+  'me/delete': deleteMe,
   'update-lover': updateLovers,
   'like-lover': likeLover,
   'ship-lovers': shipLovers,
@@ -118,6 +138,16 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'compatible-lovers': getCompatibleLovers,
   'search-location': searchLocation,
   'search-near-city': searchNearCity,
+  'create-public-chat-message': createPublicChatMessage,
+  'create-private-user-message': createPrivateUserMessage,
+  'create-private-user-message-channel': createPrivateUserMessageChannel,
+  'update-private-user-message-channel': updatePrivateUserMessageChannel,
+  'leave-private-user-message-channel': leavePrivateUserMessageChannel,
+  'get-channel-memberships': getChannelMemberships,
+  'get-channel-messages': getChannelMessages,
+  'get-channel-seen-time': getLastSeenChannelTime,
+  'set-channel-seen-time': setChannelLastSeenTime,
+  'search-giphy': searchGiphy,
 }
 
 Object.entries(handlers).forEach(([path, handler]) => {

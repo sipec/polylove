@@ -57,6 +57,7 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
+    "@types/cors": "2.8.17",
     "@types/mailgun-js": "0.22.12",
     "@types/marked": "4.0.7",
     "@types/twilio": "3.19.3",

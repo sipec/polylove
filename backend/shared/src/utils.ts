@@ -65,3 +65,5 @@ export const isProd = () => {
     return admin.app().options.projectId === 'mantic-markets'
   }
 }
+
+export const LOCAL_DEV = process.env.GOOGLE_CLOUD_PROJECT == null

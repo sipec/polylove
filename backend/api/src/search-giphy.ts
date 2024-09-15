@@ -1,16 +1,8 @@
 import { GiphyFetch } from '@giphy/js-fetch-api'
-import { z } from 'zod'
-import { jsonEndpoint, validate } from './helpers/endpoint'
+import { APIHandler } from './helpers/endpoint'
 
-const bodySchema = z
-  .object({
-    term: z.string(),
-    limit: z.number(),
-  })
-  .strict()
-
-export const searchgiphy = jsonEndpoint(async (req) => {
-  const { term, limit } = validate(bodySchema, req.body)
+export const searchGiphy: APIHandler<'search-giphy'> = async (body) => {
+  const { term, limit } = body
   if (!process.env.REACT_APP_GIPHY_KEY) {
     return { status: 'failure', data: 'Missing GIPHY API key' }
   }
@@ -25,4 +17,4 @@ export const searchgiphy = jsonEndpoint(async (req) => {
   } catch (error) {
     return { status: 'failure', data: error }
   }
-})
+}

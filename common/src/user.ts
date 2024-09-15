@@ -59,7 +59,6 @@ export type User = {
   userDeleted?: boolean
   optOutBetWarnings?: boolean
   freeQuestionsCreated?: number
-  fromLove?: boolean
   /**  @deprecated - users created from manifoldpolitics.com site*/
   fromPolitics?: boolean
   signupBonusPaid?: number

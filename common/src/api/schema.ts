@@ -40,6 +40,7 @@ export const API = (_apiTypeCheck = {
     method: 'GET',
     authed: false,
     props: z.object({}),
+    returns: {} as { message: 'Server is working.'; uid?: string },
   },
   'get-supabase-token': {
     method: 'GET',
@@ -72,11 +73,6 @@ export const API = (_apiTypeCheck = {
       })
       .strict(),
   },
-  'refer-user': {
-    method: 'POST',
-    authed: true,
-    props: z.object({ referredByUsername: z.string() }).strict(),
-  },
   'create-user': {
     // TODO rest
     method: 'POST',
@@ -86,7 +82,6 @@ export const API = (_apiTypeCheck = {
       .object({
         deviceToken: z.string().optional(),
         adminToken: z.string().optional(),
-        visitedContractIds: z.array(z.string()).optional(),
       })
       .strict(),
   },
@@ -390,7 +385,7 @@ export const API = (_apiTypeCheck = {
   'create-private-user-message': {
     method: 'POST',
     authed: true,
-    returns: {} as ChatMessage,
+    returns: {} as any,
     props: z.object({
       content: contentSchema,
       channelId: z.number(),
@@ -449,7 +444,7 @@ export const API = (_apiTypeCheck = {
       radius: z.number().min(1).max(500),
     }),
   },
-  searchgiphy: {
+  'search-giphy': {
     method: 'POST',
     authed: false,
     returns: {} as any,

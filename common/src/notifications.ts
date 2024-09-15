@@ -11,6 +11,7 @@ export type Notification = {
 
   sourceId: string
   sourceType: string
+  sourceUpdateType?: 'created' | 'updated' | 'deleted'
 
   sourceUserName: string
   sourceUserUsername: string

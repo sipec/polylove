@@ -1,5 +1,5 @@
 import { createSupabaseClient } from 'shared/supabase/init'
-import { APIError, APIHandler } from '../helpers/endpoint'
+import { APIError, APIHandler } from './helpers/endpoint'
 import { createLoveLikeNotification } from 'shared/create-love-notification'
 import { getHasFreeLike } from './has-free-like'
 import { log } from 'shared/utils'

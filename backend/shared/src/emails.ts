@@ -37,7 +37,7 @@ export const sendNewMatchEmail = async (
       creatorName,
       unsubscribeUrl,
       // questionTitle: contract.question,
-      questionUrl: `https://${LOVE_DOMAIN}${contractPath(contract)}`,
+      // questionUrl: `https://${LOVE_DOMAIN}${contractPath(contract)}`,
       userUrl: `https://${LOVE_DOMAIN}/${matchedWithUser.username}`,
       matchedUsersName: matchedWithUser.name,
       userImgSrc: loveOgImageUrl,

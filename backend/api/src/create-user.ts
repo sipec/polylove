@@ -11,36 +11,18 @@ import { generateAvatarUrl } from 'shared/helpers/generate-and-update-avatar-url
 import { getStorage } from 'firebase-admin/storage'
 import { DEV_CONFIG } from 'common/envs/dev'
 import { PROD_CONFIG } from 'common/envs/prod'
-import {
-  LOVE_DOMAIN,
-  LOVE_DOMAIN_ALTERNATE,
-  RESERVED_PATHS,
-} from 'common/envs/constants'
+import { RESERVED_PATHS } from 'common/envs/constants'
 import { log, isProd, getUser, getUserByUsername } from 'shared/utils'
 import { trackSignupFB } from 'shared/fb-analytics'
-import {
-  getAverageContractEmbedding,
-  getAverageGroupEmbedding,
-  getDefaultEmbedding,
-  normalizeAndAverageVectors,
-} from 'shared/helpers/embeddings'
-import {
-  createSupabaseDirectClient,
-  SupabaseDirectClient,
-} from 'shared/supabase/init'
-
-import { onCreateUser } from 'api/helpers/on-create-user'
+import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { insert } from 'shared/supabase/utils'
-import { runTxnFromBank } from 'shared/txn/run-txn'
-import { SignupBonusTxn } from 'common/txn'
-import { STARTING_BALANCE } from 'common/economy'
 
 export const createUser: APIHandler<'create-user'> = async (
   props,
   auth,
   req
 ) => {
-  const { deviceToken: preDeviceToken, adminToken, visitedContractIds } = props
+  const { deviceToken: preDeviceToken, adminToken } = props
   const firebaseUser = await admin.auth().getUser(auth.uid)
 
   const testUserAKAEmailPasswordUser =
@@ -57,12 +39,6 @@ export const createUser: APIHandler<'create-user'> = async (
 
   const host = req.get('referer')
   log(`Create user from: ${host}`)
-
-  const fromLove =
-    (host?.includes('localhost')
-      ? process.env.IS_MANIFOLD_LOVE === 'true'
-      : host?.includes(LOVE_DOMAIN) || host?.includes(LOVE_DOMAIN_ALTERNATE)) ||
-    undefined
 
   const ip = getIp(req)
   const deviceToken = testUserAKAEmailPasswordUser
@@ -107,7 +83,6 @@ export const createUser: APIHandler<'create-user'> = async (
     if (sameNameUser)
       throw new APIError(403, 'Username already taken', { username })
 
-    // Only undefined prop should be fromLove
     const user: User = removeUndefinedProps({
       id: auth.uid,
       name,
@@ -126,7 +101,6 @@ export const createUser: APIHandler<'create-user'> = async (
         (deviceToken && bannedDeviceTokens.includes(deviceToken)) ||
           (ip && bannedIpAddresses.includes(ip))
       ),
-      fromLove,
       signupBonusPaid: 0,
       verifiedPhone: testUserAKAEmailPasswordUser,
     })
@@ -150,20 +124,6 @@ export const createUser: APIHandler<'create-user'> = async (
       data: user,
     })
 
-    const startingBonusTxn: Omit<
-      SignupBonusTxn,
-      'id' | 'createdTime' | 'fromId'
-    > = {
-      fromType: 'BANK',
-      toId: user.id,
-      toType: 'USER',
-      amount: STARTING_BALANCE,
-      token: 'M$',
-      category: 'SIGNUP_BONUS',
-      description: 'Signup bonus',
-    }
-    await runTxnFromBank(tx, startingBonusTxn)
-
     await insert(tx, 'private_users', {
       id: privateUser.id,
       data: privateUser,
@@ -175,16 +135,7 @@ export const createUser: APIHandler<'create-user'> = async (
   log('created user ', { username: user.username, firebaseId: auth.uid })
 
   const continuation = async () => {
-    const pg = createSupabaseDirectClient()
-    await track(
-      user.id,
-      fromLove ? 'create lover' : 'create user',
-      { username: user.username },
-      { ip }
-    )
-
-    await addContractsToSeenMarketsTable(auth.uid, visitedContractIds, pg)
-    await upsertNewUserEmbeddings(auth.uid, visitedContractIds, pg)
+    await track(user.id, 'create lover', { username: user.username }, { ip })
 
     if (process.env.FB_ACCESS_TOKEN)
       await trackSignupFB(
@@ -192,9 +143,8 @@ export const createUser: APIHandler<'create-user'> = async (
         user.id,
         email ?? '',
         ip
-      ).catch((e) => log('error fb tracking:', e))
+      ).catch((e: any) => log('error fb tracking:', e))
     else log('no FB_ACCESS_TOKEN')
-    await onCreateUser(user, privateUser)
   }
 
   return {
@@ -204,62 +154,6 @@ export const createUser: APIHandler<'create-user'> = async (
     },
     continue: continuation,
   }
-}
-
-async function addContractsToSeenMarketsTable(
-  userId: string,
-  visitedContractIds: string[] | undefined,
-  pg: SupabaseDirectClient
-) {
-  if (!visitedContractIds || visitedContractIds.length === 0) return
-
-  await Promise.all(
-    visitedContractIds.map((contractId) =>
-      pg.none(
-        `insert into user_contract_views (user_id, contract_id, page_views, last_page_view_ts)
-            values ($1, $2, 1, now())`,
-        [userId, contractId]
-      )
-    )
-  )
-}
-
-async function upsertNewUserEmbeddings(
-  userId: string,
-  visitedContractIds: string[] | undefined,
-  pg: SupabaseDirectClient
-): Promise<void> {
-  log('Averaging contract embeddings for user ' + userId, {
-    visitedContractIds,
-  })
-  let embed = await getAverageContractEmbedding(pg, visitedContractIds)
-  if (!embed) embed = await getDefaultEmbedding(pg)
-  const groupIds =
-    visitedContractIds && visitedContractIds.length > 0
-      ? await pg.map(
-          `select group_id
-        from group_contracts
-        where contract_id = any($1)`,
-          [visitedContractIds],
-          (r) => r.group_id
-        )
-      : []
-  log('Averaging group embeddings for user ' + userId, { groupIds })
-  const groupEmbed = await getAverageGroupEmbedding(pg, groupIds)
-  if (groupEmbed) {
-    embed = normalizeAndAverageVectors([embed, embed, groupEmbed])
-  }
-
-  await pg.none(
-    `insert into user_embeddings (user_id, interest_embedding, contract_view_embedding)
-            values ($1, $2, $2)
-            on conflict (user_id)
-            do update set
-            interest_embedding = $2,
-            contract_view_embedding = $2
-            `,
-    [userId, embed]
-  )
 }
 
 function getStorageBucketId() {

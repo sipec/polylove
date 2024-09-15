@@ -23,7 +23,6 @@ import { track } from 'web/lib/service/analytics'
 import { Lover } from 'common/love/lover'
 import { useSaveCampaign } from 'web/hooks/use-save-campaign'
 import { useTracking } from 'web/hooks/use-tracking'
-import { useCallReferUser } from 'web/hooks/use-call-refer-user'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { CompatibleBadge } from 'love/components/widgets/compatible-badge'
 import { useGetter } from 'web/hooks/use-getter'
@@ -43,7 +42,6 @@ export default function ProfilesPage() {
   useTracking('view love profiles')
   useSaveReferral(user)
   useSaveCampaign()
-  useCallReferUser()
   const lover = useLover()
   const { data: starredUserIds, refresh: refreshStars } = useGetter(
     'star',
