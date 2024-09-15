@@ -24,7 +24,6 @@
     "@giphy/js-types": "5.1.0",
     "@google-cloud/secret-manager": "4.2.1",
     "@headlessui/react": "1.7.11",
-    "@hello-pangea/dnd": "16.3.0",
     "@heroicons/react": "1.0.6",
     "@popperjs/core": "2.0.0",
     "@radix-ui/react-hover-card": "1.0.7",
@@ -71,8 +70,8 @@
     "@tailwindcss/typography": "^0.5.1",
     "@types/d3": "7.4.0",
     "@types/lodash": "4.14.178",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.9",
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
     "autoprefixer": "10.2.6",
     "concurrently": "8.2.2",
     "cross-env": "7.0.3",
@@ -87,5 +86,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "tsc-files --noEmit --incremental false"
+  },
+  "overrides": {
+    "@types/scheduler": "< 0.23.0"
   }
 }

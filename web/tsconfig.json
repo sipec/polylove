@@ -17,13 +17,23 @@
     "paths": {
       "common/*": ["../common/src/*"],
       "web/*": ["./*"],
-      "love/*": ["./*"],
-      "react": ["./node_modules/@types/react"]
-    }
+      "love/*": ["./*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "watchOptions": {
     "excludeDirectories": [".next"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../common/src/**/*.ts", "../web/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../common/src/**/*.ts",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
