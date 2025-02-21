@@ -23,7 +23,7 @@ case $ENV in
         MACHINE_TYPE=n2-standard-2 ;;
     prod)
         ENVIRONMENT=PROD
-        GCLOUD_PROJECT=mantic-markets
+        GCLOUD_PROJECT=polylove
         MACHINE_TYPE=n2-standard-8 ;;
     *)
         echo "Invalid environment; must be dev or prod."

@@ -15,7 +15,9 @@ function replaceTw(element: ReactNode): ReactNode {
 
   // fragment
   if (!('type' in element)) {
-    return <>{Array.from(element).map(replaceTw)}</>
+    // Convert to array safely
+    const children = Array.isArray(element) ? element : [element]
+    return <>{children.map(replaceTw)}</>
   }
 
   // component

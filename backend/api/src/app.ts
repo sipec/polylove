@@ -174,3 +174,15 @@ Object.entries(handlers).forEach(([path, handler]) => {
     throw new Error('Unsupported API method')
   }
 })
+
+app.use(allowCorsUnrestricted, (req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.status(200).send()
+  } else {
+    res.status(404)
+      .set('Content-Type', 'application/json')
+      .json({ 
+        message: `The requested route '${req.path}' does not exist. Please check your URL for any misspellings or refer to app.ts`,
+      })
+  }
+})

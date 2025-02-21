@@ -4,36 +4,19 @@ import { zip } from 'lodash'
 
 // List of secrets that are available to backend (api, functions, scripts, etc.)
 // Edit them at:
-// prod - https://console.cloud.google.com/security/secret-manager?project=mantic-markets
-// dev - https://console.cloud.google.com/security/secret-manager?project=dev-mantic-markets
+// https://console.cloud.google.com/security/secret-manager?project=polylove
 export const secrets = (
   [
-    'API_SECRET',
-    'DREAM_KEY',
     'MAILGUN_KEY',
-    'OPENAI_API_KEY',
-    'SCHEDULER_AUTH_PASSWORD',
-    'STRIPE_APIKEY',
-    'STRIPE_WEBHOOKSECRET',
+    // 'STRIPE_APIKEY',
+    // 'STRIPE_WEBHOOKSECRET',
     'SUPABASE_KEY',
     'SUPABASE_JWT_SECRET',
     'SUPABASE_PASSWORD',
     'TEST_CREATE_USER_KEY',
-    'NEWS_API_KEY',
     'REACT_APP_GIPHY_KEY',
-    'TWITTER_API_KEY_JSON',
-    'DESTINY_API_KEY',
-    'FB_ACCESS_TOKEN',
+    // 'FB_ACCESS_TOKEN',
     'GEODB_API_KEY',
-    'TWILIO_AUTH_TOKEN',
-    'TWILIO_SID',
-    'TWILIO_VERIFY_SID',
-    'GIDX_API_KEY',
-    'GIDX_MERCHANT_ID',
-    'GIDX_PRODUCT_TYPE_ID',
-    'GIDX_DEVICE_TYPE_ID',
-    'GIDX_ACTIVITY_TYPE_ID',
-    'ANTHROPIC_API_KEY',
     // Some typescript voodoo to keep the string literal types while being not readonly.
   ] as const
 ).concat()

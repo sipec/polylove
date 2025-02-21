@@ -25,12 +25,12 @@ export function GIFModal(props: {
   const debouncedSearch = useCallback(
     debounce((term) => {
       setLoading(true)
-      unauthedApi('searchgiphy', { term, limit: 20 })
+      unauthedApi('search-giphy', { term, limit: 20 })
         .then((res) => {
           if (res.status === 'success') {
             setGifResults(res.data)
           } else {
-            setError(res.data as string)
+            setError(res?.data as string | undefined ?? '')
           }
         })
         .finally(() => {

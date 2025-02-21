@@ -7,10 +7,10 @@ export const DEV_CONFIG: EnvConfig = {
   loveDomainAlternate: 'dev.manifoldlove.com',
   firebaseConfig: {
     apiKey: 'AIzaSyBoq3rzUa8Ekyo3ZaTnlycQYPRCA26VpOw',
-    authDomain: 'dev-mantic-markets.firebaseapp.com',
-    projectId: 'dev-mantic-markets',
+    authDomain: 'polylove.firebaseapp.com',
+    projectId: 'polylove',
     region: 'us-central1',
-    storageBucket: 'dev-mantic-markets.appspot.com',
+    storageBucket: 'polylove.appspot.com',
     privateBucket: 'dev-mantic-markets-private',
     messagingSenderId: '134303100058',
     appId: '1:134303100058:web:27f9ea8b83347251f80323',

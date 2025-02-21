@@ -13,11 +13,7 @@ case $ENV in
 esac
 
 DIR=web
-if [ "$PROJECT" == "love" ]; then
-    export IS_MANIFOLD_LOVE=true
-    DIR=love
-    echo "Building Manifold.love..."
-fi
+export IS_MANIFOLD_LOVE=true
 
 npx concurrently \
     -n API,NEXT,TS \

@@ -30,8 +30,6 @@ const startupProcess = async () => {
   await loadSecretsToEnv(credentials)
   log('Secrets loaded.')
 
-  log('Caches loaded.')
-
   const PORT = process.env.PORT ?? 8088
   const httpServer = app.listen(PORT, () => {
     log.info(`Serving API on port ${PORT}.`)

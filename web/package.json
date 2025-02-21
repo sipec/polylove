@@ -45,7 +45,7 @@
     "cors": "2.8.5",
     "csstype": "3.0.10",
     "dayjs": "1.11.10",
-    "firebase": "9.19.1",
+    "firebase": "11.1.0",
     "link-preview-js": "3.0.4",
     "lodash": "4.17.21",
     "nanoid": "^3.3.4",
