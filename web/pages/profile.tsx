@@ -9,6 +9,7 @@ import { User } from 'common/user'
 import { useUser } from 'web/hooks/use-user'
 import { Lover } from 'common/love/lover'
 import { useLoverByUser } from 'love/hooks/use-lover'
+import { api } from 'web/lib/firebase/api'
 
 export default function ProfilePage() {
   const user = useUser()
@@ -34,6 +35,9 @@ function ProfilePageInner(props: { user: User; lover: Lover }) {
     setLover((prevState) => ({ ...prevState, [key]: value }))
   }
 
+  const [displayName, setDisplayName] = useState(user.name)
+  const [username, setUsername] = useState(user.username)
+
   return (
     <Col className="items-center">
       <Col className={'bg-canvas-0 w-full max-w-2xl px-6 py-4'}>
@@ -43,6 +47,8 @@ function ProfilePageInner(props: { user: User; lover: Lover }) {
           lover={lover}
           loverCreatedAlready={true}
           isSubmitting={false}
+          setEditUsername={setUsername}
+          setEditDisplayName={setDisplayName}
         />
         <div className={'h-4'} />
         <OptionalLoveUserForm
@@ -50,6 +56,12 @@ function ProfilePageInner(props: { user: User; lover: Lover }) {
           user={user}
           setLover={setLoverState}
           buttonLabel={'Save'}
+          onSubmit={async () => {
+            api('me/update', {
+              name: displayName === user.name ? undefined : displayName,
+              username: username === user.username ? undefined : username,
+            })
+          }}
         />
       </Col>
     </Col>

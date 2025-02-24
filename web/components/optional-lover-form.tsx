@@ -23,8 +23,9 @@ export const OptionalLoveUserForm = (props: {
   user: User
   buttonLabel?: string
   fromSignup?: boolean
+  onSubmit?: () => Promise<void>
 }) => {
-  const { lover, user, buttonLabel, setLover, fromSignup } = props
+  const { lover, user, buttonLabel, setLover, fromSignup, onSubmit } = props
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
@@ -47,6 +48,7 @@ export const OptionalLoveUserForm = (props: {
       console.error(e)
       return false
     })
+    onSubmit && (await onSubmit())
     setIsSubmitting(false)
     if (res) {
       console.log('success')

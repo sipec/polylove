@@ -42,6 +42,10 @@ const requiredKeys = Object.keys(
 
 export const RequiredLoveUserForm = (props: {
   user: User
+  // TODO thread this properly instead of this jank
+  setEditUsername?: (name: string) => unknown
+  setEditDisplayName?: (name: string) => unknown
+
   lover: rowFor<'lovers'>
   setLover: (key: keyof rowFor<'lovers'>, value: any) => void
   isSubmitting: boolean
@@ -64,6 +68,13 @@ export const RequiredLoveUserForm = (props: {
     loadingName,
     errorName,
   } = userInfo
+
+  useEffect(() => {
+    props.setEditUsername && props.setEditUsername(username)
+  }, [username])
+  useEffect(() => {
+    props.setEditDisplayName && props.setEditDisplayName(name)
+  }, [name])
 
   const canContinue =
     (!lover.looking_for_matches ||
