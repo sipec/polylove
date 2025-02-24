@@ -11,9 +11,9 @@ import { sendTemplateEmail } from './send-email'
 export const sendNewMatchEmail = async (
   reason: NotificationReason,
   privateUser: PrivateUser,
-  // contract: Contract,
+  // contract: Contract, 
   creatorName: string,
-  matchedWithUser: User
+  matchedWithUser: User 
 ) => {
   const { sendToEmail, unsubscribeUrl } = getNotificationDestinationsForUser(
     privateUser,

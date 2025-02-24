@@ -2,8 +2,7 @@ import { Json } from 'common/supabase/schema'
 import { SupabaseDirectClient } from 'shared/supabase/init'
 import { ChatVisibility } from 'common/chat-message'
 import { User } from 'common/user'
-import { first } from 'lodash'
-
+import { first } from 'lodash' 
 import { log } from 'shared/monitoring/log'
 import { HOUR_MS } from 'common/util/time'
 import { getPrivateUser, getUser } from 'shared/utils'
@@ -24,7 +23,7 @@ export const leaveChatContent = (userName: string) => ({
     {
       type: 'paragraph',
       content: [{ text: `${userName} left the chat`, type: 'text' }],
-    },
+    }, 
   ],
 })
 export const joinChatContent = (userName: string) => {

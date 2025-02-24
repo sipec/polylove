@@ -1,15 +1,7 @@
-# Secrets
-.runtimeconfig.json
+# Supabase
+.branches
+.temp
+.env
 
-# Node.js dependency directory
-node_modules/
-
-ui-debug.log
-firebase-debug.log
-firestore-debug.log
-pubsub-debug.log
-firestore_export*
-
-tsconfig.tsbuildinfo
-*emails.csv
-*.csv
+# regen-schema
+**/dump.sql

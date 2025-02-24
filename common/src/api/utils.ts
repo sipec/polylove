@@ -1,6 +1,6 @@
 import { ENV_CONFIG } from 'common/envs/constants'
 import { API, APIPath } from './schema'
-
+ 
 type ErrorCode =
   | 400 // your input is bad (like zod is mad)
   | 401 // you aren't logged in / your account doesn't exist
@@ -22,7 +22,7 @@ export class APIError extends Error {
 
 export function getCloudRunServiceUrl(name: string) {
   const { cloudRunId, cloudRunRegion } = ENV_CONFIG
-  return `https://${name}-${cloudRunId}-${cloudRunRegion}.a.run.app`
+  return `https://${name}-${cloudRunId}-${cloudRunRegion}.a.run.app` 
 }
 
 // Note that the replicator is deployed to us-east4 to be close to Supabase

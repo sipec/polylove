@@ -50,16 +50,15 @@ export const PROD_CONFIG: EnvConfig = {
   loveDomain: 'manifold.love',
   loveDomainAlternate: 'manifoldlove.com',
   amplitudeApiKey: '2d6509fd4185ebb8be29709842752a15',
-  supabaseInstanceId: 'pxidrgkatumlvfqaxcll',
+  supabaseInstanceId: 'gxbejryrwhsmuailcdur',
   supabaseAnonKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4aWRyZ2thdHVtbHZmcWF4Y2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njg5OTUzOTgsImV4cCI6MTk4NDU3MTM5OH0.d_yYtASLzAoIIGdXUBIgRAGLBnNow7JG2SoaNMQ8ySg',
-
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmVqcnlyd2hzbXVhaWxjZHVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwOTczODIsImV4cCI6MjA1NTY3MzM4Mn0.LSSlCeQ0ht__aewqW_x8tac5Mvdv8JldVJGoCM139BQ',
   firebaseConfig: {
-    apiKey: 'AIzaSyDp3J57vLeAZCzxLD-vcPaGIkAmBoGOSYw',
-    authDomain: 'mantic-markets.firebaseapp.com',
-    projectId: 'mantic-markets',
+    apiKey: 'AIzaSyBoq3rzUa8Ekyo3ZaTnlycQYPRCA26VpOw',
+    authDomain: 'polylove.firebaseapp.com',
+    projectId: 'polylove',
     region: 'us-central1',
-    storageBucket: 'mantic-markets.appspot.com',
+    storageBucket: 'polylove.appspot.com',
     privateBucket: 'mantic-markets-private',
     messagingSenderId: '128925704902',
     appId: '1:128925704902:web:f61f86944d8ffa2a642dc7',
