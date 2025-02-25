@@ -19,7 +19,7 @@ ENV=${1:-dev}
 case $ENV in
     dev)
         ENVIRONMENT=DEV
-        GCLOUD_PROJECT=dev-mantic-markets
+        GCLOUD_PROJECT=polylove
         MACHINE_TYPE=n2-standard-2 ;;
     prod)
         ENVIRONMENT=PROD

@@ -62,7 +62,7 @@ export const isProd = () => {
   if (process.env.ENVIRONMENT) {
     return process.env.ENVIRONMENT == 'PROD'
   } else {
-    return admin.app().options.projectId === 'mantic-markets'
+    return admin.app().options.projectId === 'polylove'
   }
 }
 

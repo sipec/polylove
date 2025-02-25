@@ -52,7 +52,7 @@ export const PROD_CONFIG: EnvConfig = {
   amplitudeApiKey: '2d6509fd4185ebb8be29709842752a15',
   supabaseInstanceId: 'lltoaluoavlzrgjplire',
   supabaseAnonKey:
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdG9hbHVvYXZsenJnanBsaXJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NTE4MDksImV4cCI6MjA1NjAyNzgwOX0.du6UI3YkcwUxTrYqYficcsT9zT5PTLsUYDIk_IkzVus',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdG9hbHVvYXZsenJnanBsaXJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NTE4MDksImV4cCI6MjA1NjAyNzgwOX0.du6UI3YkcwUxTrYqYficcsT9zT5PTLsUYDIk_IkzVus',
   firebaseConfig: {
     apiKey: 'AIzaSyBoq3rzUa8Ekyo3ZaTnlycQYPRCA26VpOw',
     authDomain: 'polylove.firebaseapp.com',

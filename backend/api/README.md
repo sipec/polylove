@@ -20,7 +20,6 @@ Secrets are strings that shouldn't be checked into Git (eg API keys, passwords).
 
 Add or remove keys using [Google Secret Manager](https://console.cloud.google.com/security/secret-manager), which provides them as environment variables to functions that require them.
 
-[Dev secrets manager](https://console.cloud.google.com/security/secret-manager?project=dev-mantic-markets)
-[Prod secrets manager](https://console.cloud.google.com/security/secret-manager?project=mantic-markets)
+[Secrets manager](https://console.cloud.google.com/security/secret-manager?project=polylove)
 
 Secondly, please update the list of secret keys at `backend/shared/src/secrets.ts`. Only these keys are provided to functions, scripts, and the api.
