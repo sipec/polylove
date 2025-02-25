@@ -5,8 +5,10 @@ import { Lover } from 'common/love/lover'
 export const getLovers: APIHandler<'get-lovers'> = async (_props, _auth) => {
   const pg = createSupabaseDirectClient()
 
-  const lovers = await pg.manyOrNone<Lover>(
-    `select lovers.*, users.data as user
+  const lovers = await pg.manyOrNone<
+    Lover & { name: string; username: string }
+  >(
+    `select lovers.*, name, username, users.data as user
     from lovers
     join users on users.id = lovers.user_id
     where
@@ -20,6 +22,9 @@ export const getLovers: APIHandler<'get-lovers'> = async (_props, _auth) => {
 
   return {
     status: 'success',
-    lovers,
+    lovers: lovers.map(({ name, username, user, ...l }) => ({
+      ...l,
+      user: { ...user, name, username },
+    })),
   }
 }
