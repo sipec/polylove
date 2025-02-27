@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { cleanDisplayName, cleanUsername } from 'common/util/clean-username'
 import { APIError } from 'common/api/utils'
 import { User } from 'common/user'
-import { updateUser } from 'web/lib/firebase/api'
+import { updateUser } from 'web/lib/api'
 
 type UserInfoState = {
   name: string
@@ -35,7 +35,7 @@ export const useEditableUserInfo = (user: User) => {
     if (!newName) return updateUserState({ name: user.name })
 
     try {
-      await ({ name: newName })
+      await updateUser({ name: newName })
       updateUserState({ errorName: '', name: newName })
     } catch (reason) {
       updateUserState({

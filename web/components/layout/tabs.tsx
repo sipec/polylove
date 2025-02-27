@@ -158,7 +158,7 @@ export function ControlledTabs(props: TabProps & { activeIndex: number }) {
           >
             <Col
               className={clsx(
-                tab.stackedTabIcon && activeIndex !== i && 'opacity-85'
+                // tab.stackedTabIcon && (activeIndex !== i) && 'opacity-85'
               )}
             >
               <Tooltip text={tab.tooltip}>

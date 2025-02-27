@@ -8,7 +8,6 @@ import { Search } from 'love/components/filters/search'
 import { Gender, convertGender } from 'love/components/gender-icon'
 import { LovePage } from 'love/components/love-page'
 import { SignUpAsMatchmaker } from 'love/components/nav/love-sidebar'
-import { OnlineIcon } from 'love/components/online-icon'
 import { useLover } from 'love/hooks/use-lover'
 import { useCompatibleLovers } from 'love/hooks/use-lovers'
 import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
@@ -24,7 +23,6 @@ import { track } from 'web/lib/service/analytics'
 import { Lover } from 'common/love/lover'
 import { useSaveCampaign } from 'web/hooks/use-save-campaign'
 import { useTracking } from 'web/hooks/use-tracking'
-import { useCallReferUser } from 'web/hooks/use-call-refer-user'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { CompatibleBadge } from 'love/components/widgets/compatible-badge'
 import { useGetter } from 'web/hooks/use-getter'
@@ -44,7 +42,6 @@ export default function ProfilesPage() {
   useTracking('view love profiles')
   useSaveReferral(user)
   useSaveCampaign()
-  useCallReferUser()
   const lover = useLover()
   const { data: starredUserIds, refresh: refreshStars } = useGetter(
     'star',
@@ -126,7 +123,7 @@ function ProfilePreview(props: {
   refreshStars: () => Promise<void>
 }) {
   const { lover, compatibilityScore, hasStar, refreshStars } = props
-  const { user, gender, age, pinned_url, city, last_online_time } = lover
+  const { user, gender, age, pinned_url, city } = lover
   const currentUser = useUser()
 
   return (

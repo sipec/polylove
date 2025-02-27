@@ -14,7 +14,7 @@ import clsx from 'clsx'
 // and if you add a font, you must add it to tailwind config as well for it to work.
 
 function firstLine(msg: string) {
-  return msg.replace(/\r?\n.*/s, '')
+  return msg.replace(/\r?\n[\s\S]*/, '')
 }
 
 const logoFont = Major_Mono_Display({

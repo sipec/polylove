@@ -42,7 +42,7 @@ type FirebaseConfig = {
   privateBucket: string
   messagingSenderId: string
   appId: string
-  measurementId: string
+  measurementId?: string
 }
 
 export const PROD_CONFIG: EnvConfig = {
@@ -50,23 +50,21 @@ export const PROD_CONFIG: EnvConfig = {
   loveDomain: 'manifold.love',
   loveDomainAlternate: 'manifoldlove.com',
   amplitudeApiKey: '2d6509fd4185ebb8be29709842752a15',
-  supabaseInstanceId: 'pxidrgkatumlvfqaxcll',
+  supabaseInstanceId: 'lltoaluoavlzrgjplire',
   supabaseAnonKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4aWRyZ2thdHVtbHZmcWF4Y2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njg5OTUzOTgsImV4cCI6MTk4NDU3MTM5OH0.d_yYtASLzAoIIGdXUBIgRAGLBnNow7JG2SoaNMQ8ySg',
-
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdG9hbHVvYXZsenJnanBsaXJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NTE4MDksImV4cCI6MjA1NjAyNzgwOX0.du6UI3YkcwUxTrYqYficcsT9zT5PTLsUYDIk_IkzVus',
   firebaseConfig: {
-    apiKey: 'AIzaSyDp3J57vLeAZCzxLD-vcPaGIkAmBoGOSYw',
-    authDomain: 'mantic-markets.firebaseapp.com',
-    projectId: 'mantic-markets',
-    region: 'us-central1',
-    storageBucket: 'mantic-markets.appspot.com',
+    apiKey: 'AIzaSyB_62i1KZ1_gk5vIlefi96G6lJ5dB0tXOo',
+    authDomain: 'polylove-57eab.firebaseapp.com',
+    projectId: 'polylove',
+    region: 'us-west1',
+    storageBucket: 'polylove.firebasestorage.app',
     privateBucket: 'mantic-markets-private',
-    messagingSenderId: '128925704902',
-    appId: '1:128925704902:web:f61f86944d8ffa2a642dc7',
-    measurementId: 'G-SSFK1Q138D',
+    messagingSenderId: '226356461961',
+    appId: '1:226356461961:web:ff99f7f74861454e146158',
   },
   twitchBotEndpoint: 'https://twitch-bot.manifold.markets',
-  apiEndpoint: 'https://api.manifold.markets',
+  apiEndpoint: 'https://api.manifold.love',
   cloudRunId: 'nggbo3neva',
   cloudRunRegion: 'uc',
 

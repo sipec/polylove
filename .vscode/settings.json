@@ -16,19 +16,19 @@
   "sqltools.connections": [
     {
       "previewLimit": 50,
-      "server": "db.pxidrgkatumlvfqaxcll.supabase.co",
+      "server": "db.lltoaluoavlzrgjplire.supabase.co",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "Manifold Prod",
+      "name": "Polylove Prod",
       "database": "postgres",
       "username": "postgres"
     },
     {
       "previewLimit": 50,
-      "server": "db.mfodonznyfxllcezufgr.supabase.co",
+      "server": "db.gxbejryrwhsmuailcdur.supabase.co",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "Manifold Dev",
+      "name": "Polylove Dev",
       "database": "postgres",
       "username": "postgres"
     }

@@ -11,7 +11,7 @@ import { User } from 'common/user'
 import { useEvent } from 'web/hooks/use-event'
 import { track } from 'web/lib/service/analytics'
 import { toast } from 'react-hot-toast'
-import { createLoveCompatibilityQuestion } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { Row as rowFor } from 'common/supabase/utils'
 import { AnswerCompatibilityQuestionContent } from './answer-compatibility-question-content'
 import { uniq } from 'lodash'
@@ -130,7 +130,7 @@ function CreateCompatibilityModalContent(props: {
 
   const onAddQuestion = useEvent(async () => {
     try {
-      const newQuestion = await createLoveCompatibilityQuestion({
+      const newQuestion = await api('create-compatibility-question', {
         question: question,
         options: generateJson(),
       })

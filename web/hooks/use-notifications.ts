@@ -2,7 +2,7 @@ import { NOTIFICATIONS_PER_PAGE, type Notification } from 'common/notifications'
 import { type User } from 'common/user'
 import { first, groupBy, sortBy } from 'lodash'
 import { useEffect, useMemo } from 'react'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { useApiSubscription } from './use-api-subscription'
 import { usePersistentLocalState } from './use-persistent-local-state'
 

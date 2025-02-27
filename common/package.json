@@ -21,7 +21,6 @@
     "@tiptap/suggestion": "2.3.2",
     "@tiptap/pm": "2.3.2",
     "dayjs": "1.11.4",
-    "link-preview-js": "3.0.4",
     "lodash": "4.17.21",
     "string-similarity": "4.0.4",
     "zod": "3.21.4"

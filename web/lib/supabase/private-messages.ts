@@ -1,5 +1,5 @@
 import { run } from 'common/supabase/utils'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { db } from 'web/lib/supabase/db'
 
 // NOTE: must be authorized (useIsAuthorized) to use this function

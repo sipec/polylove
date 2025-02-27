@@ -1,6 +1,6 @@
 import { ENV_CONFIG } from 'common/envs/constants'
 import { API, APIPath } from './schema'
-
+ 
 type ErrorCode =
   | 400 // your input is bad (like zod is mad)
   | 401 // you aren't logged in / your account doesn't exist
@@ -22,7 +22,7 @@ export class APIError extends Error {
 
 export function getCloudRunServiceUrl(name: string) {
   const { cloudRunId, cloudRunRegion } = ENV_CONFIG
-  return `https://${name}-${cloudRunId}-${cloudRunRegion}.a.run.app`
+  return `https://${name}-${cloudRunId}-${cloudRunRegion}.a.run.app` 
 }
 
 // Note that the replicator is deployed to us-east4 to be close to Supabase
@@ -33,28 +33,19 @@ export function getReplicatorUrl() {
 }
 
 export function pathWithPrefix(path: APIPath) {
-  return API[path].visibility === 'public' ? `v0/${path}` : path
+  return `v0/${path}`
 }
 
 export function getWebsocketUrl() {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return `ws://${process.env.NEXT_PUBLIC_API_URL}/ws`
-  } else {
-    const { apiEndpoint } = ENV_CONFIG
-    return `wss://${apiEndpoint}/ws`
-  }
+  const endpoint = process.env.NEXT_PUBLIC_API_URL ?? ENV_CONFIG.apiEndpoint
+  const protocol = endpoint.startsWith('localhost') ? 'ws' : 'wss'
+
+  return `${protocol}://${endpoint}/ws`
 }
 
-// TODO: strictly type
 export function getApiUrl(path: string) {
-  if (path in API) {
-    path = pathWithPrefix(path as APIPath)
-  }
-
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return `${process.env.NEXT_PUBLIC_API_URL}/${path}`
-  } else {
-    const { apiEndpoint } = ENV_CONFIG
-    return `${apiEndpoint}/${path}`
-  }
+  const endpoint = process.env.NEXT_PUBLIC_API_URL ?? ENV_CONFIG.apiEndpoint
+  const protocol = endpoint.startsWith('localhost') ? 'http' : 'https'
+  const prefix = 'v0'
+  return `${protocol}://${endpoint}/${prefix}/${path}`
 }

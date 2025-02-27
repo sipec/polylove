@@ -18,7 +18,6 @@ import { getLoverRow, LoverRow } from 'common/love/lover'
 import Custom404 from '../404'
 import { db } from 'web/lib/supabase/db'
 import { useSaveCampaign } from 'web/hooks/use-save-campaign'
-import { useCallReferUser } from 'web/hooks/use-call-refer-user'
 import { LoverProfile } from 'love/components/profile/lover-profile'
 import { User } from 'common/user'
 import { getUserForStaticProps } from 'common/supabase/users'
@@ -61,7 +60,6 @@ export default function UserPage(props: {
   useSaveReferral(currentUser, { defaultReferrerUsername: username })
   useTracking('view love profile', { username: user?.username })
   useSaveCampaign()
-  useCallReferUser()
 
   const [staticLover] = useState(
     props.lover && user ? { ...props.lover, user: user } : null

@@ -6,7 +6,7 @@ import { Checkbox } from 'web/components/widgets/checkbox'
 import { Button } from 'web/components/buttons/button'
 import Textarea from 'react-expanding-textarea'
 import { toast } from 'react-hot-toast'
-import { report } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 
 export const ReportUser = (props: { user: User; closeModal: () => void }) => {
   const { user, closeModal } = props
@@ -29,7 +29,7 @@ export const ReportUser = (props: { user: User; closeModal: () => void }) => {
     setIsSubmitting(true)
     await toast
       .promise(
-        report({
+        api('report', {
           contentType: 'user',
           contentId: user.id,
           contentOwnerId: user.id,

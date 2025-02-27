@@ -4,11 +4,12 @@ import clsx from 'clsx'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import Masonry from 'react-masonry-css'
-import { searchGiphy } from 'web/lib/firebase/api'
 import { Col } from '../layout/col'
 import { MODAL_CLASS, Modal } from '../layout/modal'
 import { Input } from '../widgets/input'
 import { LoadingIndicator } from '../widgets/loading-indicator'
+import { api } from 'web/lib/api'
+import { unauthedApi } from 'common/util/api'
 
 export function GIFModal(props: {
   editor: Editor | null
@@ -24,12 +25,12 @@ export function GIFModal(props: {
   const debouncedSearch = useCallback(
     debounce((term) => {
       setLoading(true)
-      searchGiphy({ term, limit: 20 })
+      unauthedApi('search-giphy', { term, limit: 20 })
         .then((res) => {
           if (res.status === 'success') {
             setGifResults(res.data)
           } else {
-            setError(res.data as string)
+            setError(res?.data as string | undefined ?? '')
           }
         })
         .finally(() => {

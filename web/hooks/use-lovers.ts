@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash'
 import { useEffect } from 'react'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
-import { api } from 'web/lib/firebase/api'
+import { api } from 'web/lib/api'
 import { APIResponse } from 'common/api/schema'
 import { useLoverByUserId } from './use-lover'
 import { getLoversCompatibilityFactor } from 'common/love/compatibility-score'

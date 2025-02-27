@@ -11,6 +11,7 @@ export type Notification = {
 
   sourceId: string
   sourceType: string
+  sourceUpdateType?: 'created' | 'updated' | 'deleted'
 
   sourceUserName: string
   sourceUserUsername: string
@@ -66,3 +67,5 @@ export async function getUnseenNotifications(
 
   return data?.map((d: Row<'user_notifications'>) => d) ?? []
 }
+
+export type NotificationReason = any // TODO

@@ -1,7 +1,11 @@
-import { contentSchema } from 'common/api/zod-types'
+import {
+  contentSchema,
+  combinedLoveUsersSchema,
+  baseLoversSchema,
+} from 'common/api/zod-types'
 import { ChatMessage, PrivateChatMessage } from 'common/chat-message'
-import type { ContractComment } from 'common/comment'
 import { CompatibilityScore } from 'common/love/compatibility-score'
+import { MAX_COMPATIBILITY_QUESTION_LENGTH } from 'common/love/constants'
 import { Lover } from 'common/love/lover'
 import { Row } from 'common/supabase/utils'
 import { PrivateUser, User } from 'common/user'
@@ -19,8 +23,6 @@ export const DEFAULT_CACHE_STRATEGY =
 type APIGenericSchema = {
   // GET is for retrieval, POST is to mutate something, PUT is idempotent mutation (can be repeated safely)
   method: 'GET' | 'POST' | 'PUT'
-  //private APIs can only be called from manifold. undocumented endpoints can change or be deleted at any time!
-  visibility: 'public' | 'undocumented' | 'private'
   // whether the endpoint requires authentication
   authed: boolean
   // zod schema for the request body (or for params for GET requests)
@@ -32,112 +34,80 @@ type APIGenericSchema = {
 }
 
 let _apiTypeCheck: { [x: string]: APIGenericSchema }
+
 export const API = (_apiTypeCheck = {
+  health: {
+    method: 'GET',
+    authed: false,
+    props: z.object({}),
+    returns: {} as { message: 'Server is working.'; uid?: string },
+  },
+  'get-supabase-token': {
+    method: 'GET',
+    authed: true,
+    props: z.object({}),
+    returns: {} as { jwt: string },
+  },
+  'mark-all-notifs-read': {
+    method: 'POST',
+    authed: true,
+    props: z.object({}),
+  },
   'user/by-id/:id/block': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({ id: z.string() }).strict(),
   },
   'user/by-id/:id/unblock': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({ id: z.string() }).strict(),
   },
-  comment: {
+  'ban-user': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
-    returns: {} as ContractComment,
     props: z
       .object({
-        contractId: z.string(),
-        content: contentSchema.optional(),
-        html: z.string().optional(),
-        markdown: z.string().optional(),
-        replyToCommentId: z.string().optional(),
-        replyToAnswerId: z.string().optional(),
-        replyToBetId: z.string().optional(),
+        userId: z.string(),
+        unban: z.boolean().optional(),
       })
       .strict(),
   },
-  'hide-comment': {
+  'create-user': {
+    // TODO rest
     method: 'POST',
-    visibility: 'public',
-    authed: true,
-    props: z.object({ commentPath: z.string() }).strict(),
-  },
-  'pin-comment': {
-    method: 'POST',
-    visibility: 'undocumented',
-    authed: true,
-    props: z.object({ commentPath: z.string() }).strict(),
-  },
-  comments: {
-    method: 'GET',
-    visibility: 'public',
-    authed: false,
-    cache: DEFAULT_CACHE_STRATEGY,
-    returns: [] as ContractComment[],
-    props: z
-      .object({
-        contractId: z.string().optional(),
-        contractSlug: z.string().optional(),
-        limit: z.coerce.number().gte(0).lte(1000).default(1000),
-        page: z.coerce.number().gte(0).default(0),
-        userId: z.string().optional(),
-        isPolitics: z.coerce.boolean().optional(),
-      })
-      .strict(),
-  },
-  createuser: {
-    method: 'POST',
-    visibility: 'public',
     authed: true,
     returns: {} as { user: User; privateUser: PrivateUser },
     props: z
       .object({
         deviceToken: z.string().optional(),
         adminToken: z.string().optional(),
-        visitedContractIds: z.array(z.string()).optional(),
       })
       .strict(),
   },
-  'verify-phone-number': {
+  'create-lover': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
-    returns: {} as { status: string },
+    returns: {} as Row<'lovers'>,
+    props: baseLoversSchema,
+  },
+  report: {
+    method: 'POST',
+    authed: true,
     props: z
       .object({
-        phoneNumber: z.string(),
-        code: z.string(),
+        contentOwnerId: z.string(),
+        contentType: z.enum(['user', 'comment', 'contract']),
+        contentId: z.string(),
+        description: z.string().optional(),
+        parentId: z.string().optional(),
+        parentType: z.enum(['contract', 'post', 'user']).optional(),
       })
       .strict(),
+    returns: {} as any,
   },
-  'request-otp': {
-    method: 'GET',
-    visibility: 'undocumented',
-    authed: true,
-    returns: {} as { status: string },
-    props: z
-      .object({
-        phoneNumber: z.string(),
-      })
-      .strict(),
-  },
-  'phone-number': {
-    method: 'GET',
-    visibility: 'undocumented',
-    authed: true,
-    returns: {} as { number: string },
-    props: z.object({}).strict(),
-  },
-
   me: {
     method: 'GET',
-    visibility: 'public',
     authed: true,
     cache: DEFAULT_CACHE_STRATEGY,
     props: z.object({}),
@@ -145,7 +115,6 @@ export const API = (_apiTypeCheck = {
   },
   'me/update': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       name: z.string().trim().min(1).optional(),
@@ -165,9 +134,14 @@ export const API = (_apiTypeCheck = {
     }),
     returns: {} as FullUser,
   },
+  'update-lover': {
+    method: 'POST',
+    authed: true,
+    props: combinedLoveUsersSchema,
+    returns: {} as any,
+  },
   'me/delete': {
     method: 'POST',
-    visibility: 'public',
     authed: true,
     props: z.object({
       username: z.string(), // just so you're sure
@@ -175,14 +149,12 @@ export const API = (_apiTypeCheck = {
   },
   'me/private': {
     method: 'GET',
-    visibility: 'public',
     authed: true,
     props: z.object({}),
     returns: {} as PrivateUser,
   },
   'user/:username': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as FullUser,
@@ -190,7 +162,6 @@ export const API = (_apiTypeCheck = {
   },
   'user/:username/lite': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as DisplayUser,
@@ -198,7 +169,6 @@ export const API = (_apiTypeCheck = {
   },
   'user/by-id/:id': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as FullUser,
@@ -206,28 +176,13 @@ export const API = (_apiTypeCheck = {
   },
   'user/by-id/:id/lite': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: {} as DisplayUser,
     props: z.object({ id: z.string() }).strict(),
   },
-  users: {
-    method: 'GET',
-    visibility: 'public',
-    authed: false,
-    cache: DEFAULT_CACHE_STRATEGY,
-    returns: [] as FullUser[],
-    props: z
-      .object({
-        limit: z.coerce.number().gte(0).lte(1000).default(500),
-        before: z.string().optional(),
-      })
-      .strict(),
-  },
   'search-users': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: false,
     cache: DEFAULT_CACHE_STRATEGY,
     returns: [] as FullUser[],
@@ -239,22 +194,8 @@ export const API = (_apiTypeCheck = {
       })
       .strict(),
   },
-  react: {
-    method: 'POST',
-    visibility: 'undocumented',
-    authed: true,
-    props: z
-      .object({
-        contentId: z.string(),
-        contentType: z.enum(['comment', 'contract']),
-        remove: z.boolean().optional(),
-      })
-      .strict(),
-    returns: { success: true },
-  },
   'compatible-lovers': {
     method: 'GET',
-    visibility: 'private',
     authed: false,
     props: z.object({ userId: z.string() }),
     returns: {} as {
@@ -265,23 +206,8 @@ export const API = (_apiTypeCheck = {
       }
     },
   },
-  post: {
-    method: 'POST',
-    visibility: 'private',
-    authed: true,
-    returns: {} as ContractComment,
-    props: z
-      .object({
-        contractId: z.string(),
-        betId: z.string().optional(),
-        commentId: z.string().optional(),
-        content: contentSchema.optional(),
-      })
-      .strict(),
-  },
   'remove-pinned-photo': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     returns: { success: true },
     props: z
@@ -292,7 +218,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-compatibility-questions': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({}),
     returns: {} as {
@@ -305,7 +230,6 @@ export const API = (_apiTypeCheck = {
   },
   'like-lover': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId: z.string(),
@@ -317,7 +241,6 @@ export const API = (_apiTypeCheck = {
   },
   'ship-lovers': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId1: z.string(),
@@ -328,16 +251,8 @@ export const API = (_apiTypeCheck = {
       status: 'success'
     },
   },
-  'request-signup-bonus': {
-    method: 'GET',
-    visibility: 'undocumented',
-    authed: true,
-    returns: {} as { bonus: number },
-    props: z.object({}),
-  },
   'get-likes-and-ships': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z
       .object({
@@ -353,7 +268,6 @@ export const API = (_apiTypeCheck = {
   },
   'has-free-like': {
     method: 'GET',
-    visibility: 'private',
     authed: true,
     props: z.object({}).strict(),
     returns: {} as {
@@ -363,7 +277,6 @@ export const API = (_apiTypeCheck = {
   },
   'star-lover': {
     method: 'POST',
-    visibility: 'private',
     authed: true,
     props: z.object({
       targetUserId: z.string(),
@@ -375,7 +288,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-lovers': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({}).strict(),
     returns: {} as {
@@ -385,7 +297,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-lover-answers': {
     method: 'GET',
-    visibility: 'public',
     authed: false,
     props: z.object({ userId: z.string() }).strict(),
     returns: {} as {
@@ -393,17 +304,27 @@ export const API = (_apiTypeCheck = {
       answers: Row<'love_compatibility_answers'>[]
     },
   },
-  'update-user-embedding': {
+  'create-comment': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
-    props: z.object({}),
-    returns: {} as { success: true },
+    props: z.object({
+      userId: z.string(),
+      content: contentSchema,
+      replyToCommentId: z.string().optional(),
+    }),
+    returns: {} as any,
   },
-
+  'hide-comment': {
+    method: 'POST',
+    authed: true,
+    props: z.object({
+      commentId: z.string(),
+      hide: z.boolean(),
+    }),
+    returns: {} as any,
+  },
   'create-public-chat-message': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     returns: {} as ChatMessage,
     props: z.object({
@@ -413,7 +334,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-memberships': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number().optional(),
@@ -428,7 +348,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-messages': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number(),
@@ -439,7 +358,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-channel-seen-time': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelIds: z.array(z.coerce.number()),
@@ -448,7 +366,6 @@ export const API = (_apiTypeCheck = {
   },
   'set-channel-seen-time': {
     method: 'POST',
-    visibility: 'undocumented',
     authed: true,
     props: z.object({
       channelId: z.coerce.number(),
@@ -456,7 +373,6 @@ export const API = (_apiTypeCheck = {
   },
   'get-notifications': {
     method: 'GET',
-    visibility: 'undocumented',
     authed: true,
     returns: [] as Notification[],
     props: z
@@ -465,6 +381,77 @@ export const API = (_apiTypeCheck = {
         limit: z.coerce.number().gte(0).lte(1000).default(100),
       })
       .strict(),
+  },
+  'create-private-user-message': {
+    method: 'POST',
+    authed: true,
+    returns: {} as any,
+    props: z.object({
+      content: contentSchema,
+      channelId: z.number(),
+    }),
+  },
+  'create-private-user-message-channel': {
+    method: 'POST',
+    authed: true,
+    returns: {} as any,
+    props: z.object({
+      userIds: z.array(z.string()),
+    }),
+  },
+  'update-private-user-message-channel': {
+    method: 'POST',
+    authed: true,
+    returns: {} as any,
+    props: z.object({
+      channelId: z.number(),
+      notifyAfterTime: z.number(),
+    }),
+  },
+  'leave-private-user-message-channel': {
+    method: 'POST',
+    authed: true,
+    returns: {} as any,
+    props: z.object({
+      channelId: z.number(),
+    }),
+  },
+  'create-compatibility-question': {
+    method: 'POST',
+    authed: true,
+    returns: {} as any,
+    props: z.object({
+      question: z.string().min(1).max(MAX_COMPATIBILITY_QUESTION_LENGTH),
+      options: z.record(z.string(), z.number()),
+    }),
+  },
+  'search-location': {
+    method: 'POST', // TODO: should be GET
+
+    authed: false,
+    returns: {} as any,
+    props: z.object({
+      term: z.string(),
+      limit: z.number().optional(),
+    }),
+  },
+  'search-near-city': {
+    method: 'POST',
+    authed: false,
+    returns: {} as any,
+    props: z.object({
+      cityId: z.string(),
+      radius: z.number().min(1).max(500),
+    }),
+  },
+  'search-giphy': {
+    method: 'POST',
+    authed: false,
+    returns: {} as any,
+    props: z.object({
+      term: z.string(),
+      limit: z.number().min(1).max(100),
+    }),
   },
 } as const)
 
