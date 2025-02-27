@@ -15,21 +15,21 @@ from
   temp_users;
 
 -- Rename temp_love_messages
-alter table temp_love_messages
-rename to private_user_messages;
+-- alter table temp_love_messages
+-- rename to private_user_messages;
 
-alter table private_user_messages
-alter column channel_id set not null,
-alter column content set not null,
-alter column created_time set not null,
-alter column created_time set default now(),
-alter column id set not null,
-alter column user_id set not null,
-alter column visibility set not null,
-alter column visibility set default 'private';
+-- alter table private_user_messages
+-- alter column channel_id set not null,
+-- alter column content set not null,
+-- alter column created_time set not null,
+-- alter column created_time set default now(),
+-- alter column id set not null,
+-- alter column user_id set not null,
+-- alter column visibility set not null,
+-- alter column visibility set default 'private';
 
-alter table private_user_messages
-alter column id add generated always as identity;
+-- alter table private_user_messages
+-- alter column id add generated always as identity;
 
-alter table private_user_messages
-add constraint private_user_messages_pkey primary key (id);
+-- alter table private_user_messages
+-- add constraint private_user_messages_pkey primary key (id);

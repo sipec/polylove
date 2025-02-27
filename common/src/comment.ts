@@ -1,4 +1,4 @@
-import type { JSONContent } from '@tiptap/core'
+import { type JSONContent } from '@tiptap/core'
 import { OnLover } from 'common/love/love-comment'
 
 export const MAX_COMMENT_LENGTH = 10000

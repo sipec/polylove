@@ -11,20 +11,22 @@ if [ -z "$1" ]; then
 fi
 
 SERVICE_NAME="api"
-SERVICE_GROUP="${SERVICE_NAME}-group-east"
-REGION="us-east4" # Ashburn, Virginia
-ZONE="us-east4-a"
+SERVICE_GROUP="${SERVICE_NAME}-group"
+REGION="us-west1"
+ZONE="us-west1-b"
 ENV=${1:-dev}
 
 case $ENV in
     dev)
         ENVIRONMENT=DEV
         GCLOUD_PROJECT=polylove
-        MACHINE_TYPE=n2-standard-2 ;;
+        # MACHINE_TYPE=n2-standard-2 ;;
+        MACHINE_TYPE=e2-small ;;
     prod)
         ENVIRONMENT=PROD
         GCLOUD_PROJECT=polylove
-        MACHINE_TYPE=n2-standard-8 ;;
+        # MACHINE_TYPE=c2-standard-4 ;;
+        MACHINE_TYPE=e2-medium ;;
     *)
         echo "Invalid environment; must be dev or prod."
         exit 1
@@ -61,7 +63,7 @@ if [ -z "${MANIFOLD_CLOUD_BUILD}" ]; then
        echo "Then it will do remote builds like before, at the cost of it being slow, like before."
        exit 1
     fi
-    IMAGE_NAME="us-east4-docker.pkg.dev/${GCLOUD_PROJECT}/builds/${SERVICE_NAME}"
+    IMAGE_NAME="${REGION}-docker.pkg.dev/${GCLOUD_PROJECT}/builds/${SERVICE_NAME}"
     IMAGE_URL="${IMAGE_NAME}:${IMAGE_TAG}"
     docker build . --tag ${IMAGE_URL} --platform linux/amd64
     docker push ${IMAGE_URL}
@@ -88,7 +90,7 @@ gcloud compute instance-templates create-with-container ${TEMPLATE_NAME} \
        --image-family "cos-109-lts" \
        --container-image ${IMAGE_URL} \
        --machine-type ${MACHINE_TYPE} \
-       --container-env ENVIRONMENT=${ENVIRONMENT},GOOGLE_CLOUD_PROJECT=${GCLOUD_PROJECT} \
+       --container-env NEXT_PUBLIC_FIREBASE_ENV=${ENVIRONMENT},GOOGLE_CLOUD_PROJECT=${GCLOUD_PROJECT} \
        --no-user-output-enabled \
        --scopes default,cloud-platform \
        --tags lb-health-check
