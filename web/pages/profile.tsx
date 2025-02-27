@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react'
-import Router from 'next/router'
-
-import { Row as rowFor } from 'common/supabase/utils'
-import { Col } from 'web/components/layout/col'
-import { RequiredLoveUserForm } from 'love/components/required-lover-form'
-import { OptionalLoveUserForm } from 'love/components/optional-lover-form'
-import { User } from 'common/user'
-import { useUser } from 'web/hooks/use-user'
 import { Lover } from 'common/love/lover'
+import { Row as rowFor } from 'common/supabase/utils'
+import { User } from 'common/user'
+import { OptionalLoveUserForm } from 'love/components/optional-lover-form'
+import { RequiredLoveUserForm } from 'love/components/required-lover-form'
 import { useLoverByUser } from 'love/hooks/use-lover'
-import { api } from 'web/lib/firebase/api'
+import Router from 'next/router'
+import { useEffect, useState } from 'react'
+import { Col } from 'web/components/layout/col'
+import { useUser } from 'web/hooks/use-user'
+import { api } from 'web/lib/api'
 
 export default function ProfilePage() {
   const user = useUser()
