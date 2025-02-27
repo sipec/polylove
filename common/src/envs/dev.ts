@@ -22,7 +22,7 @@ export const DEV_CONFIG: EnvConfig = {
   supabaseAnonKey:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmVqcnlyd2hzbXVhaWxjZHVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwOTczODIsImV4cCI6MjA1NTY3MzM4Mn0.LSSlCeQ0ht__aewqW_x8tac5Mvdv8JldVJGoCM139BQ',
   twitchBotEndpoint: 'https://dev-twitch-bot.manifold.markets',
-  apiEndpoint: 'https://api.dev.manifold.love',
+  apiEndpoint: 'api.dev.manifold.love',
   expoConfig: {
     iosClientId:
       '134303100058-lioqb7auc8minvqt9iamuit2pg10pubt.apps.googleusercontent.com',

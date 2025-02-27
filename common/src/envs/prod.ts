@@ -64,7 +64,7 @@ export const PROD_CONFIG: EnvConfig = {
     appId: '1:226356461961:web:ff99f7f74861454e146158',
   },
   twitchBotEndpoint: 'https://twitch-bot.manifold.markets',
-  apiEndpoint: 'https://api.manifold.love',
+  apiEndpoint: 'api.manifold.love',
   cloudRunId: 'nggbo3neva',
   cloudRunRegion: 'uc',
 
