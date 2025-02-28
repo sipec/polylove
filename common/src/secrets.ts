@@ -15,7 +15,6 @@ export const secrets = (
     'SUPABASE_PASSWORD',
     'TEST_CREATE_USER_KEY',
     'REACT_APP_GIPHY_KEY',
-    // 'FB_ACCESS_TOKEN',
     'GEODB_API_KEY',
     // Some typescript voodoo to keep the string literal types while being not readonly.
   ] as const

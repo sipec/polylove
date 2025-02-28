@@ -1,5 +1,7 @@
 {
   "projects": {
-    "prod": "polylove"
+    "default": "polylove",
+    "prod": "polylove",
+    "dev": "polylove-dev"
   }
 }
