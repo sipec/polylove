@@ -13,7 +13,6 @@ import { DEV_CONFIG } from 'common/envs/dev'
 import { PROD_CONFIG } from 'common/envs/prod'
 import { RESERVED_PATHS } from 'common/envs/constants'
 import { log, isProd, getUser, getUserByUsername } from 'shared/utils'
-import { trackSignupFB } from 'shared/fb-analytics'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { insert } from 'shared/supabase/utils'
 
@@ -135,16 +134,7 @@ export const createUser: APIHandler<'create-user'> = async (
   log('created user ', { username: user.username, firebaseId: auth.uid })
 
   const continuation = async () => {
-    await track(user.id, 'create lover', { username: user.username }, { ip })
-
-    if (process.env.FB_ACCESS_TOKEN)
-      await trackSignupFB(
-        process.env.FB_ACCESS_TOKEN,
-        user.id,
-        email ?? '',
-        ip
-      ).catch((e: any) => log('error fb tracking:', e))
-    else log('no FB_ACCESS_TOKEN')
+    await track(user.id, 'create lover', { username: user.username })
   }
 
   return {
