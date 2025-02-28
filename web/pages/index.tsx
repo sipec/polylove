@@ -3,7 +3,6 @@ import { capitalize } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
 import Router from 'next/router'
-
 import { Search } from 'love/components/filters/search'
 import { Gender, convertGender } from 'love/components/gender-icon'
 import { LovePage } from 'love/components/love-page'
@@ -21,7 +20,6 @@ import { useSaveReferral } from 'web/hooks/use-save-referral'
 import { useUser } from 'web/hooks/use-user'
 import { track } from 'web/lib/service/analytics'
 import { Lover } from 'common/love/lover'
-import { useSaveCampaign } from 'web/hooks/use-save-campaign'
 import { useTracking } from 'web/hooks/use-tracking'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { CompatibleBadge } from 'love/components/widgets/compatible-badge'
@@ -41,7 +39,6 @@ export default function ProfilesPage() {
   const user = useUser()
   useTracking('view love profiles')
   useSaveReferral(user)
-  useSaveCampaign()
   const lover = useLover()
   const { data: starredUserIds, refresh: refreshStars } = useGetter(
     'star',

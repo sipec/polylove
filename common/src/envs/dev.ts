@@ -17,7 +17,6 @@ export const DEV_CONFIG: EnvConfig = {
   },
   cloudRunId: 'w3txbmd3ba',
   cloudRunRegion: 'uc',
-  amplitudeApiKey: 'fd8cbfd964b9a205b8678a39faae71b3',
   supabaseInstanceId: 'gxbejryrwhsmuailcdur',
   supabaseAnonKey:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmVqcnlyd2hzbXVhaWxjZHVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwOTczODIsImV4cCI6MjA1NTY3MzM4Mn0.LSSlCeQ0ht__aewqW_x8tac5Mvdv8JldVJGoCM139BQ',

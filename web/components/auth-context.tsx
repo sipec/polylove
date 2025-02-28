@@ -5,7 +5,6 @@ import { onIdTokenChanged, User as FirebaseUser } from 'firebase/auth'
 import { auth } from 'web/lib/firebase/users'
 import { api } from 'web/lib/api'
 import { randomString } from 'common/util/random'
-import { identifyUser, setUserProperty } from 'web/lib/service/analytics'
 import { useStateCheckEquality } from 'web/hooks/use-state-check-equality'
 import { AUTH_COOKIE_NAME, TEN_YEARS_SECS } from 'common/envs/constants'
 import { getCookie, setCookie } from 'web/lib/util/cookie'
@@ -20,7 +19,6 @@ import { updateSupabaseAuth } from 'web/lib/supabase/db'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
 import { getPrivateUserSafe, getUserSafe } from 'web/lib/supabase/users'
 import { useWebsocketPrivateUser, useWebsocketUser } from 'web/hooks/use-user'
-import { unauthedApi } from 'common/util/api'
 
 // Either we haven't looked up the logged in user yet (undefined), or we know
 // the user is not logged in (null), or we know the user is logged in.
@@ -185,14 +183,6 @@ export function AuthProvider(props: {
 
   const uid = authUser ? authUser.user.id : authUser
 
-  useEffect(() => {
-    if (uid) {
-      identifyUser(uid)
-    } else if (uid === null) {
-      identifyUser(null)
-    }
-  }, [uid])
-
   const listenUser = useWebsocketUser(uid ?? undefined)
   useEffectCheckEquality(() => {
     if (authLoaded && listenUser) setUser(listenUser)
@@ -202,13 +192,6 @@ export function AuthProvider(props: {
   useEffectCheckEquality(() => {
     if (authLoaded && listenPrivateUser) setPrivateUser(listenPrivateUser)
   }, [authLoaded, listenPrivateUser])
-
-  const username = authUser?.user.username
-  useEffect(() => {
-    if (username != null) {
-      setUserProperty('username', username)
-    }
-  }, [username])
 
   return (
     <AuthContext.Provider value={authUser}>{children}</AuthContext.Provider>

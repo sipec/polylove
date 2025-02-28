@@ -391,8 +391,6 @@ export const HIDE_FROM_NEW_USER_SLUGS = [
   ...GROUP_SLUGS_TO_IGNORE_IN_MARKETS_EMAIL,
 ]
 
-export const EXTERNAL_REDIRECTS = ['/umami']
-
 export const DISCORD_INVITE_LINK = 'https://discord.com/invite/eHQBNBqXuh'
 export const DISCORD_BOT_INVITE_LINK =
   'https://discord.com/api/oauth2/authorize?client_id=1074829857537663098&permissions=328565385280&scope=bot%20applications.commands'
