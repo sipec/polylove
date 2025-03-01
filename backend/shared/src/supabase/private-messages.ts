@@ -2,7 +2,7 @@ import { Json } from 'common/supabase/schema'
 import { SupabaseDirectClient } from 'shared/supabase/init'
 import { ChatVisibility } from 'common/chat-message'
 import { User } from 'common/user'
-import { first } from 'lodash' 
+import { first } from 'lodash'
 import { log } from 'shared/monitoring/log'
 import { HOUR_MS } from 'common/util/time'
 import { getPrivateUser, getUser } from 'shared/utils'
@@ -23,7 +23,7 @@ export const leaveChatContent = (userName: string) => ({
     {
       type: 'paragraph',
       content: [{ text: `${userName} left the chat`, type: 'text' }],
-    }, 
+    },
   ],
 })
 export const joinChatContent = (userName: string) => {
@@ -176,13 +176,7 @@ const notifyOtherUserInChannelIfInactive = async (
   log('previous messages this day', previousMessagesThisDayBetweenTheseUsers)
   if (previousMessagesThisDayBetweenTheseUsers.count > 0) return
 
-  const lastUserEvent = await pg.oneOrNone(
-    `select coalesce(ts_to_millis(max(greatest(ucv.last_page_view_ts, ucv.last_promoted_view_ts, ucv.last_card_view_ts))),0) as ts
-     from user_contract_views ucv where ucv.user_id = $1`,
-    [otherUserId.user_id]
-  )
-  log('last user contract view for user ' + otherUserId.user_id, lastUserEvent)
-  if (lastUserEvent && lastUserEvent.ts > Date.now() - HOUR_MS) return
+  // TODO: notification only for active user
 
   const otherUser = await getUser(otherUserId.user_id)
   if (!otherUser) return
