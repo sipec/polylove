@@ -1,14 +1,30 @@
 import { areGenderCompatible } from 'common/love/compatibility-util'
-import { Lover, LoverRow } from 'common/love/lover'
+import { type Lover, type LoverRow } from 'common/love/lover'
+import { type User } from 'common/user'
 import { Row } from 'common/supabase/utils'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
 
+export type LoverAndUserRow = LoverRow & {
+  name: string
+  username: string
+  user: any
+}
+
+export const convertRow = (row: LoverAndUserRow) => {
+  return {
+    ...row,
+    user: { name: row.name, username: row.username, ...row.user } as User,
+  } as Lover
+}
+
+const LOVER_COLS = 'lovers.*, name, username, users.data as user'
+
 export const getLover = async (userId: string) => {
   const pg = createSupabaseDirectClient()
-  return await pg.oneOrNone<Lover>(
+  return await pg.oneOrNone(
     `
       select
-        *, users.data as user
+        ${LOVER_COLS}
       from
         lovers
       join
@@ -16,16 +32,17 @@ export const getLover = async (userId: string) => {
       where
         user_id = $1
     `,
-    [userId]
+    [userId],
+    convertRow
   )
 }
 
 export const getLovers = async (userIds: string[]) => {
   const pg = createSupabaseDirectClient()
-  return await pg.manyOrNone<Lover>(
+  return await pg.map(
     `
       select
-        *, users.data as user
+       ${LOVER_COLS}
       from
         lovers
       join
@@ -33,16 +50,17 @@ export const getLovers = async (userIds: string[]) => {
       where
         user_id = any($1)
     `,
-    [userIds]
+    [userIds],
+    convertRow
   )
 }
 
 export const getGenderCompatibleLovers = async (lover: LoverRow) => {
   const pg = createSupabaseDirectClient()
-  const lovers = await pg.manyOrNone<Lover>(
+  const lovers = await pg.map(
     `
       select 
-        *, users.data as user
+        ${LOVER_COLS}
       from lovers
       join
         users on users.id = lovers.user_id
@@ -52,7 +70,8 @@ export const getGenderCompatibleLovers = async (lover: LoverRow) => {
         and (data->>'isBannedFromPosting' != 'true' or data->>'isBannedFromPosting' is null)
         and lovers.pinned_url is not null
       `,
-    { ...lover }
+    { ...lover },
+    convertRow
   )
   return lovers.filter((l) => areGenderCompatible(lover, l))
 }
@@ -62,10 +81,10 @@ export const getCompatibleLovers = async (
   radiusKm: number | undefined
 ) => {
   const pg = createSupabaseDirectClient()
-  return await pg.manyOrNone<Lover>(
+  return await pg.map(
     `
       select 
-        *, users.data as user
+        ${LOVER_COLS}
       from lovers
       join
         users on users.id = lovers.user_id
@@ -87,7 +106,8 @@ export const getCompatibleLovers = async (
         -- Location
         and calculate_earth_distance_km($(city_latitude), $(city_longitude), lovers.city_latitude, lovers.city_longitude) < $(radiusKm)
       `,
-    { ...lover, radiusKm: radiusKm ?? 40_000 }
+    { ...lover, radiusKm: radiusKm ?? 40_000 },
+    convertRow
   )
 }
 

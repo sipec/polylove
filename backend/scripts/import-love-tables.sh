@@ -12,7 +12,7 @@ DB_USER="postgres"
 PORT="5432"
 
 psql -U $DB_USER -d postgres -h $DB_NAME -p $PORT -w \
--f ./comments-dump.sql \
+-f ./love-stars-dump.sql \
 
 
 # psql -U $DB_USER -d postgres -h $DB_NAME -p $PORT -w \

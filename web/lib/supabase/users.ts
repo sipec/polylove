@@ -59,16 +59,3 @@ export async function getDisplayUsers(userIds: string[]) {
 
   return data as unknown as DisplayUser[]
 }
-
-export async function getRecentlyActiveUsers(limit: number) {
-  const { data } = await run(
-    db
-      .from('users')
-      .select('data')
-      .gt('data->>lastBetTime', Date.now() - DAY_MS)
-      .lt('data->>createdTime', Date.now() - WEEK_MS)
-      .limit(limit)
-  )
-  console.log('getRecentlyActiveUsers', data)
-  return data.map((d) => d.data as User)
-}
