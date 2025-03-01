@@ -9,6 +9,7 @@ import { IClient } from 'pg-promise/typescript/pg-subset'
 import { HOUR_MS } from 'common/util/time'
 import { METRICS_INTERVAL_MS } from 'shared/monitoring/metric-writer'
 import { getMonitoringContext } from 'shared/monitoring/context'
+import { type IConnectionParameters } from 'pg-promise/typescript/pg-subset'
 
 export const pgp = pgPromise({
   error(err: any, e: pgPromise.IEventContext) {
@@ -44,10 +45,6 @@ export function getInstanceId() {
   )
 }
 
-export function getInstanceHostname(instanceId: string) {
-  return `${instanceId}.supabase.co`
-}
-
 export function createSupabaseClient() {
   const instanceId = getInstanceId()
   if (!instanceId) {
@@ -65,6 +62,24 @@ export function createSupabaseClient() {
   // leak the refresh interval!
 
   return createClient(instanceId, key, { auth: { autoRefreshToken: false } })
+}
+
+const newClient = (
+  props: {
+    instanceId?: string
+    password?: string
+  } & IConnectionParameters
+) => {
+  const { instanceId, password, ...settings } = props
+
+  return pgp({
+    host: 'aws-0-us-west-1.pooler.supabase.com',
+    port: 5432,
+    user: `postgres.${instanceId}`,
+    password: password,
+    database: 'postgres',
+    ...settings,
+  })
 }
 
 // Use one connection to avoid WARNING: Creating a duplicate database object for the same connection.
@@ -86,10 +101,8 @@ export function createSupabaseDirectClient(
       "Can't connect to Supabase; no process.env.SUPABASE_PASSWORD."
     )
   }
-  const client = pgp({
-    host: `db.${getInstanceHostname(instanceId)}`,
-    port: 5432,
-    user: `postgres`,
+  const client = newClient({
+    instanceId: getInstanceId(),
     password: password,
     query_timeout: HOUR_MS, // mqp: debugging scheduled job behavior
     max: 20,
@@ -111,10 +124,8 @@ export function createSupabaseDirectClient(
 let shortTimeoutPgpClient: IDatabase<{}, IClient> | null = null
 export const createShortTimeoutDirectClient = () => {
   if (shortTimeoutPgpClient) return shortTimeoutPgpClient
-  shortTimeoutPgpClient = pgp({
-    host: `db.${getInstanceHostname(getInstanceId())}`,
-    port: 5432,
-    user: `postgres`,
+  shortTimeoutPgpClient = newClient({
+    instanceId: getInstanceId(),
     password: process.env.SUPABASE_PASSWORD,
     query_timeout: 1000 * 30,
     max: 20,
