@@ -9,7 +9,7 @@ module.exports = {
       watch: false,
       // 4 GB on the box, give 3 GB to the JS heap
       node_args: '--max-old-space-size=3072',
-      max_memory_restart: '3.5G',
+      max_memory_restart: '3500M', // 3.5 GB
       env: {
         PORT: 80,
       },
