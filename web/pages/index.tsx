@@ -137,7 +137,7 @@ function ProfilePreview(props: {
             // You must set these so we don't pay an extra $1k/month to vercel
             width={180}
             height={240}
-            alt={`${user.username}`}
+            alt=""
             className="h-full w-full object-cover"
           />
         ) : (
