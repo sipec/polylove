@@ -3,7 +3,8 @@ import { LovePage } from 'web/components/love-page'
 export default function About() {
   return (
     <LovePage trackPageView={'user profiles'}>
-      Manifold love development is on hiatus.
+      Manifold love is under new construction. Expect incredible new things
+      soon. Hopefully.
       <br />
       <br />
       You answer questions and get a compatibility score.
