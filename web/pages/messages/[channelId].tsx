@@ -203,7 +203,11 @@ export const PrivateChat = (props: {
         {members && (
           <span
             className={'ml-1 cursor-pointer hover:underline'}
-            onClick={() => setShowUsers(true)}
+            onClick={() =>
+              members.length === 1
+                ? router.push(`/${members[0].username}`)
+                : setShowUsers(true)
+            }
           >
             {members
               .map((user) => user.name.split(' ')[0].trim())

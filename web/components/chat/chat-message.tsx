@@ -212,9 +212,7 @@ function MessageAvatar(props: {
         'grow-y justify-end pb-2 pr-1'
       )}
     >
-      <UserHovercard userId={userId}>
-        <Avatar avatarUrl={userAvatarUrl} username={username} size="xs" />
-      </UserHovercard>
+      <Avatar avatarUrl={userAvatarUrl} username={username} size="xs" />
     </Col>
   )
 }
