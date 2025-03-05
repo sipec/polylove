@@ -10,7 +10,10 @@ export type LoverAndUserRow = LoverRow & {
   user: any
 }
 
-export const convertRow = (row: LoverAndUserRow) => {
+export function convertRow(row: LoverAndUserRow): Lover
+export function convertRow(row: LoverAndUserRow | undefined): Lover | null {
+  if (!row) return null
+
   return {
     ...row,
     user: { name: row.name, username: row.username, ...row.user } as User,

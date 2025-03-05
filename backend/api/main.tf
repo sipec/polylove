@@ -43,7 +43,7 @@ resource "google_compute_managed_ssl_certificate" "api_cert" {
   name = "api-lb-cert"
   
   managed {
-    domains = ["api.manifold.love", "api.poly.love"]
+    domains = ["api.manifold.love", "api.manifoldlove.com", "api.poly.love", ]
   }
 }
 

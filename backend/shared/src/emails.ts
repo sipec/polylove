@@ -1,4 +1,4 @@
-import { LOVE_DOMAIN } from 'common/envs/constants'
+import { DOMAIN } from 'common/envs/constants'
 import { PrivateUser, User } from 'common/user'
 import { getLoverRow } from 'common/love/lover'
 import { getLoveOgImageUrl } from 'common/love/og-image'
@@ -11,9 +11,9 @@ import { sendTemplateEmail } from './send-email'
 export const sendNewMatchEmail = async (
   reason: NotificationReason,
   privateUser: PrivateUser,
-  // contract: Contract, 
+  // contract: Contract,
   creatorName: string,
-  matchedWithUser: User 
+  matchedWithUser: User
 ) => {
   const { sendToEmail, unsubscribeUrl } = getNotificationDestinationsForUser(
     privateUser,
@@ -36,12 +36,9 @@ export const sendNewMatchEmail = async (
       name: firstName,
       creatorName,
       unsubscribeUrl,
-      // questionTitle: contract.question,
-      // questionUrl: `https://${LOVE_DOMAIN}${contractPath(contract)}`,
-      userUrl: `https://${LOVE_DOMAIN}/${matchedWithUser.username}`,
+      userUrl: `https://${DOMAIN}/${matchedWithUser.username}`,
       matchedUsersName: matchedWithUser.name,
       userImgSrc: loveOgImageUrl,
-      // questionImgSrc,
     },
     {
       from: `manifold.love <no-reply@manifold.markets>`,
@@ -71,7 +68,7 @@ export const sendNewMessageEmail = async (
     'new-message',
     {
       name: firstName,
-      messagesUrl: `https://${LOVE_DOMAIN}/messages/${channelId}`,
+      messagesUrl: `https://${DOMAIN}/messages/${channelId}`,
       creatorName: fromUser.name,
       userImgSrc: loveOgImageUrl,
       unsubscribeUrl,
@@ -102,7 +99,7 @@ export const sendNewEndorsementEmail = async (
     'new-endorsement',
     {
       name: firstName,
-      endorsementUrl: `https://${LOVE_DOMAIN}/${onUser.username}`,
+      endorsementUrl: `https://${DOMAIN}/${onUser.username}`,
       creatorName: fromUser.name,
       creatorAvatarUrl: fromUser.avatarUrl,
       endorsementText: text,

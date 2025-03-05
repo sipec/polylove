@@ -2,7 +2,6 @@ import * as admin from 'firebase-admin'
 import { PrivateUser, User } from 'common/user'
 import { randomString } from 'common/util/random'
 import { cleanDisplayName, cleanUsername } from 'common/util/clean-username'
-
 import { getIp, track } from 'shared/analytics'
 import { APIError, APIHandler } from './helpers/endpoint'
 import { getDefaultNotificationPreferences } from 'common/user-notification-preferences'
@@ -87,21 +86,11 @@ export const createUser: APIHandler<'create-user'> = async (
       name,
       username,
       avatarUrl,
-      balance: 0,
-      spiceBalance: 0,
-      totalDeposits: 0,
       createdTime: Date.now(),
-      profitCached: { daily: 0, weekly: 0, monthly: 0, allTime: 0 },
-      nextLoanCached: 0,
-      streakForgiveness: 1,
-      shouldShowWelcome: true,
-      creatorTraders: { daily: 0, weekly: 0, monthly: 0, allTime: 0 },
       isBannedFromPosting: Boolean(
         (deviceToken && bannedDeviceTokens.includes(deviceToken)) ||
           (ip && bannedIpAddresses.includes(ip))
       ),
-      signupBonusPaid: 0,
-      verifiedPhone: testUserAKAEmailPasswordUser,
     })
 
     const privateUser: PrivateUser = {
@@ -112,8 +101,6 @@ export const createUser: APIHandler<'create-user'> = async (
       notificationPreferences: getDefaultNotificationPreferences(),
       blockedUserIds: [],
       blockedByUserIds: [],
-      blockedContractIds: [],
-      blockedGroupSlugs: [],
     }
 
     await insert(tx, 'users', {

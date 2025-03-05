@@ -9,7 +9,6 @@ import { getNotificationDestinationsForUser } from 'common/user-notification-pre
 import { Notification } from 'common/notifications'
 import { insertNotificationToSupabase } from 'shared/supabase/notifications'
 import { User } from 'common/user'
-import { createPushNotification } from 'shared/create-push-notification'
 import { richTextToString } from 'common/util/parse'
 import * as crypto from 'crypto'
 import { sendNewEndorsementEmail } from 'shared/emails'
@@ -112,12 +111,12 @@ const createNewCommentOnLoverNotification = async (
     await insertNotificationToSupabase(notification, pg)
   }
   if (sendToMobile) {
-    await createPushNotification(
-      notification,
-      privateUser,
-      `${creator.name} commented on your profile`,
-      sourceText
-    )
+    // await createPushNotification(
+    //   notification,
+    //   privateUser,
+    //   `${creator.name} commented on your profile`,
+    //   sourceText
+    // )
   }
   if (sendToEmail) {
     await sendNewEndorsementEmail(
