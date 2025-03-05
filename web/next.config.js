@@ -51,16 +51,7 @@ module.exports = {
   },
   async redirects() {
     return [
-      {
-        source: '/privacy',
-        destination: '/privacy.html',
-        permanent: true,
-      },
-      {
-        source: '/terms',
-        destination: '/terms.html',
-        permanent: true,
-      },
+      // backwards compatibility
       {
         source: '/Bet_On_Love.pdf',
         destination: 'https://manifold.markets/Bet_On_Love.pdf',

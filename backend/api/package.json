@@ -1,6 +1,6 @@
 {
-  "name": "@manifold/api",
-  "description": "Backend API endpoints for the Manifold website.",
+  "name": "@polylove/api",
+  "description": "Backend API endpoints for the Manifold Love website.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
