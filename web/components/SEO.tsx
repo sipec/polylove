@@ -16,7 +16,7 @@ export function SEO<P extends Record<string, string | undefined>>(props: {
     (ogProps &&
       buildOgUrl(removeUndefinedProps(ogProps.props) as any, ogProps.endpoint))
 
-  const absUrl = 'https://manifold.markets' + url
+  const absUrl = 'https://manifold.love' + url
 
   return (
     <Head>

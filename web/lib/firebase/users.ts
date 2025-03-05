@@ -1,4 +1,4 @@
-import { isVerified, MINUTES_ALLOWED_TO_REFER, User } from 'common/user'
+import { type User } from 'common/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import {
@@ -80,12 +80,4 @@ export async function firebaseLogout() {
   if (getIsNative()) nativeSignOut()
 
   await auth.signOut()
-}
-
-export const canSetReferrer = (user: User) => {
-  if (user.referredByUserId) return false
-  if (!isVerified(user)) return false
-  const now = dayjs().utc()
-  const userCreatedTime = dayjs(user.createdTime)
-  return now.diff(userCreatedTime, 'minute') < MINUTES_ALLOWED_TO_REFER
 }

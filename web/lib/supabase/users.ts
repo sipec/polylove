@@ -1,9 +1,6 @@
 import { db } from './db'
-import { run, selectFrom } from 'common/supabase/utils'
-import { type User } from 'common/user'
+import { run } from 'common/supabase/utils'
 import { APIError, api } from 'web/lib/api'
-import { DAY_MS, WEEK_MS } from 'common/util/time'
-import { HIDE_FROM_LEADERBOARD_USER_IDS } from 'common/envs/constants'
 import { unauthedApi } from 'common/util/api'
 import type { DisplayUser } from 'common/api/user-types'
 export type { DisplayUser }

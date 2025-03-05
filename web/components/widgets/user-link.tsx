@@ -1,13 +1,6 @@
 import Link from 'next/link'
 import clsx from 'clsx'
-import {
-  BOT_USERNAMES,
-  VERIFIED_USERNAMES,
-  MVP,
-  ENV_CONFIG,
-  MOD_IDS,
-  PARTNER_USER_IDS,
-} from 'common/envs/constants'
+import { VERIFIED_USERNAMES, ENV_CONFIG, MOD_IDS } from 'common/envs/constants'
 import { SparklesIcon } from '@heroicons/react/solid'
 import { Tooltip } from './tooltip'
 import { BadgeCheckIcon, ShieldCheckIcon } from '@heroicons/react/outline'
@@ -69,7 +62,6 @@ export function UserLink(props: {
   noLink?: boolean
   createdTime?: number
   hideBadge?: boolean
-  marketCreator?: boolean
 }) {
   const {
     user: { id, name, username },
@@ -78,7 +70,6 @@ export function UserLink(props: {
     noLink,
     createdTime,
     hideBadge,
-    marketCreator,
   } = props
   const fresh = createdTime ? isFresh(createdTime) : false
   const shortName = short ? shortenName(name) : name
@@ -86,12 +77,7 @@ export function UserLink(props: {
     <>
       <span className="max-w-[200px] truncate">{shortName}</span>
       {!hideBadge && (
-        <UserBadge
-          userId={id}
-          username={username}
-          fresh={fresh}
-          marketCreator={marketCreator}
-        />
+        <UserBadge userId={id} username={username} fresh={fresh} />
       )}
     </>
   )
@@ -144,33 +130,21 @@ export function UserBadge(props: {
   userId: string
   username: string
   fresh?: boolean
-  marketCreator?: boolean
 }) {
-  const { userId, username, fresh, marketCreator } = props
+  const { userId, username, fresh } = props
   const badges = []
-  if (BOT_USERNAMES.includes(username)) {
-    badges.push(<BotBadge key="bot" />)
-  }
+
   if (ENV_CONFIG.adminIds.includes(userId)) {
     badges.push(<CoreBadge key="core" />)
   }
   if (MOD_IDS.includes(userId)) {
     badges.push(<ModBadge key="mod" />)
   }
-  if (MVP.includes(username)) {
-    badges.push(<MVPBadge key="mvp" />)
-  }
   if (VERIFIED_USERNAMES.includes(username)) {
     badges.push(<VerifiedBadge key="check" />)
   }
-  if (PARTNER_USER_IDS.includes(userId)) {
-    badges.push(<PartnerBadge key="partner" />)
-  }
   if (fresh) {
     badges.push(<FreshBadge key="fresh" />)
-  }
-  if (marketCreator) {
-    badges.push(<MarketCreatorBadge key="creator" />)
   }
   return <>{badges}</>
 }

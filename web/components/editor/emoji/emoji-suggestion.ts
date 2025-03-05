@@ -37,12 +37,6 @@ const emojiArr = Object.entries(invertBy(shortcodes)).map(
   })
 )
 
-emojiArr.push({
-  codePoint: '2133',
-  shortcodes: ['mana', 'm$'],
-  character: ENV_CONFIG.moneyMoniker,
-})
-
 // copied from mention-suggestion.ts, which is copied from https://tiptap.dev/api/nodes/mention#usage
 export const emojiSuggestion: Suggestion = {
   char: ':',

@@ -14,13 +14,6 @@ import clsx from 'clsx'
 import { useAdmin } from 'web/hooks/use-admin'
 import { useIsAuthorized } from 'web/hooks/use-user'
 
-const isUserLikelySpammer = (user: User, hasBet: boolean) => {
-  return (
-    !hasBet &&
-    ((user.bio ?? '').length > 10 || (user.freeQuestionsCreated ?? 0) > 0)
-  )
-}
-
 export default function Journeys() {
   const [eventsByUser, setEventsByUser] = useState<
     Record<string, rowfor<'user_events'>[]>
@@ -123,11 +116,8 @@ export default function Journeys() {
               <Col className={'mt-4 min-w-[15rem]'} key={userId}>
                 <Row
                   className={clsx(
-                    'rounded-md p-1',
-                    user &&
-                      isUserLikelySpammer(user, userIdsThatBet.includes(userId))
-                      ? 'bg-amber-100'
-                      : ''
+                    'rounded-md p-1'
+                    // user && isUserLikelySpammer(user) ? 'bg-amber-100' : ''
                   )}
                 >
                   {user ? <UserAvatarAndBadge user={user} /> : userId}

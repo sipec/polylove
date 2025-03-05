@@ -150,7 +150,7 @@ function LoveLikeNotification(props: {
           setOpen={setOpen}
         />
       }
-      link={`https://${ENV_CONFIG.loveDomain}/${sourceUserUsername}`}
+      link={`https://${ENV_CONFIG.domain}/${sourceUserUsername}`}
       subtitle={<></>}
     >
       {reactorsText && <PrimaryNotificationLink text={reactorsText} />} liked
@@ -197,7 +197,7 @@ function LoveShipNotification(props: {
           setOpen={setOpen}
         />
       }
-      link={`https://${ENV_CONFIG.loveDomain}/${sourceUserUsername}`}
+      link={`https://${ENV_CONFIG.domain}/${sourceUserUsername}`}
       subtitle={<></>}
     >
       You and {reactorsText && <PrimaryNotificationLink text={reactorsText} />}{' '}
