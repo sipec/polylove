@@ -50,51 +50,14 @@ function insertUserEvent(
   data: EventData,
   db: SupabaseClient,
   userId?: string | null,
-  contractId?: string | null,
-  commentId?: string | null,
-  adId?: string | null
+  commentId?: string | null
 ) {
-  if (
-    (name === 'click market card feed' ||
-      name === 'click market card welcome topic section' ||
-      name === 'bet' ||
-      name === 'copy market link' ||
-      name === 'comment' ||
-      name === 'repost' ||
-      name === 'like') &&
-    contractId
-  ) {
-    const feedReason = data?.feedReason as string
-    const isCardClick = name.includes('click market card')
-    const kind =
-      name === 'copy market link'
-        ? 'page share'
-        : name === 'like' && feedReason
-        ? 'card like'
-        : name === 'like'
-        ? 'page like'
-        : name === 'comment'
-        ? 'page comment'
-        : name === 'repost'
-        ? 'page repost'
-        : !!data?.isPromoted && isCardClick
-        ? 'promoted click'
-        : isCardClick
-        ? 'card click'
-        : data?.location === 'feed card' ||
-          data?.location === 'feed' ||
-          !!feedReason
-        ? 'card bet'
-        : 'page bet'
-  }
   return run(
     db.from('user_events').insert({
       name,
       data: removeUndefinedProps(data) as Record<string, Json>,
       user_id: userId,
-      contract_id: contractId,
       comment_id: commentId,
-      ad_id: adId,
     })
   )
 }
