@@ -6,7 +6,7 @@ import {
 import { log, getUser } from 'shared/utils'
 import { HOUR_MS } from 'common/util/time'
 import { removePinnedUrlFromPhotoUrls } from 'shared/love/parse-photos'
-import { getIp, track } from 'shared/analytics'
+import { track } from 'shared/analytics'
 import { updateUser } from 'shared/supabase/users'
 
 export const createLover: APIHandler<'create-lover'> = async (body, auth) => {

@@ -69,6 +69,4 @@ export type OnContract = {
   isRepost?: boolean
 }
 
-export type ContractComment = Comment<OnContract>
-
 export type ReplyToUserInfo = { id: string; username: string }

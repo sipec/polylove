@@ -13,7 +13,6 @@ export type EnvConfig = {
 
   // Access controls
   adminIds: string[]
-  visibility: 'PRIVATE' | 'PUBLIC'
 
   faviconPath: string // Should be a file in /public
 }
@@ -53,7 +52,6 @@ export const PROD_CONFIG: EnvConfig = {
   adminIds: [
     '0k1suGSJKVUnHbCPEhHNpgZPkUP2', // Sinclair
   ],
-  visibility: 'PUBLIC',
 
   faviconPath: '/favicon.ico',
 }

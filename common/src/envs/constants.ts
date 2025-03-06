@@ -1,4 +1,3 @@
-import { escapeRegExp } from 'lodash'
 import { DEV_CONFIG } from './dev'
 import { EnvConfig, PROD_CONFIG } from './prod'
 
@@ -27,7 +26,6 @@ export function isModId(id: string) {
 export const DOMAIN = ENV_CONFIG.domain
 export const FIREBASE_CONFIG = ENV_CONFIG.firebaseConfig
 export const PROJECT_ID = ENV_CONFIG.firebaseConfig.projectId
-export const IS_PRIVATE_MANIFOLD = ENV_CONFIG.visibility === 'PRIVATE'
 
 export const AUTH_COOKIE_NAME = `FBUSER_${PROJECT_ID.toUpperCase().replace(
   /-/g,
@@ -102,11 +100,6 @@ export const VERIFIED_USERNAMES = [
   'liron',
   'LarsDoucet',
   'PeterWildeford',
-]
-
-export const BLESSED_BANNED_USER_IDS = [
-  'wBZSAA3MrnWjz7eHrKAq43OXBtA2', // kazoo
-  '4Qy6MOn8AFRTecA6FMzdljPJFsv1', //HamsterHawk
 ]
 
 export const TEN_YEARS_SECS = 60 * 60 * 24 * 365 * 10

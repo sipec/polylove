@@ -24,6 +24,5 @@ export const deleteMe: APIHandler<'me/delete'> = async (body, auth) => {
   })
   await updatePrivateUser(pg, auth.uid, {
     email: FieldVal.delete(),
-    twitchInfo: FieldVal.delete(),
   })
 }

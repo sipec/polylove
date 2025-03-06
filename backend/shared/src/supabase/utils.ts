@@ -2,13 +2,6 @@ import { sortBy } from 'lodash'
 import { pgp, SupabaseDirectClient } from './init'
 import { DataFor, Tables, TableName, Column, Row } from 'common/supabase/utils'
 
-export async function getIds<T extends TableName>(
-  db: SupabaseDirectClient,
-  table: T
-) {
-  return db.map('select id from $1~', [table], (r) => r.id as string)
-}
-
 export async function insert<
   T extends TableName,
   ColumnValues extends Tables[T]['Insert']
