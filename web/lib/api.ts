@@ -2,6 +2,7 @@ import { API, APIParams, APIPath, APIResponse } from 'common/api/schema'
 import { baseApiCall, formatApiUrlWithParams } from 'common/util/api'
 import { sleep } from 'common/util/time'
 import { auth } from './firebase/users'
+import { omitBy, isNull } from 'lodash'
 export { APIError } from 'common/api/utils'
 
 export async function api<P extends APIPath>(
@@ -33,6 +34,9 @@ function curriedAPI<P extends APIPath>(path: P) {
   return (params: APIParams<P>) => api(path, params)
 }
 
-export const updateLover = curriedAPI('update-lover') as any
+export const updateLover = (props: Record<string, any>) =>
+  api('update-lover', omitBy(props, isNull) as any)
+
+curriedAPI('update-lover')
 export const updateUser = curriedAPI('me/update')
 export const report = curriedAPI('report')
