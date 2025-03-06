@@ -12,7 +12,7 @@ export const DEV_CONFIG: EnvConfig = {
     projectId: 'polylove',
     region: 'us-west1',
     storageBucket: 'polylove.firebasestorage.app',
-    privateBucket: 'mantic-markets-private',
+    privateBucket: 'polylove-private.firebasestorage.app',
     messagingSenderId: '226356461961',
     appId: '1:226356461961:web:ff99f7f74861454e146158',
   },

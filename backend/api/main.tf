@@ -33,6 +33,23 @@ provider "google" {
   zone    = local.zone
 }
 
+# Firebase Storage Buckets
+# Note you still have to deploy the rules: `firebase deploy --only storage`
+resource "google_storage_bucket" "public_storage" {
+  name          = "polylove.firebasestorage.app"
+  location      = "US-WEST1"
+  force_destroy = false
+  
+  uniform_bucket_level_access = true
+  
+  cors {
+    origin          = ["*"]
+    method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
+}
+
 # static IPs
 resource "google_compute_global_address" "api_lb_ip" {
   name = "api-lb-ip-2"
@@ -43,7 +60,7 @@ resource "google_compute_managed_ssl_certificate" "api_cert" {
   name = "api-lb-cert"
   
   managed {
-    domains = ["api.manifold.love", "api.manifoldlove.com", "api.poly.love", ]
+    domains = ["api.manifold.love", "api.poly.love", ]
   }
 }
 
