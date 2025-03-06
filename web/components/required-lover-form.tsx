@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Title } from 'web/components/widgets/title'
 import { Col } from 'web/components/layout/col'
 import clsx from 'clsx'
@@ -17,7 +17,7 @@ import { Row as rowFor } from 'common/supabase/utils'
 import { Checkbox } from 'web/components/widgets/checkbox'
 import { range } from 'lodash'
 import { Select } from 'web/components/widgets/select'
-import { CitySearchBox, City, loverToCity, CityRow } from './search-location'
+import { City, loverToCity, CityRow, useCitySearch } from './search-location'
 import { AddPhotosWidget } from './widgets/add-photos'
 
 export const initialRequiredState = {
@@ -184,25 +184,29 @@ export const RequiredLoveUserForm = (props: {
           <>
             <Col className={clsx(colClassName)}>
               <label className={clsx(labelClassName)}>Your location</label>
-              <CitySearchBox
-                onCitySelected={(city: City | undefined) => {
-                  setLoverCity(city)
-                }}
-                selected={!!lover.city}
-                selectedNode={
-                  <Row className="border-primary-500 w-full justify-between rounded border px-4 py-2">
-                    <CityRow city={loverToCity(lover)} />
-                    <button
-                      className="text-ink-700 hover:text-primary-700 text-sm underline"
-                      onClick={() => {
-                        setLoverCity(undefined)
-                      }}
-                    >
-                      Change
-                    </button>
-                  </Row>
-                }
-              />
+              {lover.city ? (
+                <Row className="border-primary-500 w-full justify-between rounded border px-4 py-2">
+                  <CityRow
+                    city={loverToCity(lover)}
+                    onSelect={() => {}}
+                    className="pointer-events-none"
+                  />
+                  <button
+                    className="text-ink-700 hover:text-primary-700 text-sm underline"
+                    onClick={() => {
+                      setLoverCity(undefined)
+                    }}
+                  >
+                    Change
+                  </button>
+                </Row>
+              ) : (
+                <CitySearchBox
+                  onCitySelected={(city: City | undefined) => {
+                    setLoverCity(city)
+                  }}
+                />
+              )}
             </Col>
 
             <Col className={clsx(colClassName)}>
@@ -353,6 +357,52 @@ export const RequiredLoveUserForm = (props: {
           </Row>
         )}
       </Col>
+    </>
+  )
+}
+
+const CitySearchBox = (props: {
+  onCitySelected: (city: City | undefined) => void
+}) => {
+  // search results
+  const { cities, query, setQuery } = useCitySearch()
+  const [focused, setFocused] = useState(false)
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <>
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={'Search city...'}
+        onFocus={() => setFocused(true)}
+        onBlur={(e) => {
+          // Do not hide the dropdown if clicking inside the dropdown
+          if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(e.relatedTarget)
+          ) {
+            setFocused(false)
+          }
+        }}
+      />
+      <div className="relative w-full" ref={dropdownRef}>
+        <Col className="bg-canvas-50 absolute left-0 right-0 top-1 z-10 w-full gap-3 overflow-hidden rounded-md">
+          {focused &&
+            cities.map((c) => (
+              <CityRow
+                key={c.geodb_city_id}
+                city={c}
+                onSelect={() => {
+                  props.onCitySelected(c)
+                  setQuery('')
+                }}
+                className="hover:bg-primary-200 justify-between gap-1 px-4 py-2 transition-colors"
+              />
+            ))}
+        </Col>
+      </div>
     </>
   )
 }

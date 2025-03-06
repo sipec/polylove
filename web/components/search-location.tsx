@@ -1,12 +1,8 @@
-// src/components/SearchBar.tsx
 import clsx from 'clsx'
-import { useEffect, useRef, useState } from 'react'
-import { Col } from 'web/components/layout/col'
-import { Input } from 'web/components/widgets/input'
-import { api } from 'web/lib/api'
 import { Row as rowFor } from 'common/supabase/utils'
-import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
-import { ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { OriginLocation } from './filters/location-filter'
+import { api } from 'web/lib/api'
 
 export type City = {
   geodb_city_id: string
@@ -28,27 +24,48 @@ export function loverToCity(lover: rowFor<'lovers'>) {
   } as City
 }
 
-export function CitySearchBox(props: {
-  onCitySelected: (city: City | undefined) => void
-  selected: boolean
-  selectedNode: ReactNode | undefined
-  searchBoxClassName?: string
-  excludeCityIds?: string[]
-  placeholder?: string
+export function originToCity(origin: OriginLocation): City {
+  return {
+    geodb_city_id: origin.id,
+    city: origin.name,
+    region_code: '',
+    country: '',
+    city_latitude: 0,
+    city_longitude: 0,
+  } as City
+}
+
+export function CityRow(props: {
+  city: City
+  onSelect: (city: City) => void
+  className?: string
 }) {
-  const {
-    onCitySelected,
-    selected,
-    selectedNode,
-    searchBoxClassName,
-    excludeCityIds,
-    placeholder,
-  } = props
+  const { city, onSelect, className } = props
+  return (
+    <button
+      key={city.geodb_city_id}
+      onClick={() => onSelect(city)}
+      className={clsx(
+        'group flex cursor-pointer flex-col items-start',
+        className
+      )}
+    >
+      <div className="group-hover:text-ink-950 font-semibold transition-colors">
+        {city.city}
+        {city.region_code ? `, ${city.region_code}` : ''}
+      </div>
+      <div className="text-ink-400 group-hover:text-ink-700 transition-colors">
+        {city.country}
+      </div>
+    </button>
+  )
+}
+
+export const useCitySearch = () => {
   const [query, setQuery] = useState('')
-  const [cities, setCities] = useState<City[]>([])
   const [loading, setLoading] = useState(false)
-  const [dropdownVisible, setDropdownVisible] = useState(false)
-  const dropdownRef = useRef<HTMLUListElement>(null)
+  const [cities, setCities] = useState<City[]>([])
+
   const searchCountRef = useRef(0)
 
   useEffect(() => {
@@ -92,75 +109,5 @@ export function CitySearchBox(props: {
     }
   }, [query])
 
-  if (selected) {
-    return <>{selectedNode}</>
-  }
-
-  return (
-    <div className="relative w-full">
-      <Input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={placeholder ?? 'Search for a city...'}
-        className={clsx(searchBoxClassName, 'w-full')}
-        autoFocus
-        onFocus={() => setDropdownVisible(true)}
-        onBlur={(e) => {
-          if (
-            dropdownRef.current &&
-            dropdownRef.current.contains(e.relatedTarget)
-          ) {
-            return // Do not hide the dropdown if clicking inside the dropdown
-          }
-          setTimeout(() => setDropdownVisible(false), 300)
-        }}
-      />
-      {cities.length > 0 && dropdownVisible && (
-        <ul
-          className={clsx(
-            loading
-              ? 'pointer-events-none animate-pulse cursor-not-allowed'
-              : '',
-            'border-1 border-ink-400 bg-canvas-0 absolute z-10 w-full rounded-b border text-sm drop-shadow'
-          )}
-          ref={dropdownRef}
-        >
-          {cities.length < 1 && loading && <LoadingIndicator />}
-          {cities.map((city, index) => {
-            if (excludeCityIds && excludeCityIds.includes(city.geodb_city_id)) {
-              return null
-            }
-            return (
-              <li
-                key={index}
-                onClick={() => {
-                  onCitySelected(city)
-                  setQuery('')
-                  setCities([])
-                }}
-              >
-                <CityRow
-                  city={city}
-                  className="hover:bg-primary-200 px-4 py-2"
-                />
-              </li>
-            )
-          })}
-        </ul>
-      )}
-    </div>
-  )
-}
-
-export function CityRow(props: { city: City; className?: string }) {
-  const { city, className } = props
-  return (
-    <Col className={clsx(className, 'w-full justify-between transition-all')}>
-      <span className="font-semibold">
-        {city.city}
-        {city.region_code ? `, ${city.region_code}` : ''}{' '}
-      </span>
-      <div className="text-ink-400">{city.country}</div>
-    </Col>
-  )
+  return { query, setQuery, loading, cities }
 }
