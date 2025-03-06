@@ -5,7 +5,7 @@ create table if not exists
     comment_id text,
     contract_id text,
     data jsonb not null,
-    id bigint primary key generated always as identity not null,
+    id bigint primary key user_events_pkey generated always as identity not null,
     name text not null,
     ts timestamp with time zone default now() not null,
     user_id text

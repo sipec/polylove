@@ -2,7 +2,6 @@ import * as fs from 'fs/promises'
 import { execSync } from 'child_process'
 import { type SupabaseDirectClient } from 'shared/supabase/init'
 import { runScript } from 'run-script'
-import { countBy } from 'lodash'
 
 const outputDir = `../supabase/`
 
@@ -10,7 +9,9 @@ runScript(async ({ pg }) => {
   // make the output directory if it doesn't exist
   execSync(`mkdir -p ${outputDir}`)
   // delete all sql files except seed.sql
-  execSync(`cd ${outputDir} && find *.sql -type f ! -name seed.sql -delete`)
+  execSync(
+    `cd ${outputDir} && find *.sql -type f ! -name seed.sql -delete || true`
+  )
   await generateSQLFiles(pg)
 })
 
@@ -178,7 +179,7 @@ async function getTableInfo(pg: SupabaseDirectClient, tableName: string) {
 
 async function getFunctions(pg: SupabaseDirectClient) {
   console.log('Getting functions')
-  const rows = await pg.many<{
+  const rows = await pg.manyOrNone<{
     function_name: string
     definition: string
   }>(
@@ -196,7 +197,7 @@ async function getFunctions(pg: SupabaseDirectClient) {
 
 async function getViews(pg: SupabaseDirectClient) {
   console.log('Getting views')
-  return pg.many<{ view_name: string; definition: string }>(
+  return pg.manyOrNone<{ view_name: string; definition: string }>(
     `SELECT
       table_name AS view_name,
       view_definition AS definition
@@ -251,7 +252,8 @@ async function generateSQLFiles(pg: SupabaseDirectClient) {
         content += `  ${c.name} ${c.type === 'bigint' ? 'bigserial' : 'serial'}`
       } else {
         content += `  ${c.name} ${c.type}`
-        if (pkeys.length === 1 && pkeys[0] === c.name) content += ' PRIMARY KEY'
+        if (pkeys.length === 1 && pkeys[0] === c.name)
+          content += ` PRIMARY KEY ${tableInfo.tableName}_pkey`
         if (c.default) content += ` DEFAULT ${c.default}`
         else if (c.identity) content += ` GENERATED ${c.always} AS IDENTITY`
         else if (c.gen) content += ` GENERATED ALWAYS AS (${c.gen}) ${c.stored}`

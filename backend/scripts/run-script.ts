@@ -1,11 +1,10 @@
-import * as admin from 'firebase-admin'
 import { SupabaseClient } from 'common/supabase/utils'
 import { getLocalEnv, initAdmin } from 'shared/init-admin'
 import { getServiceAccountCredentials, loadSecretsToEnv } from 'common/secrets'
 import {
   createSupabaseClient,
   createSupabaseDirectClient,
-  SupabaseDirectClientTimeout,
+  type SupabaseDirectClient,
 } from 'shared/supabase/init'
 
 initAdmin()
@@ -13,8 +12,7 @@ initAdmin()
 export const runScript = async (
   main: (services: {
     db: SupabaseClient
-    pg: SupabaseDirectClientTimeout
-    firestore: admin.firestore.Firestore
+    pg: SupabaseDirectClient
   }) => Promise<any> | any
 ) => {
   const env = getLocalEnv()
@@ -24,8 +22,7 @@ export const runScript = async (
 
   const db = createSupabaseClient()
   const pg = createSupabaseDirectClient()
-  const firestore = admin.firestore()
-  await main({ db, pg, firestore })
+  await main({ db, pg })
 
   process.exit()
 }

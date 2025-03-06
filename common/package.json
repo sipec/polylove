@@ -17,9 +17,9 @@
     "@tiptap/extension-image": "2.3.2",
     "@tiptap/extension-link": "2.3.2",
     "@tiptap/extension-mention": "2.3.2",
+    "@tiptap/pm": "2.3.2",
     "@tiptap/starter-kit": "2.3.2",
     "@tiptap/suggestion": "2.3.2",
-    "@tiptap/pm": "2.3.2",
     "dayjs": "1.11.4",
     "lodash": "4.17.21",
     "string-similarity": "4.0.4",
@@ -30,6 +30,7 @@
     "@types/lodash": "4.14.178",
     "@types/string-similarity": "4.0.0",
     "jest": "29.3.1",
+    "supabase": "2.15.8",
     "ts-jest": "29.0.3"
   }
 }

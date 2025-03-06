@@ -323,15 +323,6 @@ export const API = (_apiTypeCheck = {
     }),
     returns: {} as any,
   },
-  'create-public-chat-message': {
-    method: 'POST',
-    authed: true,
-    returns: {} as ChatMessage,
-    props: z.object({
-      content: contentSchema,
-      channelId: z.string(),
-    }),
-  },
   'get-channel-memberships': {
     method: 'GET',
     authed: true,

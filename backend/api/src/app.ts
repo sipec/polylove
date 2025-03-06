@@ -38,7 +38,6 @@ import { updateLovers } from './update-lover'
 import { updateMe } from './update-me'
 import { deleteMe } from './delete-me'
 import { getCurrentPrivateUser } from './get-current-private-user'
-import { createPublicChatMessage } from './create-public-chat-message'
 import { createPrivateUserMessage } from './create-private-user-message'
 import {
   getChannelMemberships,
@@ -138,7 +137,6 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'compatible-lovers': getCompatibleLovers,
   'search-location': searchLocation,
   'search-near-city': searchNearCity,
-  'create-public-chat-message': createPublicChatMessage,
   'create-private-user-message': createPrivateUserMessage,
   'create-private-user-message-channel': createPrivateUserMessageChannel,
   'update-private-user-message-channel': updatePrivateUserMessageChannel,
