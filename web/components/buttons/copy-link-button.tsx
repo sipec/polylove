@@ -16,10 +16,6 @@ import {
   ClipboardCopyIcon,
   DuplicateIcon,
 } from '@heroicons/react/outline'
-import ArrowUpSquareIcon from 'web/lib/icons/arrow-up-square-icon.svg'
-import { getNativePlatform } from 'web/lib/native/is-native'
-import { useBrowserOS } from 'web/hooks/use-browser-os'
-import { ShareIcon } from '@heroicons/react/outline'
 
 export function CopyLinkOrShareButton(props: {
   url: string
@@ -36,14 +32,10 @@ export function CopyLinkOrShareButton(props: {
 }) {
   const { url, size, children, className, iconClassName, tooltip, color } =
     props
-  // NOTE: this results in hydration errors on mobile dev
-  const { isNative, platform } = getNativePlatform()
-  const { os } = useBrowserOS()
 
   const onClick = () => {
     if (!url) return
     copyToClipboard(url)
-    if (!isNative) toast.success('Link copied!')
   }
 
   return (
@@ -60,20 +52,11 @@ export function CopyLinkOrShareButton(props: {
         size={size}
         color={color ?? 'gray-white'}
       >
-        {(isNative && platform === 'ios') || os === 'ios' ? (
-          <ArrowUpSquareIcon className={clsx(iconClassName ?? 'h-[1.4rem]')} />
-        ) : (isNative && platform === 'android') || os === 'android' ? (
-          <ShareIcon
-            strokeWidth={'2.5'}
-            className={clsx(iconClassName ?? 'h-[1.4rem]')}
-          />
-        ) : (
-          <LinkIcon
-            strokeWidth={'2.5'}
-            className={clsx(iconClassName ?? 'h-[1.1rem]')}
-            aria-hidden="true"
-          />
-        )}
+        <LinkIcon
+          strokeWidth={'2.5'}
+          className={clsx(iconClassName ?? 'h-[1.1rem]')}
+          aria-hidden="true"
+        />
         {children}
       </Button>
     </ToolTipOrDiv>
@@ -98,12 +81,7 @@ export const CopyLinkRow = (props: {
   linkBoxClassName?: string
   linkButtonClassName?: string
 }) => {
-  const { url, eventTrackingName, linkBoxClassName, linkButtonClassName } =
-    props
-
-  // TODO: this is resulting in hydration errors on mobile dev
-  const { isNative, platform } = getNativePlatform()
-  const { os } = useBrowserOS()
+  const { url, linkBoxClassName, linkButtonClassName } = props
 
   // "copied" success state animations
   const [bgPressed, setBgPressed] = useState(false)
@@ -117,7 +95,7 @@ export const CopyLinkRow = (props: {
     setTimeout(() => setBgPressed(false), 300)
     setTimeout(() => setIconPressed(false), 1000)
     copyToClipboard(url)
-    if (!isNative) toast.success('Link copied!')
+    toast.success('Link copied!')
   }
 
   // remove any http:// prefix
@@ -140,13 +118,7 @@ export const CopyLinkRow = (props: {
       {url && (
         <div className={linkButtonClassName}>
           {!iconPressed ? (
-            (isNative && platform === 'ios') || os === 'ios' ? (
-              <ArrowUpSquareIcon className={'h-[1.4rem]'} />
-            ) : (isNative && platform === 'android') || os === 'android' ? (
-              <ShareIcon strokeWidth={'2.5'} className={'h-[1.4rem]'} />
-            ) : (
-              <DuplicateIcon className="h-5 w-5" />
-            )
+            <DuplicateIcon className="h-5 w-5" />
           ) : (
             <CheckIcon className="h-5 w-5" />
           )}
@@ -163,13 +135,12 @@ export function SimpleCopyTextButton(props: {
   className?: string
 }) {
   const { text, eventTrackingName, className, tooltip } = props
-  const { isNative } = getNativePlatform()
 
   const onClick = () => {
     if (!text) return
 
     copyToClipboard(text)
-    if (!isNative) toast.success('Link copied!')
+    toast.success('Link copied!')
     track(eventTrackingName, { text })
   }
 

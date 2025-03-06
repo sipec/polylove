@@ -7,11 +7,8 @@ import {
   getAuth,
   signInWithPopup,
 } from 'firebase/auth'
-import { getIsNative } from 'web/lib/native/is-native'
-import { nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from '../util/local'
 import { app } from './init'
-import { postMessageToNative } from 'web/lib/native/post-message'
 
 dayjs.extend(utc)
 
@@ -51,11 +48,6 @@ export function writeReferralInfo(
 }
 
 export async function firebaseLogin() {
-  if (getIsNative()) {
-    // Post the message back to expo
-    postMessageToNative('loginClicked', {})
-    return
-  }
   const provider = new GoogleAuthProvider()
   return signInWithPopup(auth, provider).then(async (result) => {
     return result
@@ -77,7 +69,5 @@ export async function loginWithApple() {
 }
 
 export async function firebaseLogout() {
-  if (getIsNative()) nativeSignOut()
-
   await auth.signOut()
 }

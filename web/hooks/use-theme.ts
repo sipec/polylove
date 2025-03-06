@@ -1,6 +1,5 @@
 'use client'
 import { useEffect } from 'react'
-import { postMessageToNative } from 'web/lib/native/post-message'
 import { usePersistentLocalState } from './use-persistent-local-state'
 
 type theme_option = 'light' | 'dark' | 'auto'
@@ -48,14 +47,4 @@ const reRenderTheme = () => {
   } else {
     document.documentElement.classList.remove('dark')
   }
-
-  // pass theme to app
-  const element = document.querySelector('.bg-canvas-0')
-  if (element === null) return
-  const con = getComputedStyle(element).getPropertyValue('--color-canvas-0')
-  const color = `rgba(${con.replaceAll(' ', ',')}, 1)`
-  postMessageToNative('theme', {
-    theme: theme,
-    backgroundColor: color,
-  })
 }

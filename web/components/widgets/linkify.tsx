@@ -2,7 +2,6 @@ import clsx from 'clsx'
 import { Fragment } from 'react'
 import Link from 'next/link'
 import { linkClass } from './site-link'
-import { getNativePlatform } from 'web/lib/native/is-native'
 
 // Return a JSX span, linkifying @username, and https://...
 export function Linkify(props: { text: string; className?: string }) {
@@ -53,13 +52,11 @@ export function Linkify(props: { text: string; className?: string }) {
 }
 
 export const getLinkTarget = (href: string, newTab?: boolean) => {
+  // TODO: make this more robust against domain changes?
   if (
     href.startsWith('http') &&
     !href.startsWith(`https://manifold`) // covers manifold.markets and manifold.love
   )
     return '_blank'
-  const { isNative } = getNativePlatform()
-  // Native will open 'a new tab' when target = '_blank' in the system browser rather than in the app
-  if (isNative) return '_self'
   return newTab ? '_blank' : '_self'
 }

@@ -13,7 +13,6 @@ import {
   type User,
   type UserAndPrivateUser,
 } from 'common/user'
-import { nativePassUsers, nativeSignOut } from 'web/lib/native/native-messages'
 import { safeLocalStorage } from 'web/lib/util/local'
 import { updateSupabaseAuth } from 'web/lib/supabase/db'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
@@ -122,14 +121,6 @@ export function AuthProvider(props: {
     setUser(user)
     setPrivateUser(privateUser)
     setAuthLoaded(true)
-
-    nativePassUsers(
-      JSON.stringify({
-        fbUser: fbUser.toJSON(),
-        privateUser: privateUser,
-      })
-    )
-
     // generate auth token
     fbUser.getIdToken()
   }
@@ -170,7 +161,6 @@ export function AuthProvider(props: {
           setUserCookie(undefined)
           setUser(null)
           setPrivateUser(undefined)
-          nativeSignOut()
           // Clear local storage only if we were signed in, otherwise we'll clear referral info
           if (safeLocalStorage?.getItem(CACHED_USER_KEY)) localStorage.clear()
         }

@@ -36,7 +36,6 @@ import { FaUserFriends, FaUserMinus } from 'react-icons/fa'
 import { buildArray, filterDefined } from 'common/util/array'
 import { GiSpeakerOff } from 'react-icons/gi'
 import toast from 'react-hot-toast'
-import { getNativePlatform } from 'web/lib/native/is-native'
 import { useIsMobile } from 'web/hooks/use-is-mobile'
 import {
   useGroupedMessages,
@@ -99,9 +98,7 @@ export const PrivateChat = (props: {
 }) => {
   const { user, channel, memberIds } = props
   const channelId = channel.channel_id
-  const isSafari =
-    /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
-    getNativePlatform().platform === 'ios'
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
   const isMobile = useIsMobile()
 
   const totalMessagesToLoad = 100

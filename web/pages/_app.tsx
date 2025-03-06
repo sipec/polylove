@@ -4,8 +4,6 @@ import { useEffect } from 'react'
 import { AuthProvider, AuthUser } from 'web/components/auth-context'
 import { useHasLoaded } from 'web/hooks/use-has-loaded'
 import '../styles/globals.css'
-import { getIsNative } from 'web/lib/native/is-native'
-import { postMessageToNative } from 'web/lib/native/post-message'
 import { Major_Mono_Display, Figtree } from 'next/font/google'
 import clsx from 'clsx'
 
@@ -27,19 +25,6 @@ const mainFont = Figtree({
   variable: '--font-main',
   subsets: ['latin'],
 })
-
-// It can be very hard to see client logs on native, so send them manually
-if (getIsNative()) {
-  const log = console.log.bind(console)
-  console.log = (...args) => {
-    postMessageToNative('log', { args })
-    log(...args)
-  }
-  console.error = (...args) => {
-    postMessageToNative('log', { args })
-    log(...args)
-  }
-}
 
 function printBuildInfo() {
   // These are undefined if e.g. dev server

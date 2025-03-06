@@ -2,7 +2,6 @@
 import { ENV } from 'common/envs/constants'
 import { db } from 'web/lib/supabase/db'
 import { removeUndefinedProps } from 'common/util/object'
-import { getIsNative } from '../native/is-native'
 import { run, SupabaseClient } from 'common/supabase/utils'
 import { Json } from 'common/supabase/schema'
 
@@ -15,21 +14,13 @@ type EventIds = {
 type EventData = Record<string, Json | undefined>
 
 export async function track(name: string, properties?: EventIds & EventData) {
-  const isNative = getIsNative()
-
-  // mqp: did you know typescript can't type `const x = { a: b, ...c }` correctly?
-  // see https://github.com/microsoft/TypeScript/issues/27273
-  const allProperties = Object.assign(properties ?? {}, {
-    isNative,
-  })
-
-  const { contractId, adId, commentId, ...data } = allProperties
+  const { commentId, ...data } = properties || {}
   try {
     if (ENV !== 'PROD') {
-      console.log(name, allProperties)
+      console.log(name, properties)
     }
     // TODO: track in posthog
-    await insertUserEvent(name, data, db, null, contractId, commentId, adId)
+    await insertUserEvent(name, data, db, null, commentId)
   } catch (e) {
     console.log('error tracking event:', e)
   }
