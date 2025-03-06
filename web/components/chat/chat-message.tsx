@@ -14,7 +14,6 @@ import Link from 'next/link'
 import DropdownMenu from 'web/components/comments/dropdown-menu'
 import { DotsHorizontalIcon, ReplyIcon } from '@heroicons/react/solid'
 import { manifoldLoveUserId } from 'common/love/constants'
-import { UserHovercard } from '../user/user-hovercard'
 import { DisplayUser } from 'common/api/user-types'
 
 export const ChatMessageItem = memo(function ChatMessageItem(props: {
@@ -204,7 +203,7 @@ function MessageAvatar(props: {
   username?: string
   userId: string
 }) {
-  const { beforeSameUser, userAvatarUrl, username, userId } = props
+  const { beforeSameUser, userAvatarUrl, username } = props
   return (
     <Col
       className={clsx(

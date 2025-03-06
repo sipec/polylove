@@ -3,14 +3,11 @@ import {
   LogoutIcon,
   MoonIcon,
   SunIcon,
-  SparklesIcon,
   LoginIcon,
 } from '@heroicons/react/outline'
 import clsx from 'clsx'
 import { buildArray } from 'common/util/array'
-import { capitalize } from 'lodash'
 import Router, { useRouter } from 'next/router'
-import { useState } from 'react'
 import { useUser } from 'web/hooks/use-user'
 import { firebaseLogin, firebaseLogout } from 'web/lib/firebase/users'
 import { withTracking } from 'web/lib/service/analytics'

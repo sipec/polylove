@@ -1,6 +1,5 @@
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import Script from 'next/script'
 import { useEffect } from 'react'
 import { AuthProvider, AuthUser } from 'web/components/auth-context'
 import { useHasLoaded } from 'web/hooks/use-has-loaded'

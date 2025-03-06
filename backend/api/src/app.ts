@@ -175,13 +175,14 @@ Object.entries(handlers).forEach(([path, handler]) => {
   }
 })
 
-app.use(allowCorsUnrestricted, (req, res, next) => {
+app.use(allowCorsUnrestricted, (req, res) => {
   if (req.method === 'OPTIONS') {
     res.status(200).send()
   } else {
-    res.status(404)
+    res
+      .status(404)
       .set('Content-Type', 'application/json')
-      .json({ 
+      .json({
         message: `The requested route '${req.path}' does not exist. Please check your URL for any misspellings or refer to app.ts`,
       })
   }
