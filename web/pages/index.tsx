@@ -27,9 +27,13 @@ import { useGetter } from 'web/hooks/use-getter'
 import { getStars } from 'love/lib/supabase/stars'
 import { StarButton } from 'love/components/widgets/star-button'
 import { useAPIGetter } from 'web/hooks/use-api-getter'
+import { ProfileGrid } from 'web/components/profile-grid'
+import { useEffect } from 'react'
 
 export default function ProfilesPage() {
-  const { data: loversResult } = useAPIGetter('get-lovers', {})
+  const { data: loversResult } = useAPIGetter('get-lovers', {
+    limit: 20,
+  })
   const allLovers = loversResult?.lovers
 
   const [lovers, setLovers] = usePersistentInMemoryState<Lover[] | undefined>(
@@ -89,23 +93,13 @@ export default function ProfilesPage() {
           {lovers === undefined || compatibleLovers === undefined ? (
             <LoadingIndicator />
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-              {lovers.map((lover) => (
-                <ProfilePreview
-                  key={lover.id}
-                  lover={lover}
-                  compatibilityScore={
-                    compatibleLovers
-                      ? compatibleLovers.loverCompatibilityScores[lover.user_id]
-                      : undefined
-                  }
-                  hasStar={
-                    !!starredUserIds && starredUserIds.includes(lover.user_id)
-                  }
-                  refreshStars={refreshStars}
-                />
-              ))}
-            </div>
+            <ProfileGrid
+              initialLovers={lovers}
+              compatibilityScores={compatibleLovers?.loverCompatibilityScores}
+              starredUserIds={starredUserIds}
+              refreshStars={refreshStars}
+              ProfilePreviewComponent={ProfilePreview}
+            />
           )}
         </Col>
       </Col>
@@ -134,11 +128,12 @@ function ProfilePreview(props: {
         {pinned_url ? (
           <Image
             src={pinned_url}
-            // You must set these so we don't pay an extra $1k/month to vercel
             width={180}
             height={240}
             alt=""
             className="h-full w-full object-cover"
+            loading="lazy"
+            priority={false}
           />
         ) : (
           <Col className="bg-ink-300 h-full w-full items-center justify-center">

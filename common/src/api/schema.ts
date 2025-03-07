@@ -289,7 +289,12 @@ export const API = (_apiTypeCheck = {
   'get-lovers': {
     method: 'GET',
     authed: false,
-    props: z.object({}).strict(),
+    props: z
+      .object({
+        limit: z.coerce.number().optional().default(20),
+        after: z.string().optional(),
+      })
+      .strict(),
     returns: {} as {
       status: 'success'
       lovers: Lover[]
