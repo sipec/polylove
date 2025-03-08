@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { type JSONContent } from '@tiptap/core'
 
+// @ts-ignore
 export const contentSchema: z.ZodType<JSONContent> = z.lazy(() =>
   z.intersection(
     z.record(z.any()),

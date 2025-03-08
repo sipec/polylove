@@ -1,11 +1,11 @@
-{ 
+{
   "name": "love",
   "private": true,
   "workspaces": [
     "common",
     "backend/api",
-    "backend/scheduler",
     "backend/scripts",
+    "backend/email",
     "backend/shared",
     "web"
   ],

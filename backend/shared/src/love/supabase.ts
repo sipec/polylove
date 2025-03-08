@@ -76,7 +76,7 @@ export const getGenderCompatibleLovers = async (lover: LoverRow) => {
     { ...lover },
     convertRow
   )
-  return lovers.filter((l) => areGenderCompatible(lover, l))
+  return lovers.filter((l: Lover) => areGenderCompatible(lover, l))
 }
 
 export const getCompatibleLovers = async (

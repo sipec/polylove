@@ -1,6 +1,6 @@
 import * as pgPromise from 'pg-promise'
 import { createClient } from 'common/supabase/utils'
-export { SupabaseClient } from 'common/supabase/utils'
+export type { SupabaseClient } from 'common/supabase/utils'
 import { DEV_CONFIG } from 'common/envs/dev'
 import { PROD_CONFIG } from 'common/envs/prod'
 import { metrics, log, isProd } from '../utils'
@@ -11,7 +11,7 @@ import { METRICS_INTERVAL_MS } from 'shared/monitoring/metric-writer'
 import { getMonitoringContext } from 'shared/monitoring/context'
 import { type IConnectionParameters } from 'pg-promise/typescript/pg-subset'
 
-export const pgp = pgPromise({
+export const pgp = pgPromise.default({
   error(err: any, e: pgPromise.IEventContext) {
     // Read more: https://node-postgres.com/apis/pool#error
     log.error('pgPromise background error', {
@@ -19,7 +19,7 @@ export const pgp = pgPromise({
       event: e,
     })
   },
-  query(ev) {
+  query(ev: any) {
     const ctx = getMonitoringContext()
     if (ctx?.endpoint) {
       metrics.inc('pg/query_count', { endpoint: ctx.endpoint })
@@ -32,7 +32,7 @@ export const pgp = pgPromise({
 })
 
 // This loses precision for large numbers (> 2^53). Beware fetching int8 columns with large values.
-pgp.pg.types.setTypeParser(20, (value) => parseInt(value, 10))
+pgp.pg.types.setTypeParser(20, (value: any) => parseInt(value, 10))
 pgp.pg.types.setTypeParser(1700, parseFloat) // Type Id 1700 = NUMERIC
 
 export type SupabaseTransaction = ITask<{}>

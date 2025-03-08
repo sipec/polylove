@@ -11,7 +11,7 @@ import { insertNotificationToSupabase } from 'shared/supabase/notifications'
 import { User } from 'common/user'
 import { richTextToString } from 'common/util/parse'
 import * as crypto from 'crypto'
-import { sendNewEndorsementEmail } from 'shared/emails'
+import { sendNewEndorsementEmail } from 'email/functions/helpers'
 
 export const MAX_COMMENT_JSON_LENGTH = 20000
 
@@ -119,13 +119,6 @@ const createNewCommentOnLoverNotification = async (
     // )
   }
   if (sendToEmail) {
-    await sendNewEndorsementEmail(
-      reason,
-      privateUser,
-      creator,
-      onUser,
-      `${creator.name} just endorsed you!`,
-      sourceText
-    )
+    await sendNewEndorsementEmail(privateUser, creator, onUser, sourceText)
   }
 }

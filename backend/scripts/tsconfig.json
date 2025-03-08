@@ -11,7 +11,7 @@
       "common/*": ["../../common/src/*", "../../../common/lib/*"],
       "api/*": ["../api/src/*", "../../api/lib/*"],
       "shared/*": ["../shared/src/*", "../../shared/lib/*"],
-      "scheduler/*": ["../scheduler/src/*", "../../scheduler/lib/*"],
+      "email/*": ["../email/emails/*", "../../email/lib/*"],
       "scripts/*": ["./src/*"]
     }
   },
@@ -19,18 +19,10 @@
     "require": ["tsconfig-paths/register"]
   },
   "references": [
-    {
-      "path": "../../common"
-    },
-    {
-      "path": "../shared"
-    },
-    {
-      "path": "../api"
-    },
-    {
-      "path": "../scheduler"
-    }
+    { "path": "../../common" },
+    { "path": "../shared" },
+    { "path": "../api" },
+    { "path": "../email" }
   ],
   "compileOnSave": true
 }

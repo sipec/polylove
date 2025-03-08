@@ -28,7 +28,6 @@ import { getStars } from 'love/lib/supabase/stars'
 import { StarButton } from 'love/components/widgets/star-button'
 import { useAPIGetter } from 'web/hooks/use-api-getter'
 import { ProfileGrid } from 'web/components/profile-grid'
-import { useEffect } from 'react'
 
 export default function ProfilesPage() {
   const { data: loversResult } = useAPIGetter('get-lovers', {

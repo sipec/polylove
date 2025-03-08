@@ -5,7 +5,7 @@ import { LOCAL_DEV, log } from 'shared/utils'
 import { METRIC_WRITER } from 'shared/monitoring/metric-writer'
 import { listen as webSocketListen } from 'shared/websockets/server'
 
-log('Api server starting up...')
+log('Api server starting up....')
 
 if (LOCAL_DEV) {
   initAdmin()

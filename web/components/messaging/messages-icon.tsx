@@ -5,6 +5,7 @@ import { useUnseenPrivateMessageChannels } from 'web/hooks/use-private-messages'
 import { BiEnvelope, BiSolidEnvelope } from 'react-icons/bi'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
+import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
 
 export function UnseenMessagesBubble(props: { className?: string }) {
   const { className } = props
@@ -55,12 +56,12 @@ function InternalUnseenMessagesBubble(props: {
   )
   const pathName = usePathname()
 
-  if (
-    unseenChannels.length === 0 ||
-    !privateUser.notificationPreferences.new_message.includes('browser') ||
-    privateUser.notificationPreferences.opt_out_all.includes('browser') ||
-    pathName === '/messages'
+  const { sendToBrowser } = getNotificationDestinationsForUser(
+    privateUser,
+    'new_message'
   )
+
+  if (unseenChannels.length === 0 || !sendToBrowser || pathName === '/messages')
     return null
 
   return (

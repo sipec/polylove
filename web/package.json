@@ -85,8 +85,5 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "tsc-files --noEmit --incremental false"
-  },
-  "overrides": {
-    "@types/scheduler": "< 0.23.0"
   }
 }

@@ -9,12 +9,16 @@
     "tsBuildInfoFile": "lib/tsconfig.tsbuildinfo",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "lib": ["esnext"],
+    "skipLibCheck": true,
     "paths": {
       "common/*": ["../../common/src/*", "../../../common/lib/*"],
       "shared/*": ["./src/*"]
     }
   },
   "references": [{ "path": "../../common" }],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

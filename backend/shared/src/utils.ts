@@ -4,11 +4,11 @@ import {
 } from 'shared/supabase/init'
 import * as admin from 'firebase-admin'
 import { convertPrivateUser, convertUser } from 'common/supabase/users'
-import { log, Logger } from 'shared/monitoring/log'
+import { log, type Logger } from 'shared/monitoring/log'
 import { metrics } from 'shared/monitoring/metrics'
 
 export { metrics }
-export { log, Logger }
+export { log, type Logger }
 
 export const getUser = async (
   userId: string,

@@ -4,19 +4,19 @@ import { ChatVisibility } from 'common/chat-message'
 import { User } from 'common/user'
 import { first } from 'lodash'
 import { log } from 'shared/monitoring/log'
-import { HOUR_MS } from 'common/util/time'
 import { getPrivateUser, getUser } from 'shared/utils'
 import { type JSONContent } from '@tiptap/core'
 import { APIError } from 'common/api/utils'
 import { broadcast } from 'shared/websockets/server'
 import { track } from 'shared/analytics'
-import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
-import { sendNewMessageEmail } from 'shared/emails'
-import * as dayjs from 'dayjs'
-import * as utc from 'dayjs/plugin/utc'
-import * as timezone from 'dayjs/plugin/timezone'
+import { sendNewMessageEmail } from 'email/functions/helpers'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
+
 export const leaveChatContent = (userName: string) => ({
   type: 'doc',
   content: [
@@ -185,57 +185,17 @@ const notifyOtherUserInChannelIfInactive = async (
     `select 1 from lovers where user_id = $1`,
     [otherUserId.user_id]
   )
-  await createNewMessageNotification(
-    creator,
-    otherUser,
-    channelId,
-    hasLoverProfile
-  )
+  if (hasLoverProfile) {
+    await createNewMessageNotification(creator, otherUser, channelId)
+  }
 }
+
 const createNewMessageNotification = async (
   fromUser: User,
   toUser: User,
-  channelId: number,
-  otherUserHasLoverProfile: boolean
+  channelId: number
 ) => {
   const privateUser = await getPrivateUser(toUser.id)
   if (!privateUser) return
-  const reason = 'new_message'
-  const { sendToEmail } = getNotificationDestinationsForUser(
-    privateUser,
-    reason
-  )
-  const sourceText = `${fromUser.name} sent you a message!`
-  // const id = crypto.randomUUID()
-  // const notification: Notification = {
-  //   id,
-  //   userId: privateUser.id,
-  //   reason,
-  //   createdTime: Date.now(),
-  //   isSeen: false,
-  //   sourceId: channelId.toString(),
-  //   sourceType: reason,
-  //   sourceUpdateType: 'created',
-  //   sourceUserName: fromUser.name,
-  //   sourceUserUsername: fromUser.username,
-  //   sourceUserAvatarUrl: fromUser.avatarUrl,
-  //   sourceSlug: '/messages/' + channelId,
-  //   sourceText,
-  // }
-
-  // if (sendToMobile) {
-  //   await createPushNotifications([
-  //     [privateUser, notification, `${fromUser.name} messaged you`, sourceText],
-  //   ])
-  // }
-  if (sendToEmail && otherUserHasLoverProfile) {
-    await sendNewMessageEmail(
-      reason,
-      privateUser,
-      fromUser,
-      toUser,
-      channelId,
-      sourceText
-    )
-  }
+  await sendNewMessageEmail(privateUser, fromUser, toUser, channelId)
 }
