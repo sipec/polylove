@@ -68,8 +68,12 @@ export default function UserPage(props: {
   if (!user) {
     return <Custom404 />
   }
+  if (user.userDeleted) {
+    return <div>This account has been deleted</div>
+  }
+
   if (user.isBannedFromPosting) {
-    return <div>User is banned</div>
+    return <div>This account is banned</div>
   }
 
   return (

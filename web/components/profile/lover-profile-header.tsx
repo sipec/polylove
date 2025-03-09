@@ -3,7 +3,6 @@ import { DotsHorizontalIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
 import Router from 'next/router'
 import Link from 'next/link'
-
 import { User } from 'common/user'
 import { Button } from 'web/components/buttons/button'
 import { MoreOptionsUserButton } from 'web/components/buttons/more-options-user-button'
@@ -14,12 +13,12 @@ import LoverPrimaryInfo from './lover-primary-info'
 import { OnlineIcon } from '../online-icon'
 import { track } from 'web/lib/service/analytics'
 import DropdownMenu from 'web/components/comments/dropdown-menu'
-import { deleteLover } from 'love/lib/supabase/lovers'
 import { ShareProfileButton } from '../widgets/share-profile-button'
 import { Lover } from 'common/love/lover'
 import { useUser } from 'web/hooks/use-user'
 import { linkClass } from 'web/components/widgets/site-link'
 import { StarButton } from '../widgets/star-button'
+import { api } from 'web/lib/api'
 
 export default function LoverProfileHeader(props: {
   user: User
@@ -93,7 +92,7 @@ export default function LoverProfileHeader(props: {
                     )
                     if (confirmed) {
                       track('delete love profile')
-                      await deleteLover(currentUser.id)
+                      await api('me/delete', { username: user.username })
                       window.location.reload()
                     }
                   },
