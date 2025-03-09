@@ -558,6 +558,7 @@ export type Database = {
           data: Json
           id: string
           name: string
+          name_username_vector: unknown | null
           username: string
         }
         Insert: {
@@ -565,6 +566,7 @@ export type Database = {
           data: Json
           id?: string
           name: string
+          name_username_vector?: unknown | null
           username: string
         }
         Update: {
@@ -572,6 +574,7 @@ export type Database = {
           data?: Json
           id?: string
           name?: string
+          name_username_vector?: unknown | null
           username?: string
         }
         Relationships: []

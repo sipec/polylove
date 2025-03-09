@@ -5,6 +5,12 @@ create table if not exists
     data jsonb not null,
     id text primary key users_pkey default random_alphanumeric (12) not null,
     name text not null,
+    name_username_vector tsvector generated always as (
+      to_tsvector(
+        'english'::regconfig,
+        (name || ' '::text) || username
+      )
+    ) stored,
     username text not null
   );
 
