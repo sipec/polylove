@@ -7,7 +7,6 @@ import { zip } from 'lodash'
 // https://console.cloud.google.com/security/secret-manager?project=polylove
 export const secrets = (
   [
-    'MAILGUN_KEY',
     // 'STRIPE_APIKEY',
     // 'STRIPE_WEBHOOKSECRET',
     'SUPABASE_KEY',
@@ -16,6 +15,7 @@ export const secrets = (
     'TEST_CREATE_USER_KEY',
     'REACT_APP_GIPHY_KEY',
     'GEODB_API_KEY',
+    'RESEND_KEY',
     // Some typescript voodoo to keep the string literal types while being not readonly.
   ] as const
 ).concat()
