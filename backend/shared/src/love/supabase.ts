@@ -71,6 +71,7 @@ export const getGenderCompatibleLovers = async (lover: LoverRow) => {
         user_id != $(user_id)
         and looking_for_matches
         and (data->>'isBannedFromPosting' != 'true' or data->>'isBannedFromPosting' is null)
+        and (data->>'userDeleted' != 'true' or data->>'userDeleted' is null)
         and lovers.pinned_url is not null
       `,
     { ...lover },
@@ -95,6 +96,7 @@ export const getCompatibleLovers = async (
         user_id != $(user_id)
         and looking_for_matches
         and (data->>'isBannedFromPosting' != 'true' or data->>'isBannedFromPosting' is null)
+        and (data->>'userDeleted' != 'true' or data->>'userDeleted' is null)
 
         -- Gender
         and (lovers.gender = any($(pref_gender)) or lovers.gender = 'non-binary')

@@ -117,27 +117,10 @@ export const createPrivateUserMessageMain = async (
   otherUserIds.concat(creator.id).forEach((otherUserId) => {
     broadcast(`private-user-messages/${otherUserId}`, {})
   })
-  let bothHaveLoverProfiles = false
-  const hasLoverProfile = await pg.oneOrNone(
-    'select 1 from lovers where user_id = $1',
-    [creator.id]
-  )
-  if (hasLoverProfile) {
-    const otherUserId = first(otherUserIds)
-
-    if (otherUserId && otherUserIds.length === 1) {
-      const otherHasLoverProfile = await pg.oneOrNone(
-        'select 1 from lovers where user_id = $1',
-        [otherUserId]
-      )
-      bothHaveLoverProfiles = !!otherHasLoverProfile
-    }
-  }
 
   track(creator.id, 'send private message', {
     channelId,
     otherUserIds,
-    bothHaveLoverProfiles,
   })
 
   return privateMessage
