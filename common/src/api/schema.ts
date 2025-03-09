@@ -293,10 +293,26 @@ export const API = (_apiTypeCheck = {
       .object({
         limit: z.coerce.number().optional().default(20),
         after: z.string().optional(),
+        // Search and filter parameters
+        name: z.string().optional(),
+        genders: z.array(z.string()).optional(),
+        pref_gender: z.array(z.string()).optional(),
+        pref_age_min: z.coerce.number().optional(),
+        pref_age_max: z.coerce.number().optional(),
+        pref_relation_styles: z.array(z.string()).optional(),
+        wants_kids_strength: z.coerce.number().optional(),
+        has_kids: z.coerce.number().optional(),
+        is_smoker: z.coerce.boolean().optional(),
+        geodbCityIds: z.array(z.string()).optional(),
+        compatibleWithUserId: z.string().optional(),
+        orderBy: z
+          .enum(['last_online_time', 'created_time', 'compatibility_score'])
+          .optional()
+          .default('last_online_time'),
       })
       .strict(),
     returns: {} as {
-      status: 'success'
+      status: 'success' | 'fail'
       lovers: Lover[]
     },
   },

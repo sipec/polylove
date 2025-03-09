@@ -1,78 +1,41 @@
-import { useState } from 'react'
 import { Lover } from 'common/love/lover'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
 import { LoadMoreUntilNotVisible } from 'web/components/widgets/visibility-observer'
-import { api } from 'web/lib/api'
+import { UserIcon } from '@heroicons/react/solid'
+import { capitalize } from 'lodash'
+import Link from 'next/link'
+import { useUser } from 'web/hooks/use-user'
+import { track } from 'web/lib/service/analytics'
+import { convertGender, Gender } from './gender-icon'
+import { Col } from './layout/col'
+import { Row } from './layout/row'
+import { CompatibleBadge } from './widgets/compatible-badge'
+import { StarButton } from './widgets/star-button'
+import Image from 'next/image'
 
-type ProfilePreviewProps = {
-  lover: Lover
-  compatibilityScore: CompatibilityScore | undefined
-  hasStar: boolean
-  refreshStars: () => Promise<void>
-}
-
-type ProfileGridProps = {
-  initialLovers: Lover[]
+export const ProfileGrid = (props: {
+  lovers: Lover[]
+  loadMore: () => Promise<boolean>
+  loading: boolean
   compatibilityScores: Record<string, CompatibilityScore> | undefined
   starredUserIds: string[] | undefined
   refreshStars: () => Promise<void>
-  ProfilePreviewComponent: React.ComponentType<ProfilePreviewProps>
-}
-
-export function ProfileGrid({
-  initialLovers,
-  compatibilityScores,
-  starredUserIds,
-  refreshStars,
-  ProfilePreviewComponent,
-}: ProfileGridProps) {
-  const [lovers, setLovers] = useState<Lover[]>(initialLovers)
-  const [hasMore, setHasMore] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
-
-  const loadMore = async () => {
-    if (isLoading || !hasMore) return false
-
-    try {
-      setIsLoading(true)
-
-      // Get the last lover's ID as the after parameter
-      const lastLover = lovers[lovers.length - 1]
-      if (!lastLover) {
-        setHasMore(false)
-        return false
-      }
-
-      const result = await api('get-lovers', {
-        limit: 20,
-        after: lastLover.id.toString(), // Convert to string to match API expectation
-      })
-
-      if (result.lovers.length === 0) {
-        setHasMore(false)
-        return false
-      }
-
-      setLovers((prevLovers) => [...prevLovers, ...result.lovers])
-      return true
-    } catch (err) {
-      console.error('Failed to load more lovers', err)
-      setError(
-        err instanceof Error ? err : new Error('Failed to load more lovers')
-      )
-      return false
-    } finally {
-      setIsLoading(false)
-    }
-  }
+}) => {
+  const {
+    lovers,
+    loadMore,
+    loading,
+    compatibilityScores,
+    starredUserIds,
+    refreshStars,
+  } = props
 
   return (
     <div className="relative">
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
         {lovers.map((lover) => (
-          <ProfilePreviewComponent
+          <ProfilePreview
             key={lover.id}
             lover={lover}
             compatibilityScore={compatibilityScores?.[lover.user_id]}
@@ -82,23 +45,87 @@ export function ProfileGrid({
         ))}
       </div>
 
-      {isLoading && (
+      <LoadMoreUntilNotVisible loadMore={loadMore} />
+
+      {loading && (
         <div className="flex justify-center py-4">
           <LoadingIndicator />
         </div>
       )}
 
-      {error && (
-        <div className="py-4 text-center text-red-500">
-          Error loading profiles. Please try again.
-        </div>
-      )}
-
-      {hasMore && !error && <LoadMoreUntilNotVisible loadMore={loadMore} />}
-
-      {!hasMore && lovers.length === 0 && (
+      {!loading && lovers.length === 0 && (
         <div className="py-8 text-center">No profiles found</div>
       )}
     </div>
+  )
+}
+
+function ProfilePreview(props: {
+  lover: Lover
+  compatibilityScore: CompatibilityScore | undefined
+  hasStar: boolean
+  refreshStars: () => Promise<void>
+}) {
+  const { lover, compatibilityScore, hasStar, refreshStars } = props
+  const { user, gender, age, pinned_url, city } = lover
+  const currentUser = useUser()
+
+  return (
+    <Link
+      href={`/${user.username}`}
+      onClick={() => {
+        track('click love profile preview')
+      }}
+    >
+      <Col className="relative h-60 w-full overflow-hidden rounded text-white transition-all hover:z-20 hover:scale-110 hover:drop-shadow">
+        {pinned_url ? (
+          <Image
+            src={pinned_url}
+            width={180}
+            height={240}
+            alt=""
+            className="h-full w-full object-cover"
+            loading="lazy"
+            priority={false}
+          />
+        ) : (
+          <Col className="bg-ink-300 h-full w-full items-center justify-center">
+            <UserIcon className="h-20 w-20" />
+          </Col>
+        )}
+
+        <Row className="absolute inset-x-0 right-0 top-0 items-start justify-between bg-gradient-to-b from-black/70 via-black/70 to-transparent px-2 pb-3 pt-2">
+          {currentUser ? (
+            <StarButton
+              className="!pt-0"
+              isStarred={hasStar}
+              refresh={refreshStars}
+              targetLover={lover}
+              hideTooltip
+            />
+          ) : (
+            <div />
+          )}
+          {compatibilityScore && (
+            <CompatibleBadge compatibility={compatibilityScore} />
+          )}
+        </Row>
+
+        <Col className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent px-4 pb-2 pt-6">
+          <div>
+            <div className="flex flex-wrap items-center gap-x-1">
+              {/* <OnlineIcon last_online_time={last_online_time} /> */}
+              <span>
+                <span className="break-words font-semibold">{user.name}</span>,
+              </span>
+              {age}
+            </div>
+          </div>
+          <Row className="gap-1 text-xs">
+            {city} • {capitalize(convertGender(gender as Gender))}
+          </Row>
+        </Col>
+      </Col>
+    </Link>
   )
 }

@@ -8,12 +8,13 @@ import {
 } from 'shared/love/supabase'
 import { log } from 'shared/utils'
 
-export const getCompatibleLovers: APIHandler<'compatible-lovers'> = async (
-  props,
-  _auth
-) => {
-  const { userId } = props
+export const getCompatibleLoversHandler: APIHandler<
+  'compatible-lovers'
+> = async (props) => {
+  return getCompatibleLovers(props.userId)
+}
 
+export const getCompatibleLovers = async (userId: string) => {
   const lover = await getLover(userId)
 
   log('got lover', {
@@ -25,18 +26,6 @@ export const getCompatibleLovers: APIHandler<'compatible-lovers'> = async (
   if (!lover) throw new APIError(404, 'Lover not found')
 
   const lovers = await getGenderCompatibleLovers(lover)
-
-  const debug = false
-  if (debug) {
-    console.log(
-      'got compatible',
-      lovers.map((l) => ({
-        id: l.id,
-        username: l.user.username,
-        user_id: l.user.id,
-      }))
-    )
-  }
 
   const loverAnswers = await getCompatibilityAnswers([
     userId,
@@ -57,8 +46,6 @@ export const getCompatibleLovers: APIHandler<'compatible-lovers'> = async (
         ] as const
     )
   )
-
-  if (debug) log('got lover compatibility scores', loverCompatibilityScores)
 
   const sortedCompatibleLovers = sortBy(
     lovers,

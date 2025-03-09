@@ -10,7 +10,7 @@ import { log } from 'shared/monitoring/log'
 import { metrics } from 'shared/monitoring/metrics'
 import { banUser } from './ban-user'
 import { blockUser, unblockUser } from './block-user'
-import { getCompatibleLovers } from './compatible-lovers'
+import { getCompatibleLoversHandler } from './compatible-lovers'
 import { createComment } from './create-comment'
 import { createCompatibilityQuestion } from './create-compatibility-question'
 import { createLover } from './create-lover'
@@ -134,7 +134,7 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'create-comment': createComment,
   'hide-comment': hideComment,
   'create-compatibility-question': createCompatibilityQuestion,
-  'compatible-lovers': getCompatibleLovers,
+  'compatible-lovers': getCompatibleLoversHandler,
   'search-location': searchLocation,
   'search-near-city': searchNearCity,
   'create-private-user-message': createPrivateUserMessage,
