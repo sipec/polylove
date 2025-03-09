@@ -1,6 +1,6 @@
-import * as pgPromise from 'pg-promise'
+import pgPromise from 'pg-promise'
 import { createClient } from 'common/supabase/utils'
-export type { SupabaseClient } from 'common/supabase/utils'
+export { SupabaseClient } from 'common/supabase/utils'
 import { DEV_CONFIG } from 'common/envs/dev'
 import { PROD_CONFIG } from 'common/envs/prod'
 import { metrics, log, isProd } from '../utils'
@@ -11,7 +11,7 @@ import { METRICS_INTERVAL_MS } from 'shared/monitoring/metric-writer'
 import { getMonitoringContext } from 'shared/monitoring/context'
 import { type IConnectionParameters } from 'pg-promise/typescript/pg-subset'
 
-export const pgp = pgPromise.default({
+export const pgp = pgPromise({
   error(err: any, e: pgPromise.IEventContext) {
     // Read more: https://node-postgres.com/apis/pool#error
     log.error('pgPromise background error', {
@@ -19,7 +19,7 @@ export const pgp = pgPromise.default({
       event: e,
     })
   },
-  query(ev: any) {
+  query() {
     const ctx = getMonitoringContext()
     if (ctx?.endpoint) {
       metrics.inc('pg/query_count', { endpoint: ctx.endpoint })
