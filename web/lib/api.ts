@@ -1,5 +1,5 @@
-import { API, APIParams, APIPath, APIResponse } from 'common/api/schema'
-import { baseApiCall, formatApiUrlWithParams } from 'common/util/api'
+import { API, APIParams, APIPath } from 'common/api/schema'
+import { typedAPICall } from 'common/util/api'
 import { sleep } from 'common/util/time'
 import { auth } from './firebase/users'
 import { omitBy, isNull } from 'lodash'
@@ -22,12 +22,7 @@ export async function api<P extends APIPath>(
     }
   }
 
-  return (await baseApiCall(
-    formatApiUrlWithParams(path, params),
-    API[path].method,
-    params,
-    auth.currentUser
-  )) as Promise<APIResponse<P>>
+  return typedAPICall(path, params, auth.currentUser)
 }
 
 function curriedAPI<P extends APIPath>(path: P) {

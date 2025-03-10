@@ -5,24 +5,31 @@ import { removeUndefinedProps } from 'common/util/object'
 import { User } from 'firebase/auth'
 
 export function unauthedApi<P extends APIPath>(path: P, params: APIParams<P>) {
-  return baseApiCall(
-    formatApiUrlWithParams(path, params),
-    API[path].method,
-    params,
-    null
-  ) as Promise<APIResponse<P>>
+  return typedAPICall(path, params, null)
 }
 
-export const formatApiUrlWithParams = (
-  path: APIPath,
-  params: APIParams<APIPath>
+export const typedAPICall = <P extends APIPath>(
+  path: P,
+  params: APIParams<P>,
+  user: User | null
 ) => {
   // parse any params that should part of the path (like market/:id)
+  const newParams: any = {}
   let url = getApiUrl(path)
   forEach(params, (v, k) => {
-    url = url.replace(`:${k}`, v + '')
+    if (url.includes(`:${k}`)) {
+      url = url.replace(`:${k}`, v + '')
+    } else {
+      newParams[k] = v
+    }
   })
-  return url
+
+  return baseApiCall({
+    url,
+    method: API[path].method,
+    params: newParams,
+    user,
+  }) as Promise<APIResponse<P>>
 }
 
 function appendQuery(url: string, props: Record<string, any>) {
@@ -38,12 +45,14 @@ function appendQuery(url: string, props: Record<string, any>) {
   return `${base}?${params.toString()}`
 }
 
-export async function baseApiCall(
-  url: string,
-  method: 'POST' | 'PUT' | 'GET',
-  params: any,
+export async function baseApiCall(props: {
+  url: string
+  method: 'POST' | 'PUT' | 'GET'
+  params: any
   user: User | null
-) {
+}) {
+  const { url, method, params, user } = props
+
   const actualUrl = method === 'POST' ? url : appendQuery(url, params)
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
