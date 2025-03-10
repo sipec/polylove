@@ -2,8 +2,9 @@ import {
   contentSchema,
   combinedLoveUsersSchema,
   baseLoversSchema,
+  arraybeSchema,
 } from 'common/api/zod-types'
-import { ChatMessage, PrivateChatMessage } from 'common/chat-message'
+import { PrivateChatMessage } from 'common/chat-message'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { MAX_COMPATIBILITY_QUESTION_LENGTH } from 'common/love/constants'
 import { Lover } from 'common/love/lover'
@@ -14,6 +15,7 @@ import { LikeData, ShipData } from './love-types'
 import { DisplayUser, FullUser } from './user-types'
 import { PrivateMessageChannel } from 'common/supabase/private-messages'
 import { Notification } from 'common/notifications'
+import { arrify } from 'common/util/array'
 
 // mqp: very unscientific, just balancing our willingness to accept load
 // with user willingness to put up with stale data
@@ -295,15 +297,15 @@ export const API = (_apiTypeCheck = {
         after: z.string().optional(),
         // Search and filter parameters
         name: z.string().optional(),
-        genders: z.array(z.string()).optional(),
-        pref_gender: z.array(z.string()).optional(),
+        genders: arraybeSchema.optional(),
+        pref_gender: arraybeSchema.optional(),
         pref_age_min: z.coerce.number().optional(),
         pref_age_max: z.coerce.number().optional(),
-        pref_relation_styles: z.array(z.string()).optional(),
+        pref_relation_styles: arraybeSchema.optional(),
         wants_kids_strength: z.coerce.number().optional(),
         has_kids: z.coerce.number().optional(),
         is_smoker: z.coerce.boolean().optional(),
-        geodbCityIds: z.array(z.string()).optional(),
+        geodbCityIds: arraybeSchema.optional(),
         compatibleWithUserId: z.string().optional(),
         orderBy: z
           .enum(['last_online_time', 'created_time', 'compatibility_score'])
@@ -372,7 +374,10 @@ export const API = (_apiTypeCheck = {
     method: 'GET',
     authed: true,
     props: z.object({
-      channelIds: z.array(z.coerce.number()),
+      channelIds: z
+        .array(z.coerce.number())
+        .or(z.coerce.number())
+        .transform(arrify),
     }),
     returns: [] as [number, string][],
   },

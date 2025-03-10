@@ -1,5 +1,5 @@
 import { ENV_CONFIG } from 'common/envs/constants'
-import { API, APIPath } from './schema'
+import { type APIPath } from './schema'
 
 type ErrorCode =
   | 400 // your input is bad (like zod is mad)

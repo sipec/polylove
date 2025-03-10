@@ -1,5 +1,8 @@
 import { compact, flattenDeep, isEqual } from 'lodash'
 
+export const arrify = <T>(maybeArr: T | T[]) =>
+  Array.isArray(maybeArr) ? maybeArr : [maybeArr]
+
 export function filterDefined<T>(array: (T | null | undefined)[]) {
   return array.filter((item) => item !== null && item !== undefined) as T[]
 }
