@@ -2,7 +2,7 @@
 
 ## Overview
 
-The email module provides React Email components for sending beautiful, responsive emails from the application. We use the React Email for email templates and Resend for delivery.
+The email module provides React Email components for sending beautiful, responsive emails from the application. We use the React Email for templates and Resend for delivery.
 
 ## Structure
 

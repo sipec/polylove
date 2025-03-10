@@ -28,7 +28,7 @@ TIMESTAMP=$(date +"%s")
 IMAGE_TAG="${TIMESTAMP}-${GIT_REVISION}"
 IMAGE_URL="${REGION}-docker.pkg.dev/${PROJECT}/builds/${SERVICE_NAME}:${IMAGE_TAG}"
 
-echo "🚀 Deploying ${SERVICE_NAME} to ${ENV} ( $(date "+%Y-%m-%d %I:%M:%S %p"))"
+echo "🚀 Deploying ${SERVICE_NAME} to ${ENV} ($(date "+%Y-%m-%d %I:%M:%S %p"))"
 yarn build
 docker build . --tag ${IMAGE_URL} --platform linux/amd64
 docker push ${IMAGE_URL}

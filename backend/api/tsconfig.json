@@ -15,7 +15,7 @@
     "paths": {
       "common/*": ["../../common/src/*", "../../../common/lib/*"],
       "shared/*": ["../shared/src/*", "../../shared/lib/*"],
-      "email/*": ["../email/emails/*", "../email/lib/*"],
+      "email/*": ["../email/emails/*", "../../email/lib/*"],
       "api/*": ["./src/*"]
     }
   },

@@ -12,6 +12,7 @@ export const sendEmail = async (
   payload: CreateEmailOptions,
   options?: CreateEmailRequestOptions
 ) => {
+  const resend = getResend()
   const { data, error } = await resend.emails.send(
     { replyTo: 'love@sincl.ai', ...payload },
     options
@@ -29,9 +30,11 @@ export const sendEmail = async (
   return data
 }
 
-const initResend = () => {
-  const apiKey = process.env.RESEND_KEY as string
-  return new Resend(apiKey)
-}
+let resend: Resend | null = null
+const getResend = () => {
+  if (resend) return resend
 
-const resend = initResend()
+  const apiKey = process.env.RESEND_KEY as string
+  resend = new Resend(apiKey)
+  return resend
+}
