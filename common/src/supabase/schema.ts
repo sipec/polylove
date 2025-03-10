@@ -413,28 +413,31 @@ export type Database = {
       }
       private_user_messages: {
         Row: {
-          channel_id: number | null
-          content: Json | null
-          created_time: string | null
-          id: number | null
-          user_id: string | null
-          visibility: string | null
+          channel_id: number
+          content: Json
+          created_time: string
+          id: number
+          old_id: number | null
+          user_id: string
+          visibility: string
         }
         Insert: {
-          channel_id?: number | null
-          content?: Json | null
-          created_time?: string | null
-          id?: number | null
-          user_id?: string | null
-          visibility?: string | null
+          channel_id: number
+          content: Json
+          created_time?: string
+          id?: never
+          old_id?: number | null
+          user_id: string
+          visibility?: string
         }
         Update: {
-          channel_id?: number | null
-          content?: Json | null
-          created_time?: string | null
-          id?: number | null
-          user_id?: string | null
-          visibility?: string | null
+          channel_id?: number
+          content?: Json
+          created_time?: string
+          id?: never
+          old_id?: number | null
+          user_id?: string
+          visibility?: string
         }
         Relationships: []
       }
