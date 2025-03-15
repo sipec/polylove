@@ -7,6 +7,10 @@ create table if not exists
     user_id text not null
   );
 
+-- Foreign Keys
+alter table private_user_seen_message_channels
+add constraint channel_id_fkey foreign key (channel_id) references private_user_message_channels (id) on update cascade on delete cascade;
+
 -- Row Level Security
 alter table private_user_seen_message_channels enable row level security;
 

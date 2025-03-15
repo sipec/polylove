@@ -10,6 +10,10 @@ create table if not exists
     visibility text default 'private'::text not null
   );
 
+-- Foreign Keys
+alter table private_user_messages
+add constraint private_user_messages_channel_id_fkey foreign key (channel_id) references private_user_message_channels (id) on update cascade on delete cascade;
+
 -- Row Level Security
 alter table private_user_messages enable row level security;
 
