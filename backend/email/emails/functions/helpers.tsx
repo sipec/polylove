@@ -7,6 +7,7 @@ import { sendEmail } from './send-email'
 import { NewMatchEmail } from '../new-match'
 import { NewMessageEmail } from '../new-message'
 import { NewEndorsementEmail } from '../new-endorsement'
+import { Test } from '../test'
 
 const from = 'Love <no-reply@poly.love>'
 
@@ -93,5 +94,14 @@ export const sendNewEndorsementEmail = async (
         unsubscribeUrl={unsubscribeUrl}
       />
     ),
+  })
+}
+
+export const sendTestEmail = async (toEmail: string) => {
+  return await sendEmail({
+    from,
+    subject: 'Test email from Love',
+    to: toEmail,
+    react: <Test name="Test User" />,
   })
 }

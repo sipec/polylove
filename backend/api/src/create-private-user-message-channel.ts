@@ -16,7 +16,6 @@ export const createPrivateUserMessageChannel: APIHandler<
   const creator = await getUser(creatorId)
   if (!creator) throw new APIError(401, 'Your account was not found')
   if (creator.isBannedFromPosting) throw new APIError(403, 'You are banned')
-  const creatorShouldJoinChannel = userIds.includes(creatorId)
   const toPrivateUsers = filterDefined(
     await Promise.all(userIds.map((id) => getPrivateUser(id)))
   )
@@ -45,9 +44,9 @@ export const createPrivateUserMessageChannel: APIHandler<
         select channel_id from private_user_message_channel_members
           group by channel_id
           having array_agg(user_id::text) @> array[$1]::text[]
-          and count(distinct user_id) = $2
+          and array_agg(user_id::text) <@ array[$1]::text[]
       `,
-    [userIds, userIds.length]
+    [userIds]
   )
   if (currentChannel)
     return {
@@ -58,17 +57,15 @@ export const createPrivateUserMessageChannel: APIHandler<
   const channel = await pg.one(
     `insert into private_user_message_channels default values returning id`
   )
-  if (creatorShouldJoinChannel) {
-    await pg.none(
-      `insert into private_user_message_channel_members (channel_id, user_id, role, status)
+
+  await pg.none(
+    `insert into private_user_message_channel_members (channel_id, user_id, role, status)
        values ($1, $2, 'creator', 'joined')
       `,
-      [channel.id, creatorId]
-    )
-  }
-  const memberIds = creatorShouldJoinChannel
-    ? userIds.filter((id) => id !== creatorId)
-    : userIds
+    [channel.id, creatorId]
+  )
+
+  const memberIds = userIds.filter((id) => id !== creatorId)
   await addUsersToPrivateMessageChannel(memberIds, channel.id, pg)
   return { status: 'success', channelId: Number(channel.id) }
 }

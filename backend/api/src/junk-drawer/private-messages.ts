@@ -163,14 +163,8 @@ const notifyOtherUserInChannelIfInactive = async (
 
   const otherUser = await getUser(otherUserId.user_id)
   if (!otherUser) return
-  // We're only sending emails for users who have a lover profile
-  const hasLoverProfile = await pg.oneOrNone(
-    `select 1 from lovers where user_id = $1`,
-    [otherUserId.user_id]
-  )
-  if (hasLoverProfile) {
-    await createNewMessageNotification(creator, otherUser, channelId)
-  }
+
+  await createNewMessageNotification(creator, otherUser, channelId)
 }
 
 const createNewMessageNotification = async (
