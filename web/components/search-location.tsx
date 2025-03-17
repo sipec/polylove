@@ -3,14 +3,16 @@ import { Row as rowFor } from 'common/supabase/utils'
 import { useEffect, useRef, useState } from 'react'
 import { OriginLocation } from './filters/location-filter'
 import { api } from 'web/lib/api'
+import { countryCodeToFlag } from 'web/lib/util/location'
 
 export type City = {
   geodb_city_id: string
   city: string
   region_code: string
   country: string
-  city_latitude: number
-  city_longitude: number
+  country_code: string
+  latitude: number
+  longitude: number
 }
 
 export function loverToCity(lover: rowFor<'lovers'>) {
@@ -19,8 +21,8 @@ export function loverToCity(lover: rowFor<'lovers'>) {
     city: lover.city,
     region_code: lover.region_code,
     country: lover.country,
-    city_latitude: lover.city_latitude,
-    city_longitude: lover.city_longitude,
+    latitude: lover.city_latitude,
+    longitude: lover.city_longitude,
   } as City
 }
 
@@ -30,8 +32,8 @@ export function originToCity(origin: OriginLocation): City {
     city: origin.name,
     region_code: '',
     country: '',
-    city_latitude: 0,
-    city_longitude: 0,
+    latitude: 0,
+    longitude: 0,
   } as City
 }
 
@@ -46,7 +48,7 @@ export function CityRow(props: {
       key={city.geodb_city_id}
       onClick={() => onSelect(city)}
       className={clsx(
-        'group flex cursor-pointer flex-col items-start',
+        'group flex cursor-pointer flex-row flex-wrap justify-between gap-x-4',
         className
       )}
     >
@@ -55,7 +57,7 @@ export function CityRow(props: {
         {city.region_code ? `, ${city.region_code}` : ''}
       </div>
       <div className="text-ink-400 group-hover:text-ink-700 transition-colors">
-        {city.country}
+        {countryCodeToFlag(city.country_code) || city.country}
       </div>
     </button>
   )
@@ -82,8 +84,9 @@ export const useCitySearch = () => {
               city: city.name,
               region_code: city.regionCode,
               country: city.country,
-              city_latitude: city.latitude,
-              city_longitude: city.longitude,
+              country_code: city.countryCode,
+              latitude: city.latitude,
+              longitude: city.longitude,
             }))
           )
         }

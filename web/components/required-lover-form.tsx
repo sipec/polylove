@@ -104,8 +104,8 @@ export const RequiredLoveUserForm = (props: {
         city,
         region_code,
         country,
-        city_latitude,
-        city_longitude,
+        latitude: city_latitude,
+        longitude: city_longitude,
       } = inputCity
       setLover('geodb_city_id', geodb_city_id)
       setLover('city', city)
@@ -388,7 +388,7 @@ const CitySearchBox = (props: {
         }}
       />
       <div className="relative w-full" ref={dropdownRef}>
-        <Col className="bg-canvas-50 absolute left-0 right-0 top-1 z-10 w-full gap-3 overflow-hidden rounded-md">
+        <Col className="bg-canvas-50 absolute left-0 right-0 top-1 z-10 w-full overflow-hidden rounded-md">
           {focused &&
             cities.map((c) => (
               <CityRow

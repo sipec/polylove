@@ -58,8 +58,9 @@ const DEFAULT_LAST_CITY: City = {
   city: 'San Francisco County',
   region_code: 'CA',
   country: 'United States of America',
-  city_latitude: 37.778333333,
-  city_longitude: -122.4425,
+  country_code: 'US',
+  latitude: 37.778333333,
+  longitude: -122.4425,
 }
 
 export function LocationFilter(props: {
@@ -141,7 +142,7 @@ export function LocationFilter(props: {
           setQuery('')
         }}
         loading={loading}
-        className="-mx-4 gap-2"
+        className="-mx-4"
       />
     </Col>
   )
@@ -211,8 +212,9 @@ function LocationResults(props: {
               city: youLocation.name,
               region_code: '',
               country: '',
-              city_latitude: 0,
-              city_longitude: 0,
+              country_code: '',
+              latitude: 0,
+              longitude: 0,
             }
             onCitySelected(city)
           }}
