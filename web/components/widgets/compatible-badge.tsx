@@ -12,10 +12,7 @@ export const CompatibleBadge = (props: {
   const { compatibility, className } = props
   return (
     <Row
-      className={clsx(
-        'items-center gap-1 text-sm font-semibold',
-        className
-      )}
+      className={clsx('items-center gap-1 text-sm font-semibold', className)}
     >
       <BadgeCheckIcon className="h-4 w-4" />
       {formatPercent(compatibility.score ?? 0)}{' '}

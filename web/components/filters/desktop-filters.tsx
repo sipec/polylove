@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
-import { RelationshipType } from 'love/lib/util/convert-relationship-type'
+import { RelationshipType } from 'web/lib/util/convert-relationship-type'
 import { ReactNode } from 'react'
 import { FaUserGroup } from 'react-icons/fa6'
 import DropdownMenu from 'web/components/comments/dropdown-menu'

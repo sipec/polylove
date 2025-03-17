@@ -1,6 +1,6 @@
 import { User } from 'common/user'
-import { useOtherAnswers } from 'love/hooks/use-other-answers'
-import { QuestionWithCountType } from 'love/hooks/use-questions'
+import { useOtherAnswers } from 'web/hooks/use-other-answers'
+import { QuestionWithCountType } from 'web/hooks/use-questions'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { Avatar } from 'web/components/widgets/avatar'

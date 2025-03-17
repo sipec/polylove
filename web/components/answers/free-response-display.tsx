@@ -3,7 +3,7 @@ import { PencilIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/outline'
 import { Row as rowFor } from 'common/supabase/utils'
 import { User } from 'common/user'
-import { deleteAnswer } from 'love/lib/supabase/answers'
+import { deleteAnswer } from 'web/lib/supabase/answers'
 import { useState } from 'react'
 import DropdownMenu from 'web/components/comments/dropdown-menu'
 import { Col } from 'web/components/layout/col'
@@ -15,7 +15,7 @@ import {
   QuestionWithCountType,
   useFRQuestionsWithAnswerCount,
   useUserAnswers,
-} from 'love/hooks/use-questions'
+} from 'web/hooks/use-questions'
 import { TbMessage } from 'react-icons/tb'
 import { OtherLoverAnswers } from './other-lover-answers'
 import {

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { UserIcon } from '@heroicons/react/solid'
 
 import { Lover } from 'common/love/lover'
-import { useLoverByUserId } from 'love/hooks/use-lover'
+import { useLoverByUserId } from 'web/hooks/use-lover'
 import { Col } from 'web/components/layout/col'
 import { Avatar, EmptyAvatar } from 'web/components/widgets/avatar'
 import { Carousel } from 'web/components/widgets/carousel'

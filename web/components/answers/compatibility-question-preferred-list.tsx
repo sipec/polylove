@@ -1,4 +1,4 @@
-import { QuestionWithCountType } from 'love/hooks/use-questions'
+import { QuestionWithCountType } from 'web/hooks/use-questions'
 import { Row as rowFor } from 'common/supabase/utils'
 import { Row } from 'web/components/layout/row'
 import { Col } from 'web/components/layout/col'

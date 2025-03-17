@@ -1,4 +1,4 @@
-import { LovePage } from 'love/components/love-page'
+import { LovePage } from 'web/components/love-page'
 import { SEO } from 'web/components/SEO'
 import { CopyLinkRow } from 'web/components/buttons/copy-link-button'
 import { Col } from 'web/components/layout/col'
@@ -23,9 +23,7 @@ export default function ReferralsPage() {
       <Col className="bg-canvas-0 rounded-lg p-4 sm:p-8">
         <Title>Share the love!</Title>
 
-        <div className="mb-4">
-          Invite someone to join manifold.love
-        </div>
+        <div className="mb-4">Invite someone to join manifold.love</div>
 
         <CopyLinkRow url={url} eventTrackingName="copy love referral" />
 

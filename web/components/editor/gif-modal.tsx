@@ -30,7 +30,7 @@ export function GIFModal(props: {
           if (res.status === 'success') {
             setGifResults(res.data)
           } else {
-            setError(res?.data as string | undefined ?? '')
+            setError((res?.data as string | undefined) ?? '')
           }
         })
         .finally(() => {

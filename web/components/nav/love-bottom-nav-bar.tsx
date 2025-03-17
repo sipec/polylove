@@ -12,7 +12,7 @@ import { useIsIframe } from 'web/hooks/use-is-iframe'
 import { trackCallback } from 'web/lib/service/analytics'
 import { User } from 'common/user'
 import { Col } from 'web/components/layout/col'
-import { useLover } from 'love/hooks/use-lover'
+import { useLover } from 'web/hooks/use-lover'
 
 const itemClass =
   'sm:hover:bg-ink-200 block w-full py-1 px-3 text-center sm:hover:text-primary-700 transition-colors'

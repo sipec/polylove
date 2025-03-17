@@ -2,7 +2,7 @@ import { ImageResponse } from '@vercel/og'
 import { ImageResponseOptions } from '@vercel/og/dist/types'
 import { NextRequest } from 'next/server'
 import { classToTw } from 'web/components/og/utils'
-import { Gender, convertGender } from 'love/components/gender-icon'
+import { Gender, convertGender } from 'web/components/gender-icon'
 import { LoveOgProps } from 'common/love/og-image'
 
 export const config = { runtime: 'edge' }

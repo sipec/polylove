@@ -7,12 +7,12 @@ import { Lover } from 'common/love/lover'
 import { Row as rowFor } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { partition, sortBy, keyBy } from 'lodash'
-import { useLover } from 'love/hooks/use-lover'
+import { useLover } from 'web/hooks/use-lover'
 import {
   QuestionWithCountType,
   useCompatibilityQuestionsWithAnswerCount,
   useUserCompatibilityAnswers,
-} from 'love/hooks/use-questions'
+} from 'web/hooks/use-questions'
 import { useEffect, useState } from 'react'
 import DropdownMenu from 'web/components/comments/dropdown-menu'
 import { Col } from 'web/components/layout/col'
@@ -44,7 +44,7 @@ import {
 } from './compatibility-question-preferred-list'
 import { useUser } from 'web/hooks/use-user'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
-import { useIsMatchmaker } from 'love/hooks/use-is-matchmaker'
+import { useIsMatchmaker } from 'web/hooks/use-is-matchmaker'
 import { DropdownButton } from '../filters/desktop-filters'
 import { buildArray } from 'common/util/array'
 

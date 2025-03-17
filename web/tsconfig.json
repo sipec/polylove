@@ -16,8 +16,7 @@
     "incremental": true,
     "paths": {
       "common/*": ["../common/src/*"],
-      "web/*": ["./*"],
-      "love/*": ["./*"]
+      "web/*": ["./*"]
     },
     "plugins": [
       {

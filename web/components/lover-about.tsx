@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import {
   type RelationshipType,
   convertRelationshipType,
-} from 'love/lib/util/convert-relationship-type'
-import stringOrStringArrayToText from 'love/lib/util/string-or-string-array-to-text'
+} from 'web/lib/util/convert-relationship-type'
+import stringOrStringArrayToText from 'web/lib/util/string-or-string-array-to-text'
 import { ReactNode } from 'react'
 import { BiSolidDrink } from 'react-icons/bi'
 import { BsPersonHeart } from 'react-icons/bs'

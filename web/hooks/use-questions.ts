@@ -7,7 +7,7 @@ import {
   getFreeResponseQuestions,
   getUserAnswers,
   getUserCompatibilityAnswers,
-} from 'love/lib/supabase/questions'
+} from 'web/lib/supabase/questions'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
 import { api } from 'web/lib/api'
 

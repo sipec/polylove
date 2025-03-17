@@ -12,7 +12,7 @@ import { Row } from 'web/components/layout/row'
 import { Lover } from 'common/love/lover'
 import { useUserById } from 'web/hooks/use-user-supabase'
 import { MatchAvatars } from '../matches/match-avatars'
-import { useLover } from 'love/hooks/use-lover'
+import { useLover } from 'web/hooks/use-lover'
 import { useAPIGetter } from 'web/hooks/use-api-getter'
 
 export const LikeButton = (props: {

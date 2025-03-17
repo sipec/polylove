@@ -78,7 +78,6 @@ const FetchUserHovercardContent = forwardRef(
           )}
 
           <Col className="mt-3 gap-1">
-
             <Row className="gap-4 text-sm">
               <div className="text-ink-400">
                 Joined {dayjs(user.createdTime).format('MMM DD, YYYY')}

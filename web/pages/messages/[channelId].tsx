@@ -1,4 +1,4 @@
-import { LovePage } from 'love/components/love-page'
+import { LovePage } from 'web/components/love-page'
 import { useRouter } from 'next/router'
 import {
   usePrivateMessages,

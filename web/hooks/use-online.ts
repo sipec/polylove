@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLover } from 'love/hooks/use-lover'
+import { useLover } from 'web/hooks/use-lover'
 import { useIsAuthorized } from 'web/hooks/use-user'
 import { run } from 'common/supabase/utils'
 import { db } from 'web/lib/supabase/db'

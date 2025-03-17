@@ -10,7 +10,7 @@ export function LoverBio(props: {
   refreshLover: () => void
   fromLoverPage?: Lover
 }) {
-  const { isCurrentUser, lover, refreshLover, fromLoverPage} = props
+  const { isCurrentUser, lover, refreshLover, fromLoverPage } = props
   const [edit, setEdit] = useState(false)
 
   if (!isCurrentUser && !lover.bio) return null

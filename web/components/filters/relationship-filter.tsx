@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import {
   RelationshipType,
   convertRelationshipType,
-} from 'love/lib/util/convert-relationship-type'
-import stringOrStringArrayToText from 'love/lib/util/string-or-string-array-to-text'
+} from 'web/lib/util/convert-relationship-type'
+import stringOrStringArrayToText from 'web/lib/util/string-or-string-array-to-text'
 import { FilterFields } from './search'
 import { MultiCheckbox } from 'web/components/multi-checkbox'
 
@@ -15,7 +15,9 @@ export function RelationshipFilterText(props: {
   const relationshipLength = (relationship ?? []).length
 
   if (!relationship || relationshipLength < 1) {
-    return <span className={clsx('text-semibold', highlightedClass)}>Any style</span>
+    return (
+      <span className={clsx('text-semibold', highlightedClass)}>Any style</span>
+    )
   }
 
   const convertedRelationships = relationship.map((r) =>

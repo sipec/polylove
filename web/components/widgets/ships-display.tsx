@@ -6,7 +6,7 @@ import { MODAL_CLASS, Modal } from 'web/components/layout/modal'
 import { MatchAvatars } from '../matches/match-avatars'
 import { Row } from 'web/components/layout/row'
 import { Lover } from 'common/love/lover'
-import { useLoverByUserId } from 'love/hooks/use-lover'
+import { useLoverByUserId } from 'web/hooks/use-lover'
 import { Col } from 'web/components/layout/col'
 import { EmptyAvatar, Avatar } from 'web/components/widgets/avatar'
 import { Carousel } from 'web/components/widgets/carousel'
@@ -14,7 +14,7 @@ import { UserLink } from 'web/components/widgets/user-link'
 import { useUser } from 'web/hooks/use-user'
 import { Subtitle } from './lover-subtitle'
 import { ShipButton } from './ship-button'
-import { hasShipped } from 'love/lib/util/ship-util'
+import { hasShipped } from 'web/lib/util/ship-util'
 import { ShipData } from 'common/api/love-types'
 import { useUserById } from 'web/hooks/use-user-supabase'
 import { User } from 'common/user'
@@ -75,7 +75,7 @@ const ShipsTargetDisplay = (props: {
   const { targetId } = ships[0]
 
   const targetLover = useLoverByUserId(targetId)
-  const targetUser = useUserById(targetId) as (User | null | undefined)
+  const targetUser = useUserById(targetId) as User | null | undefined
   const [open, setOpen] = useState(false)
 
   const currentUser = useUser()

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useLover } from 'love/hooks/use-lover'
+import { useLover } from 'web/hooks/use-lover'
 import Link from 'next/link'
 import { Avatar } from 'web/components/widgets/avatar'
 import { User } from 'web/lib/firebase/users'

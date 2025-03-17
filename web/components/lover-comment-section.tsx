@@ -1,10 +1,10 @@
 import { Col } from 'web/components/layout/col'
 import { groupBy, orderBy } from 'lodash'
-import { useLiveCommentsOnLover } from 'love/hooks/use-comments-on-lover'
+import { useLiveCommentsOnLover } from 'web/hooks/use-comments-on-lover'
 import {
   LoverCommentInput,
   LoverProfileCommentThread,
-} from 'love/components/lover-comments'
+} from 'web/components/lover-comments'
 import { User } from 'common/user'
 import { Row } from 'web/components/layout/row'
 import ShortToggle from 'web/components/widgets/short-toggle'

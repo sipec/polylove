@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Row as rowFor, run } from 'common/supabase/utils'
 import { User } from 'common/user'
-import { useQuestions } from 'love/hooks/use-questions'
+import { useQuestions } from 'web/hooks/use-questions'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Button } from 'web/components/buttons/button'

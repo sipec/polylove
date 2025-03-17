@@ -15,8 +15,8 @@ import { ProfileSummary } from './love-profile-summary'
 import { Item, SidebarItem } from './love-sidebar-item'
 import ManifoldLoveLogo from '../manifold-love-logo'
 import { Button, ColorType, SizeType } from 'web/components/buttons/button'
-import { signupThenMaybeRedirectToSignup } from 'love/lib/util/signup'
-import { useLover } from 'love/hooks/use-lover'
+import { signupThenMaybeRedirectToSignup } from 'web/lib/util/signup'
+import { useLover } from 'web/hooks/use-lover'
 import { useTheme } from 'web/hooks/use-theme'
 
 export default function Sidebar(props: {

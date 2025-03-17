@@ -12,7 +12,7 @@ export const Races = {
   Other: 'other',
 } as const
 
-export type Race = typeof Races[keyof typeof Races]
+export type Race = (typeof Races)[keyof typeof Races]
 
 const raceTolabel = invert(Races)
 

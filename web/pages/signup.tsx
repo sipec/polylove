@@ -3,8 +3,8 @@ import { Col } from 'web/components/layout/col'
 import {
   initialRequiredState,
   RequiredLoveUserForm,
-} from 'love/components/required-lover-form'
-import { OptionalLoveUserForm } from 'love/components/optional-lover-form'
+} from 'web/components/required-lover-form'
+import { OptionalLoveUserForm } from 'web/components/optional-lover-form'
 import { useUser } from 'web/hooks/use-user'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
 import { GoogleSignInButton } from 'web/components/buttons/sign-up-button'
@@ -15,12 +15,12 @@ import {
 import { api } from 'web/lib/api'
 import { useRouter } from 'next/router'
 import { Row as rowFor } from 'common/supabase/utils'
-import ManifoldLoveLogo from 'love/components/manifold-love-logo'
+import ManifoldLoveLogo from 'web/components/manifold-love-logo'
 import { useTracking } from 'web/hooks/use-tracking'
 import { track } from 'web/lib/service/analytics'
 import { safeLocalStorage } from 'web/lib/util/local'
 import { removeUndefinedProps } from 'common/util/object'
-import { useLoverByUserId } from 'love/hooks/use-lover'
+import { useLoverByUserId } from 'web/hooks/use-lover'
 
 export default function SignupPage() {
   const [step, setStep] = useState(0)
