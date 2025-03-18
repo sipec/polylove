@@ -21,6 +21,11 @@ import { useSaveReferral } from 'web/hooks/use-save-referral'
 import { useTracking } from 'web/hooks/use-tracking'
 import { useUser } from 'web/hooks/use-user'
 import { api } from 'web/lib/api'
+import { debounce, omit } from 'lodash'
+import {
+  PREF_AGE_MAX,
+  PREF_AGE_MIN,
+} from 'web/components/filters/location-filter'
 
 export default function ProfilesPage() {
   const you = useLover()
@@ -41,10 +46,34 @@ export default function ProfilesPage() {
   )
 
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [isReloading, setIsReloading] = useState(false)
 
   // Refresh lovers when filters change
+
+  // debounce age filter
+  const [debouncedAgeRange, setRawAgeRange] = useState({
+    min: filters.pref_age_min ?? PREF_AGE_MIN,
+    max: filters.pref_age_max ?? PREF_AGE_MAX,
+  })
+
+  const debouncedSetAge = useCallback(
+    debounce(
+      (state: { min: number; max: number }) => setRawAgeRange(state),
+      50
+    ),
+    []
+  )
+
+  useEffect(() => {
+    debouncedSetAge({
+      min: filters.pref_age_min ?? PREF_AGE_MIN,
+      max: filters.pref_age_max ?? PREF_AGE_MAX,
+    })
+  }, [filters.pref_age_min, filters.pref_age_max])
+
   const id = useRef(0)
   useEffect(() => {
+    setIsReloading(true)
     const current = ++id.current
     api(
       'get-lovers',
@@ -53,12 +82,22 @@ export default function ProfilesPage() {
         compatibleWithUserId: user?.id,
         ...filters,
       }) as any
-    ).then(({ lovers }) => {
-      if (current === id.current) {
-        setLovers(lovers)
-      }
-    })
-  }, [JSON.stringify(filters)])
+    )
+      .then(({ lovers }) => {
+        if (current === id.current) {
+          setLovers(lovers)
+        }
+      })
+      .finally(() => {
+        if (current === id.current) {
+          setIsReloading(false)
+        }
+      })
+  }, [
+    JSON.stringify(omit(filters, ['pref_age_min', 'pref_age_max'])),
+    debouncedAgeRange.min,
+    debouncedAgeRange.max,
+  ])
 
   const user = useUser()
   useTracking('view love profiles')
@@ -160,7 +199,8 @@ export default function ProfilesPage() {
             <ProfileGrid
               lovers={displayLovers}
               loadMore={loadMore}
-              loading={isLoadingMore}
+              isLoadingMore={isLoadingMore}
+              isReloading={isReloading}
               compatibilityScores={compatibleLovers?.loverCompatibilityScores}
               starredUserIds={starredUserIds}
               refreshStars={refreshStars}

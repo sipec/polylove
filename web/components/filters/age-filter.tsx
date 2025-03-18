@@ -95,7 +95,7 @@ export function AgeFilter(props: {
           value: ((70 - PREF_AGE_MIN) / (PREF_AGE_MAX - PREF_AGE_MIN)) * 100,
           label: `70`,
         },
-        { value: 100, label: `${PREF_AGE_MAX}` },
+        { value: 100, label: `${PREF_AGE_MAX}+` },
       ]}
     />
   )
