@@ -12,12 +12,14 @@ import { Col } from './layout/col'
 import { Row } from './layout/row'
 import { CompatibleBadge } from './widgets/compatible-badge'
 import { StarButton } from './widgets/star-button'
+import clsx from 'clsx'
 import Image from 'next/image'
 
 export const ProfileGrid = (props: {
   lovers: Lover[]
   loadMore: () => Promise<boolean>
-  loading: boolean
+  isLoadingMore: boolean
+  isReloading: boolean
   compatibilityScores: Record<string, CompatibilityScore> | undefined
   starredUserIds: string[] | undefined
   refreshStars: () => Promise<void>
@@ -25,7 +27,8 @@ export const ProfileGrid = (props: {
   const {
     lovers,
     loadMore,
-    loading,
+    isLoadingMore,
+    isReloading,
     compatibilityScores,
     starredUserIds,
     refreshStars,
@@ -33,7 +36,12 @@ export const ProfileGrid = (props: {
 
   return (
     <div className="relative">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+      <div
+        className={clsx(
+          'grid grid-cols-2 gap-2 opacity-100 transition-opacity duration-75 sm:grid-cols-3 md:grid-cols-4',
+          isReloading && 'animate-pulse opacity-80'
+        )}
+      >
         {lovers.map((lover) => (
           <ProfilePreview
             key={lover.id}
@@ -47,13 +55,13 @@ export const ProfileGrid = (props: {
 
       <LoadMoreUntilNotVisible loadMore={loadMore} />
 
-      {loading && (
+      {isLoadingMore && (
         <div className="flex justify-center py-4">
           <LoadingIndicator />
         </div>
       )}
 
-      {!loading && lovers.length === 0 && (
+      {!isLoadingMore && !isReloading && lovers.length === 0 && (
         <div className="py-8 text-center">No profiles found</div>
       )}
     </div>
