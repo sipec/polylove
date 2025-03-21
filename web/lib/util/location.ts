@@ -1,7 +1,7 @@
 // web only. uses Intl https://caniuse.com/mdn-javascript_builtins_intl_displaynames
 
-export function countryCodeToFlag(code: string) {
-  if (!getCountryName(code)) return null
+export function countryCodeToFlag(code?: string) {
+  if (!code || !getCountryName(code)) return null
 
   const x = 0x1f1a5 + code.toUpperCase().charCodeAt(0)
   const y = 0x1f1a5 + code.toUpperCase().charCodeAt(1)

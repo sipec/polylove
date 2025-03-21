@@ -15,15 +15,16 @@ export type City = {
   longitude: number
 }
 
-export function loverToCity(lover: rowFor<'lovers'>) {
+export function loverToCity(lover: rowFor<'lovers'>): City {
   return {
-    geodb_city_id: lover.geodb_city_id,
+    geodb_city_id: lover.geodb_city_id!,
     city: lover.city,
-    region_code: lover.region_code,
-    country: lover.country,
-    latitude: lover.city_latitude,
-    longitude: lover.city_longitude,
-  } as City
+    region_code: lover.region_code!,
+    country: lover.country!,
+    country_code: '',
+    latitude: lover.city_latitude!,
+    longitude: lover.city_longitude!,
+  }
 }
 
 export function originToCity(origin: OriginLocation): City {
@@ -32,9 +33,10 @@ export function originToCity(origin: OriginLocation): City {
     city: origin.name,
     region_code: '',
     country: '',
+    country_code: '',
     latitude: 0,
     longitude: 0,
-  } as City
+  }
 }
 
 export function CityRow(props: {
