@@ -16,6 +16,12 @@ Sign up for [Firebase](https://console.firebase.google.com).
 
 Create a new project.
 
+Enable Google Secret Manager in the [Google Cloud console](https://console.cloud.google.com/apis/api/secretmanager.googleapis.com/overview). You will need to activate billing on your project.
+
+Instal the [`gcloud` CLI](https://cloud.google.com/sdk/docs/install)
+
+Authenticate to Secret Manager using `gcloud`
+
 Go to Project Settings > Service Account > Firebase Admin SDK
 
 Generate a new private key.
@@ -32,7 +38,7 @@ firebase use --add
 # Set alias to `polylove`
 ```
 
-Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS_POLYLOVE` to the absolute path of your credential file.
+Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS_POLYLOVE` and `GOOGLE_APPLICATION_CREDENTIALS_DEV` to the absolute path of your credential file.
 
 ## Running
 
