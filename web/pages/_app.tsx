@@ -61,9 +61,8 @@ function MyApp({ Component, pageProps }: AppProps<ManifoldPageProps>) {
     }
   }, [])
 
-  const title = 'Manifold.love — Bet on love!'
-  const description =
-    "Find the love of your life and bet on your friends’ relationships ❤️ Who says love and money don't mix?"
+  const title = 'manifold love'
+  const description = 'Questionable dating site'
 
   return (
     <>

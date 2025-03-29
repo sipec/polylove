@@ -371,7 +371,7 @@ ts-node manicode.ts "Generate a page called cowp, which has cows that make noise
 
 Our backend is mostly a set of endpoints. We create new endpoints by adding to the schema in `common/src/api/schema.ts`.
 
-E.g. Here is the bet schema:
+E.g. Here is a hypothetical bet schema:
 
 ```ts
   bet: {

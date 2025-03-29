@@ -65,12 +65,6 @@ export default function Journeys() {
     getEvents()
   }, [hoursFromNow, isAuthed])
 
-  const userIdsThatBet = unBannedUsers
-    .filter(
-      (u) => eventsByUser[u.id].filter((e) => e.name === 'bet').length > 0
-    )
-    .map((u) => u.id)
-
   const isAdmin = useAdmin()
   if (!isAdmin) return <></>
 
@@ -92,11 +86,6 @@ export default function Journeys() {
           >
             +1h
           </Button>
-        </Row>
-        <Row>
-          Fraction of users that bet:{' '}
-          {(userIdsThatBet.length / unBannedUsers.length).toPrecision(2)}. If a
-          user is highlighted, check if they're a spammer.
         </Row>
         <Row className={'flex-wrap gap-2 scroll-auto'}>
           {Object.keys(eventsByUser).map((userId) => {
