@@ -13,11 +13,13 @@ export type User = {
   website?: string
   twitterHandle?: string
   discordHandle?: string
+  manifoldHandle?: string
 
   isBannedFromPosting?: boolean
   userDeleted?: boolean
 
   // fromLove?: boolean // whether originally from manifold.love back when it was synced to manifold
+  // fromManifold?: boolean // whether has a manifold.markets account
 
   sweestakesVerified?: boolean
   verifiedPhone?: boolean

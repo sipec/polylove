@@ -1,18 +1,14 @@
 import Link from 'next/link'
 import clsx from 'clsx'
-import { VERIFIED_USERNAMES, ENV_CONFIG, MOD_IDS } from 'common/envs/constants'
+import { VERIFIED_USERNAMES, MOD_IDS } from 'common/envs/constants'
 import { SparklesIcon } from '@heroicons/react/solid'
 import { Tooltip } from './tooltip'
 import { BadgeCheckIcon, ShieldCheckIcon } from '@heroicons/react/outline'
 import { Row } from '../layout/row'
 import { Avatar } from './avatar'
 import { DAY_MS } from 'common/util/time'
-import ScalesIcon from 'web/lib/icons/scales-icon.svg'
 import { linkClass } from './site-link'
-import Foldy from 'web/public/logo.svg'
 import { Col } from 'web/components/layout/col'
-import { BsFillArrowThroughHeartFill } from 'react-icons/bs'
-import { LuCrown } from 'react-icons/lu'
 import { UserHovercard } from '../user/user-hovercard'
 
 export const isFresh = (createdTime: number) =>
@@ -134,9 +130,6 @@ export function UserBadge(props: {
   const { userId, username, fresh } = props
   const badges = []
 
-  if (ENV_CONFIG.adminIds.includes(userId)) {
-    badges.push(<CoreBadge key="core" />)
-  }
   if (MOD_IDS.includes(userId)) {
     badges.push(<ModBadge key="mod" />)
   }
@@ -149,33 +142,11 @@ export function UserBadge(props: {
   return <>{badges}</>
 }
 
-// Show a special checkmark next to Core team members
-function CoreBadge() {
-  return (
-    <Tooltip text="I work on Manifold!" placement="right">
-      <Foldy
-        className="stoke-indigo-700 h-4 w-4 stroke-1 hover:rotate-12 dark:stroke-indigo-300"
-        aria-hidden
-      />
-    </Tooltip>
-  )
-}
-
 // Show a normal checkmark next to our mods
 function ModBadge() {
   return (
     <Tooltip text="Moderator" placement="right">
       <ShieldCheckIcon
-        className="h-4 w-4 text-purple-700 dark:text-purple-400"
-        aria-hidden="true"
-      />
-    </Tooltip>
-  )
-}
-function MVPBadge() {
-  return (
-    <Tooltip text="MVP" placement="right">
-      <BsFillArrowThroughHeartFill
         className="h-4 w-4 text-purple-700 dark:text-purple-400"
         aria-hidden="true"
       />
@@ -192,28 +163,11 @@ function VerifiedBadge() {
   )
 }
 
-// Show a crown for our partners
-function PartnerBadge() {
-  return (
-    <Tooltip text="Partner" placement="right">
-      <LuCrown className="text-primary-700 h-3.5 w-3.5" aria-hidden />
-    </Tooltip>
-  )
-}
-
 // Show a fresh badge next to new users
 function FreshBadge() {
   return (
     <Tooltip text="I'm new here!" placement="right">
       <SparklesIcon className="h-4 w-4 text-green-500" aria-hidden="true" />
-    </Tooltip>
-  )
-}
-
-function MarketCreatorBadge() {
-  return (
-    <Tooltip text="Question Creator" placement="right">
-      <ScalesIcon className="h-4 w-4 text-amber-400" aria-hidden="true" />
     </Tooltip>
   )
 }
