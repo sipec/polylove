@@ -28,3 +28,5 @@ export function convertPrivateUser(
   if (!row) return null
   return row.data as PrivateUser
 }
+
+export const displayUserColumns = `id,name,username,data->>'avatarUrl' as "avatarUrl",data->'isBannedFromPosting' as "isBannedFromPosting"`

@@ -6,7 +6,7 @@ import {
 } from 'shared/websockets/helpers'
 import { DataUpdate, updateData } from './utils'
 
-/** only updates data column. do not use for name, username, or balances */
+/** only updates data column. do not use for name, username */
 export const updateUser = async (
   db: SupabaseDirectClient,
   id: string,

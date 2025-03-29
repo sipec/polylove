@@ -24,8 +24,6 @@ export async function getPrivateUserSafe() {
   }
 }
 
-const defaultFields = ['id', 'name', 'username', 'avatarUrl'] as const
-
 export async function getUserById(id: string) {
   return unauthedApi('user/by-id/:id/lite', { id })
 }

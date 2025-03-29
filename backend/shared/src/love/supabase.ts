@@ -16,7 +16,7 @@ export function convertRow(row: LoverAndUserRow | undefined): Lover | null {
 
   return {
     ...row,
-    user: { name: row.name, username: row.username, ...row.user } as User,
+    user: { ...row.user, name: row.name, username: row.username } as User,
   } as Lover
 }
 

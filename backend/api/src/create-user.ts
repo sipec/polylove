@@ -14,6 +14,7 @@ import { RESERVED_PATHS } from 'common/envs/constants'
 import { log, isProd, getUser, getUserByUsername } from 'shared/utils'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { insert } from 'shared/supabase/utils'
+import { convertPrivateUser, convertUser } from 'common/supabase/users'
 
 export const createUser: APIHandler<'create-user'> = async (
   props,
@@ -81,12 +82,8 @@ export const createUser: APIHandler<'create-user'> = async (
     if (sameNameUser)
       throw new APIError(403, 'Username already taken', { username })
 
-    const user: User = removeUndefinedProps({
-      id: auth.uid,
-      name,
-      username,
+    const user: Partial<User> = removeUndefinedProps({
       avatarUrl,
-      createdTime: Date.now(),
       isBannedFromPosting: Boolean(
         (deviceToken && bannedDeviceTokens.includes(deviceToken)) ||
           (ip && bannedIpAddresses.includes(ip))
@@ -103,25 +100,28 @@ export const createUser: APIHandler<'create-user'> = async (
       blockedByUserIds: [],
     }
 
-    await insert(tx, 'users', {
-      id: user.id,
-      name: user.name,
-      username: user.username,
+    const newUserRow = await insert(tx, 'users', {
+      id: auth.uid,
+      name,
+      username,
       data: user,
     })
 
-    await insert(tx, 'private_users', {
+    const newPrivateUserRow = await insert(tx, 'private_users', {
       id: privateUser.id,
       data: privateUser,
     })
 
-    return { user, privateUser }
+    return {
+      user: convertUser(newUserRow),
+      privateUser: convertPrivateUser(newPrivateUserRow),
+    }
   })
 
   log('created user ', { username: user.username, firebaseId: auth.uid })
 
   const continuation = async () => {
-    await track(user.id, 'create lover', { username: user.username })
+    await track(auth.uid, 'create lover', { username: user.username })
   }
 
   return {

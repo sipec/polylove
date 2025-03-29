@@ -2,9 +2,6 @@
 import { PrivateUser, User } from 'common/user'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from 'web/components/auth-context'
-import { db } from 'web/lib/supabase/db'
-import { useLiveUpdates } from './use-persistent-supabase-polling'
-import { run } from 'common/supabase/utils'
 import { useIsPageVisible } from './use-page-visible'
 import { useApiSubscription } from './use-api-subscription'
 import { getFullUserById, getPrivateUserSafe } from 'web/lib/supabase/users'
@@ -59,15 +56,6 @@ export const useWebsocketUser = (userId: string | undefined) => {
   }, [userId, isPageVisible])
 
   return user
-}
-
-export const usePollUserBalances = (userIds: string[]) => {
-  return useLiveUpdates(async () => {
-    const { data } = await run(
-      db.from('users').select('id, balance').in('id', userIds)
-    )
-    return data
-  })
 }
 
 export const useWebsocketPrivateUser = (userId: string | undefined) => {

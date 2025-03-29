@@ -13,6 +13,7 @@ import { usePersistentQueryState } from 'web/hooks/use-persistent-query-state'
 import clsx from 'clsx'
 import { useAdmin } from 'web/hooks/use-admin'
 import { useIsAuthorized } from 'web/hooks/use-user'
+import { convertUser } from 'common/supabase/users'
 
 export default function Journeys() {
   const [eventsByUser, setEventsByUser] = useState<
@@ -48,9 +49,9 @@ export default function Journeys() {
 
   const getUsers = async () => {
     const userData = await run(
-      db.from('users').select('data').in('id', Object.keys(eventsByUser))
+      db.from('users').select().in('id', Object.keys(eventsByUser))
     )
-    const users = userData.data.map((d) => d.data as User)
+    const users = userData.data.map(convertUser)
     setBannedUsers(users.filter((u) => u.isBannedFromPosting))
     setUnBannedUsers(users.filter((u) => !u.isBannedFromPosting))
   }
