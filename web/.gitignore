@@ -6,3 +6,6 @@ tsconfig.tsbuildinfo
 .env*
 .vercel
 testing
+
+.env
+.env.local

@@ -1,30 +1,51 @@
 import { Request } from 'express'
-
-import { tryOrLogError } from 'shared/helpers/try-or-log-error'
-
 import { trackAuditEvent } from 'shared/audit-events'
+import { PostHog } from 'posthog-node'
+import { isProd, log } from 'shared/utils'
+import { PROD_CONFIG } from 'common/envs/prod'
+import { DEV_CONFIG } from 'common/envs/dev'
+
+const key = isProd() ? PROD_CONFIG.posthogKey : DEV_CONFIG.posthogKey
+
+const client = new PostHog(key, {
+  host: 'https://us.i.posthog.com',
+  flushAt: 1,
+  flushInterval: 0,
+})
 
 export const track = async (
   userId: string,
   eventName: string,
-  eventProperties?: any
+  properties?: any
 ) => {
-  // TODO: Implement
+  try {
+    client.capture({
+      distinctId: userId,
+      event: eventName,
+      properties,
+    })
+  } catch (e) {
+    log.error(e)
+  }
 }
 
 export const trackPublicEvent = async (
   userId: string,
   eventName: string,
-  eventProperties?: any
+  properties?: any
 ) => {
-  const allProperties = Object.assign(eventProperties ?? {}, {})
-  const { contractId, commentId, ...data } = allProperties
-  return await tryOrLogError(
-    Promise.all([
-      // TODO: Implement
-      trackAuditEvent(userId, eventName, contractId, commentId, data),
-    ])
-  )
+  const allProperties = Object.assign(properties ?? {}, {})
+  const { commentId, ...data } = allProperties
+  try {
+    client.capture({
+      distinctId: userId,
+      event: eventName,
+      properties,
+    })
+    await trackAuditEvent(userId, eventName, commentId, data)
+  } catch (e) {
+    log.error(e)
+  }
 }
 
 export const getIp = (req: Request) => {

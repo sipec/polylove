@@ -18,6 +18,7 @@ import { updateSupabaseAuth } from 'web/lib/supabase/db'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
 import { getPrivateUserSafe, getUserSafe } from 'web/lib/supabase/users'
 import { useWebsocketPrivateUser, useWebsocketUser } from 'web/hooks/use-user'
+import { identifyUser, setUserProperty } from 'web/lib/service/analytics'
 
 // Either we haven't looked up the logged in user yet (undefined), or we know
 // the user is not logged in (null), or we know the user is logged in.
@@ -172,6 +173,21 @@ export function AuthProvider(props: {
   }, [])
 
   const uid = authUser ? authUser.user.id : authUser
+  const username = authUser?.user.username
+
+  useEffect(() => {
+    if (uid) {
+      identifyUser(uid)
+    } else if (uid === null) {
+      identifyUser(null)
+    }
+  }, [uid])
+
+  useEffect(() => {
+    if (username != null) {
+      setUserProperty('username', username)
+    }
+  }, [username])
 
   const listenUser = useWebsocketUser(uid ?? undefined)
   useEffectCheckEquality(() => {

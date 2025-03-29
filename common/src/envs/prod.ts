@@ -4,6 +4,7 @@ export type EnvConfig = {
   firebaseConfig: FirebaseConfig
   supabaseInstanceId: string
   supabaseAnonKey: string
+  posthogKey: string
   apiEndpoint: string
 
   // IDs for v2 cloud functions -- find these by deploying a cloud function and
@@ -32,6 +33,7 @@ type FirebaseConfig = {
 export const PROD_CONFIG: EnvConfig = {
   domain: 'manifold.love',
   domainAlternate: 'manifoldlove.com',
+  posthogKey: 'phc_7g8JXcONJQtsVEqOcSw4h2RzEEz5W40rD2WIjHC129h',
   supabaseInstanceId: 'lltoaluoavlzrgjplire',
   supabaseAnonKey:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdG9hbHVvYXZsenJnanBsaXJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NTE4MDksImV4cCI6MjA1NjAyNzgwOX0.du6UI3YkcwUxTrYqYficcsT9zT5PTLsUYDIk_IkzVus',

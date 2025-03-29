@@ -1,9 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
-import { ENV } from 'common/envs/constants'
+import { ENV_CONFIG } from 'common/envs/constants'
 import { db } from 'web/lib/supabase/db'
 import { removeUndefinedProps } from 'common/util/object'
 import { run, SupabaseClient } from 'common/supabase/utils'
 import { Json } from 'common/supabase/schema'
+import posthog from 'posthog-js'
 
 type EventIds = {
   contractId?: string | null
@@ -16,14 +17,21 @@ type EventData = Record<string, Json | undefined>
 export async function track(name: string, properties?: EventIds & EventData) {
   const { commentId, ...data } = properties || {}
   try {
-    if (ENV !== 'PROD') {
-      console.log(name, properties)
-    }
-    // TODO: track in posthog
+    posthog?.capture(name, data)
     await insertUserEvent(name, data, db, null, commentId)
   } catch (e) {
-    console.log('error tracking event:', e)
+    console.error('error tracking event:', e)
   }
+}
+
+export function initTracking() {
+  posthog.init(ENV_CONFIG.posthogKey, {
+    api_host: '/ingest',
+    ui_host: 'https://us.posthog.com',
+    loaded: (posthog) => {
+      posthog.debug(false)
+    },
+  })
 }
 
 // Convenience functions:
@@ -60,4 +68,13 @@ function insertUserEvent(
       comment_id: commentId,
     })
   )
+}
+
+export function identifyUser(userId: string | null) {
+  if (userId) posthog.identify(userId)
+  else posthog.reset()
+}
+
+export async function setUserProperty(property: string, value: string) {
+  posthog.setPersonProperties({ property: value })
 }
