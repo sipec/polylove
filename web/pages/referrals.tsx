@@ -23,7 +23,7 @@ export default function ReferralsPage() {
       <Col className="bg-canvas-0 rounded-lg p-4 sm:p-8">
         <Title>Share the love!</Title>
 
-        <div className="mb-4">Invite someone to join manifold.love</div>
+        <div className="mb-4">Invite someone to join</div>
 
         <CopyLinkRow url={url} eventTrackingName="copy love referral" />
 

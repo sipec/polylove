@@ -1,5 +1,4 @@
 import {
-  HeartIcon,
   LogoutIcon,
   MoonIcon,
   SunIcon,
@@ -87,11 +86,6 @@ const bottomNav = (
   toggleTheme: () => void
 ) =>
   buildArray<Item>(
-    loggedIn && {
-      name: 'Share with friends',
-      href: '/referrals',
-      icon: HeartIcon,
-    },
     !loggedIn && { name: 'Sign in', icon: LoginIcon, onClick: firebaseLogin },
     {
       name: theme ?? 'auto',
