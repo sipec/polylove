@@ -1,9 +1,4 @@
-import {
-  LinkIcon,
-  EyeOffIcon,
-  CheckIcon,
-  TrashIcon,
-} from '@heroicons/react/solid'
+import { LinkIcon, CheckIcon, TrashIcon } from '@heroicons/react/solid'
 import { Editor } from '@tiptap/core'
 import { BubbleMenu } from '@tiptap/react'
 import clsx from 'clsx'
@@ -76,11 +71,6 @@ export function FloatingFormatMenu(props: {
             icon={LinkIcon}
             onClick={() => (editor.isActive('link') ? unsetLink() : setUrl(''))}
             isActive={editor.isActive('link')}
-          />
-          <IconButton
-            icon={EyeOffIcon}
-            onClick={() => editor.chain().focus().toggleSpoiler().run()}
-            isActive={editor.isActive('spoiler')}
           />
         </>
       ) : (

@@ -16,9 +16,10 @@ import ButtonDropdownMenu from 'web/components/comments/dropdown-button-menu'
 /* Toolbar, with buttons for images and embeds */
 export function StickyFormatMenu(props: {
   editor: Editor | null
+  hideEmbed?: boolean
   children?: React.ReactNode
 }) {
-  const { editor, children } = props
+  const { editor, hideEmbed, children } = props
   const upload = editor?.storage.upload.mutation
 
   const [iframeOpen, setIframeOpen] = useState(false)
@@ -35,17 +36,19 @@ export function StickyFormatMenu(props: {
         }
         items={[
           <UploadButton key={'upload-button'} upload={upload} />,
-          <ToolbarButton
-            key={'embed-button'}
-            label="Add embed"
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              setIframeOpen(true)
-            }}
-          >
-            <CodeIcon className="h-5 w-5" aria-hidden="true" />
-          </ToolbarButton>,
+          !hideEmbed && (
+            <ToolbarButton
+              key={'embed-button'}
+              label="Add embed"
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                setIframeOpen(true)
+              }}
+            >
+              <CodeIcon className="h-5 w-5" aria-hidden="true" />
+            </ToolbarButton>
+          ),
           <ToolbarButton
             key={'emoji-button'}
             label="Add emoji"

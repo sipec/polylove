@@ -11,23 +11,19 @@ import {
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import clsx from 'clsx'
-import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { DisplayMention } from '../editor/user-mention/mention-extension'
 import { Linkify } from './linkify'
 import { linkClass } from './site-link'
 import Iframe from 'common/util/tiptap-iframe'
-import { TiptapSpoiler } from 'common/util/tiptap-spoiler'
 import { debounce, noop } from 'lodash'
 import { FloatingFormatMenu } from '../editor/floating-format-menu'
 import { StickyFormatMenu } from '../editor/sticky-format-menu'
-import { DisplayTweet } from '../editor/tweet'
 import { Upload, useUploadMutation } from '../editor/upload-extension'
-import { generateReact, insertContent } from '../editor/utils'
+import { generateReact } from '../editor/utils'
 import { EmojiExtension } from '../editor/emoji/emoji-extension'
-import { DisplaySpoiler } from '../editor/spoiler'
 import { nodeViewMiddleware } from '../editor/nodeview-middleware'
 import { BasicImage, DisplayImage, MediumDisplayImage } from '../editor/image'
-import { Row } from 'web/components/layout/row'
 import { usePersistentLocalState } from 'web/hooks/use-persistent-local-state'
 import { richTextToString } from 'common/util/parse'
 import { safeLocalStorage } from 'web/lib/util/local'
@@ -63,8 +59,6 @@ const editorExtensions = (simple = false): Extensions =>
     DisplayLink,
     DisplayMention,
     Iframe,
-    DisplayTweet,
-    TiptapSpoiler.configure({ class: 'rounded-sm bg-ink-200' }),
     Upload,
   ])
 
@@ -96,7 +90,6 @@ export function useTextEditor(props: {
   const [content, setContent] = usePersistentLocalState<
     JSONContent | undefined
   >(undefined, getEditorLocalStorageKey(key ?? ''))
-  const fetchingLinks = useRef<boolean>(false)
 
   const save = useCallback(
     debounce((newContent: JSONContent) => {
@@ -158,19 +151,12 @@ export function useTextEditor(props: {
 
   editor.setOptions({
     editorProps: {
-      handlePaste(view, event) {
+      handlePaste(_view, event) {
         const imageFiles = getImages(event.clipboardData)
         if (imageFiles.length) {
           event.preventDefault()
           upload.mutate(imageFiles)
           return true // Prevent image in text/html from getting pasted again
-        }
-
-        // If the pasted content is iframe code, directly inject it
-        const text = event.clipboardData?.getData('text/plain').trim() ?? ''
-        if (isValidIframe(text)) {
-          insertContent(editor, text)
-          return true // Prevent the code from getting pasted as text
         }
 
         // Otherwise, use default paste handler
@@ -191,19 +177,15 @@ export function useTextEditor(props: {
 const getImages = (data: DataTransfer | null) =>
   Array.from(data?.files ?? []).filter((file) => file.type.startsWith('image'))
 
-function isValidIframe(text: string) {
-  return /^<iframe.*<\/iframe>$/.test(text)
-}
-
 export function TextEditor(props: {
   editor: Editor | null
   simple?: boolean // show heading in toolbar
-  hideToolbar?: boolean // hide toolbar
+  hideEmbed?: boolean // hide toolbar
   children?: ReactNode // additional toolbar buttons
   className?: string
   onBlur?: () => void
 }) {
-  const { editor, simple, hideToolbar, children, className, onBlur } = props
+  const { editor, simple, hideEmbed, children, className, onBlur } = props
 
   return (
     // matches input styling
@@ -217,11 +199,10 @@ export function TextEditor(props: {
       <div className={clsx('max-h-[69vh] overflow-auto')}>
         <EditorContent editor={editor} onBlur={onBlur} />
       </div>
-      {!hideToolbar ? (
-        <StickyFormatMenu editor={editor}>{children}</StickyFormatMenu>
-      ) : (
-        <Row className={'justify-end p-1'}>{children}</Row>
-      )}
+
+      <StickyFormatMenu editor={editor} hideEmbed={hideEmbed}>
+        {children}
+      </StickyFormatMenu>
     </div>
   )
 }
@@ -245,8 +226,6 @@ function RichContent(props: {
         DisplayLink,
         DisplayMention,
         Iframe,
-        DisplayTweet,
-        DisplaySpoiler,
       ])
     } catch (e) {
       console.error('Error generating react', e, 'for content', content)

@@ -16,19 +16,9 @@ type EmbedPattern = {
 
 const embedPatterns: EmbedPattern[] = [
   {
-    regex: /^(<iframe.*<\/iframe>)$/,
-    rewrite: (text: string) => text,
-  },
-  {
     regex: /^https?:\/\/manifold\.markets\/([^\/]+\/[^\/]+)/,
     rewrite: (slug) =>
       `<iframe src="https://manifold.markets/embed/${slug}"></iframe>`,
-  },
-  {
-    regex: /^https?:\/\/(?:twitter|x)\.com\/.*\/status\/(\d+)/,
-    // Hack: append a leading 't', to prevent tweetId from being interpreted as a number.
-    // If it's a number, there may be numeric precision issues.
-    rewrite: (id) => `<tiptap-tweet tweetid="t${id}"></tiptap-tweet>`,
   },
   {
     regex: /^https?:\/\/www\.youtube\.com\/watch\?v=([^&]+)/,
@@ -40,22 +30,6 @@ const embedPatterns: EmbedPattern[] = [
     regex: /^https?:\/\/youtu\.be\/([^&]+)/,
     rewrite: (id) =>
       `<iframe src="https://www.youtube.com/embed/${id}"></iframe>`,
-  },
-  {
-    regex: /^https?:\/\/www\.metaculus\.com\/questions\/(\d+)/,
-    rewrite: (id) =>
-      `<iframe src="https://www.metaculus.com/questions/embed/${id}"></iframe>`,
-  },
-  // Metaforecast: https://metaforecast.org/questions/kalshi-1ca58f9a-a299-4d69-9984-c11001b130c8
-  {
-    regex: /^https?:\/\/metaforecast\.org\/questions\/([^\/]+)/,
-    rewrite: (id) =>
-      `<iframe src="https://metaforecast.org/questions/embed/${id}"></iframe>`,
-  },
-  {
-    regex: /^(https?:\/\/www\.figma\.com\/(?:file|proto)\/[^\/]+\/[^\/]+)/,
-    rewrite: (url) =>
-      `<iframe src="https://www.figma.com/embed?embed_host=manifold&url=${url}"></iframe>`,
   },
   // Twitch is a bit annoying, since it requires the `&parent=DOMAIN` to match
   {
@@ -71,53 +45,21 @@ const embedPatterns: EmbedPattern[] = [
       `<iframe src="https://player.twitch.tv/?channel=${channel}&parent=${DOMAIN}"></iframe>`,
   },
   {
-    // Strawpoll: https://strawpoll.com/polls/PbZqoPJelnN
-    regex: /^https?:\/\/strawpoll\.com\/polls\/(\w+)/,
-    rewrite: (id) =>
-      `<iframe src="https://strawpoll.com/embed/polls/${id}"></iframe>`,
-  },
-  {
     // Tiktok: https://www.tiktok.com/@tiktok/video/6959980000000000001
     regex: /^https?:\/\/www\.tiktok\.com\/@[^\/]+\/video\/(\d+)/,
     rewrite: (id) =>
       `<iframe src="https://www.tiktok.com/embed/v2/${id}"></iframe>`,
   },
-  {
-    // FRED: https://fred.stlouisfed.org/graph/?g=1dyEg
-    regex: /^https?:\/\/fred\.stlouisfed\.org\/graph\/\?(\w+)/,
-    rewrite: (id) =>
-      `<iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=${id}"></iframe>`,
-  },
 ]
-
-const allowedDomains: string[] = ['streamlit.app', 'wikipedia.org']
-
-function isAllowedDomain(url: string) {
-  try {
-    const { hostname } = new URL(url)
-    return allowedDomains.some(
-      (allowedDomain) =>
-        hostname === allowedDomain || hostname.endsWith('.' + allowedDomain)
-    )
-  } catch (error) {
-    return false
-  }
-}
 
 function embedCode(text: string) {
   for (const pattern of embedPatterns) {
-    const match = text.match(pattern.regex)
+    const match = text.trim().match(pattern.regex)
     if (match) {
       return pattern.rewrite(match[1])
     }
   }
 
-  const urlPattern = /^(https?:\/\/.*)/
-  const match = text.match(urlPattern)
-  // If it's a URL, check against the allowed domains
-  if (match && isAllowedDomain(match[1])) {
-    return `<iframe src="${match[1]}"></iframe>`
-  }
   return null
 }
 
@@ -137,7 +79,7 @@ export function EmbedModal(props: {
           htmlFor="embed"
           className="text-ink-700 block text-sm font-medium"
         >
-          Embed a Youtube video, Tweet, or other link
+          Embed a Youtube video
         </label>
         <input
           type="text"
@@ -163,7 +105,7 @@ export function EmbedModal(props: {
                 setOpen(false)
               } else {
                 toast.error(
-                  'Your embed site is not allowlisted; please ask to enable it in Discord #api-and-bots.'
+                  `We only allow embeds from a few sites. Please open a pull request.`
                 )
               }
             }}

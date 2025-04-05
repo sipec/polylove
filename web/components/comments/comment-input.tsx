@@ -188,7 +188,7 @@ export function CommentInputTextArea(props: {
   }, [replyTo, editor])
 
   return (
-    <TextEditor editor={editor} simple hideToolbar={hideToolbar}>
+    <TextEditor editor={editor} simple hideEmbed={hideToolbar}>
       <Row className={''}>
         {user && !isSubmitting && submit && commentTypes.includes('repost') && (
           <Tooltip
