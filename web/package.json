@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@floating-ui/react": "0.19.0",
-    "@giphy/js-types": "5.1.0",
     "@google-cloud/secret-manager": "4.2.1",
     "@headlessui/react": "1.7.11",
     "@heroicons/react": "1.0.6",

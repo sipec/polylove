@@ -13,7 +13,6 @@ export const secrets = (
     'SUPABASE_JWT_SECRET',
     'SUPABASE_PASSWORD',
     'TEST_CREATE_USER_KEY',
-    'REACT_APP_GIPHY_KEY',
     'GEODB_API_KEY',
     'RESEND_KEY',
     // Some typescript voodoo to keep the string literal types while being not readonly.

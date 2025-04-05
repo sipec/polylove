@@ -461,15 +461,6 @@ export const API = (_apiTypeCheck = {
       radius: z.number().min(1).max(500),
     }),
   },
-  'search-giphy': {
-    method: 'POST',
-    authed: false,
-    returns: {} as any,
-    props: z.object({
-      term: z.string(),
-      limit: z.number().min(1).max(100),
-    }),
-  },
 } as const)
 
 export type APIPath = keyof typeof API

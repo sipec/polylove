@@ -10,8 +10,6 @@ import { FileUploadButton } from '../buttons/file-upload-button'
 import { LoadingIndicator } from '../widgets/loading-indicator'
 import { EmbedModal } from './embed-modal'
 import type { UploadMutation } from './upload-extension'
-import { PiGifFill } from 'react-icons/pi'
-import { GIFModal } from './gif-modal'
 import { Row } from 'web/components/layout/row'
 import ButtonDropdownMenu from 'web/components/comments/dropdown-button-menu'
 
@@ -24,7 +22,6 @@ export function StickyFormatMenu(props: {
   const upload = editor?.storage.upload.mutation
 
   const [iframeOpen, setIframeOpen] = useState(false)
-  const [GIFOpen, setGIFOpen] = useState(false)
 
   return (
     <Row className="text-ink-600 ml-2 h-8 items-center">
@@ -38,13 +35,6 @@ export function StickyFormatMenu(props: {
         }
         items={[
           <UploadButton key={'upload-button'} upload={upload} />,
-          <ToolbarButton
-            key={'gif-button'}
-            label="Add GIF"
-            onClick={() => setGIFOpen(true)}
-          >
-            <PiGifFill className="h-5 w-5" aria-hidden />
-          </ToolbarButton>,
           <ToolbarButton
             key={'embed-button'}
             label="Add embed"
@@ -67,8 +57,6 @@ export function StickyFormatMenu(props: {
       />
 
       <EmbedModal editor={editor} open={iframeOpen} setOpen={setIframeOpen} />
-      <GIFModal editor={editor} open={GIFOpen} setOpen={setGIFOpen} />
-
       <div className="grow" />
       {children}
     </Row>

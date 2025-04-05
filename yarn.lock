@@ -1730,28 +1730,6 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.2.tgz#d8bae93ac8b815b2bd7a98078cf91e2724ef11e5"
   integrity sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==
 
-"@giphy/js-fetch-api@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@giphy/js-fetch-api/-/js-fetch-api-5.0.0.tgz#52379f6e5371b89f5d91d7b9d3a3f6c3c76bd964"
-  integrity sha512-tS3/0/RewzgpOqMyT3QCTKyPaSQfMfq023UWPkEH9GwbJGlOVN2s9acQNfun+w9SCTdIaZmW/f9HbDpsoz7jWg==
-  dependencies:
-    "@giphy/js-types" "*"
-    "@giphy/js-util" "*"
-    qs "^6.9.4"
-
-"@giphy/js-types@*", "@giphy/js-types@5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@giphy/js-types/-/js-types-5.1.0.tgz#af7c7d3b8190bf89e25da0e693935871b2c53b0b"
-  integrity sha512-BZYCDtYNRR7cUWkbDLB4wmm3qmWMsVCQdUiBNOfmZ3yAazCgygKJoDI/5Rq4CK5MBaOc5LVdF8viC2WtoBdaPA==
-
-"@giphy/js-util@*":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@giphy/js-util/-/js-util-5.1.0.tgz#9f289ea8aaa115e7a1a6517cfdc8db47cef35ae8"
-  integrity sha512-CvmeJi9H6tj0jscL7xpRXBhNuTgkQkXo7PQZK+UbWMR3NmJ07JibYxrw02bLmBZHxw+4F0cGeZL3zf8u5d+o5A==
-  dependencies:
-    "@giphy/js-types" "*"
-    uuid "^9.0.0"
-
 "@google-cloud/firestore@^6.8.0":
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/firestore/-/firestore-6.8.0.tgz#d8c852844c381afaf62592796606c10e178400b5"

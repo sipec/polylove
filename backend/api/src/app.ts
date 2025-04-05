@@ -46,7 +46,6 @@ import {
   setChannelLastSeenTime,
 } from 'api/get-private-messages'
 import { searchUsers } from './search-users'
-import { searchGiphy } from './search-giphy'
 import { createPrivateUserMessageChannel } from './create-private-user-message-channel'
 import { leavePrivateUserMessageChannel } from './leave-private-user-message-channel'
 import { updatePrivateUserMessageChannel } from './update-private-user-message-channel'
@@ -145,7 +144,6 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'get-channel-messages': getChannelMessages,
   'get-channel-seen-time': getLastSeenChannelTime,
   'set-channel-seen-time': setChannelLastSeenTime,
-  'search-giphy': searchGiphy,
 }
 
 Object.entries(handlers).forEach(([path, handler]) => {
