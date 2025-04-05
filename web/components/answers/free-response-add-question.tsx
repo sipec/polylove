@@ -1,9 +1,7 @@
 import { PlusIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
-import { Row as rowFor } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { QuestionWithCountType } from 'web/hooks/use-questions'
-import { useState } from 'react'
 import { Button } from 'web/components/buttons/button'
 import { Col } from 'web/components/layout/col'
 import {
@@ -16,7 +14,6 @@ import { IndividualQuestionRow } from '../questions-form'
 import { TbMessage } from 'react-icons/tb'
 import { OtherLoverAnswers } from './other-lover-answers'
 import { ArrowLeftIcon } from '@heroicons/react/outline'
-import { usePersistentLocalState } from 'web/hooks/use-persistent-local-state'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
 
 export function AddQuestionButton(props: {

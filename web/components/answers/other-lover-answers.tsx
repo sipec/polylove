@@ -7,12 +7,9 @@ import { Avatar } from 'web/components/widgets/avatar'
 import { Linkify } from 'web/components/widgets/linkify'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
 import { UserLink } from 'web/components/widgets/user-link'
-import { LoadMoreUntilNotVisible } from 'web/components/widgets/visibility-observer'
-import { useEvent } from 'web/hooks/use-event'
 import { Gender, convertGender } from '../gender-icon'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
-import { fromNow } from 'web/lib/util/time'
 import { shortenedFromNow } from 'web/lib/util/shortenedFromNow'
 
 export function OtherLoverAnswers(props: {

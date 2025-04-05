@@ -6,7 +6,7 @@ import { useState } from 'react'
 import clsx from 'clsx'
 
 import { Col } from 'web/components/layout/col'
-import { Button, buttonClass } from 'web/components/buttons/button'
+import { Button } from 'web/components/buttons/button'
 import { uploadImage } from 'web/lib/firebase/storage'
 import { buildArray } from 'common/util/array'
 import { Row } from 'web/components/layout/row'

@@ -10,8 +10,8 @@
     "web"
   ],
   "scripts": {
-    "verify": "yarn --cwd=common verify:dir; yarn --cwd=web verify:dir; yarn --cwd=backend/functions verify:dir; yarn --cwd=backend/shared verify:dir",
-    "lint": "yarn --cwd=web lint-fix; eslint common --fix ; eslint backend/functions --fix ; eslint backend/api --fix ; eslint backend/shared --fix",
+    "verify": "yarn --cwd=common verify:dir; yarn --cwd=web verify:dir; yarn --cwd=backend/shared verify:dir",
+    "lint": "yarn --cwd=web lint-fix; eslint common --fix ; eslint backend/api --fix ; eslint backend/shared --fix",
     "dev": "./dev.sh dev",
     "prod": "./dev.sh prod"
   },

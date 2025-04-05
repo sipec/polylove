@@ -4,7 +4,6 @@ import { EmojiList } from './emoji-list'
 import { invertBy, orderBy } from 'lodash'
 import shortcodes from './github-shortcodes.json' // from https://api.github.com/emojis
 import { PluginKey } from '@tiptap/pm/state'
-import { ENV_CONFIG } from 'common/envs/constants'
 import { makeMentionRender } from '../user-mention/mention-suggestion'
 
 type Suggestion = Omit<SuggestionOptions, 'editor'>
