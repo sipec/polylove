@@ -128,12 +128,10 @@ export function CommentInputTextArea(props: {
   submit?: (type: CommentType) => void
   isSubmitting: boolean
   submitOnEnter?: boolean
-  hideToolbar?: boolean
   commentTypes?: CommentType[]
 }) {
   const {
     user,
-    hideToolbar,
     submitOnEnter,
     editor,
     submit,
@@ -188,7 +186,7 @@ export function CommentInputTextArea(props: {
   }, [replyTo, editor])
 
   return (
-    <TextEditor editor={editor} simple hideEmbed={hideToolbar}>
+    <TextEditor editor={editor} simple hideEmbed>
       <Row className={''}>
         {user && !isSubmitting && submit && commentTypes.includes('repost') && (
           <Tooltip

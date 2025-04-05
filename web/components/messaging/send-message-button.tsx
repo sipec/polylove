@@ -113,7 +113,6 @@ export const SendMessageButton = (props: {
             submit={sendMessage}
             isSubmitting={!editor || submitting}
             submitOnEnter={false}
-            hideToolbar={true}
           />
           <span className={'text-red-500'}>{error}</span>
         </Col>
