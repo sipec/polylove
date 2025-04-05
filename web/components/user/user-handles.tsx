@@ -48,7 +48,7 @@ export function UserHandles(props: {
         </a>
       )}
       {discordHandle && (
-        <a target={'_blank'} href="https://discord.com/invite/eHQBNBqXuh">
+        <a target={'_blank'} href="https://discord.com/invite/AYDw8dbrGS">
           <Row className="items-center gap-1">
             <img src="/discord-logo.svg" className="h-4 w-4" alt="Discord" />
             <span className="text-ink-400 text-sm">{discordHandle}</span>
