@@ -16,8 +16,6 @@ Sign up for [Firebase](https://console.firebase.google.com).
 
 Create a new project.
 
-Enable Google Secret Manager in the [Google Cloud console](https://console.cloud.google.com/apis/api/secretmanager.googleapis.com/overview). You will need to activate billing on your project.
-
 Instal the [`gcloud` CLI](https://cloud.google.com/sdk/docs/install)
 
 Authenticate to Secret Manager using `gcloud`
@@ -39,6 +37,32 @@ firebase use --add
 ```
 
 Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS_POLYLOVE` and `GOOGLE_APPLICATION_CREDENTIALS_DEV` to the absolute path of your credential file.
+
+### Creating the Supabase DB
+
+Create a new project on [Supabase](https://supabase.com).
+
+### Creating the secrets in Google Secret Manager
+
+Enable Google Secret Manager in the [Google Cloud console](https://console.cloud.google.com/apis/api/secretmanager.googleapis.com/overview). You will need to activate billing on your project.
+
+Create one secret for each key in common/src/secrets.ts. The important ones are the Supabase credentials which you can find in your [Supabase API setting](https://supabase.com/dashboard/project/eljzrcrvyxybkngvkcab/settings/api). You probably can put random values for the rest and let the features be broken.
+
+Run this command to get your service account email:
+
+```sh
+> gcloud iam service-accounts list --project=FIREBASE-PROJECT-ID
+
+DISPLAY NAME       EMAIL                    DISABLED
+firebase-adminsdk  [SERVICE-ACCOUNT-EMAIL]  False
+```
+
+Now run this command:
+```sh
+gcloud projects add-iam-policy-binding FIREBASE-PROJECT-ID \
+    --member="serviceAccount:SERVICE-ACCOUNT-EMAIL" \
+    --role="roles/secretmanager.secretAccessor"
+```
 
 ## Running
 
