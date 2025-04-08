@@ -16,6 +16,10 @@ Sign up for [Firebase](https://console.firebase.google.com).
 
 Create a new project.
 
+Add the Google authentication method in the Authentication section.
+
+Create a default bucket in the Storage section.
+
 Instal the [`gcloud` CLI](https://cloud.google.com/sdk/docs/install)
 
 Authenticate to Secret Manager using `gcloud`
@@ -44,11 +48,20 @@ Create a new project on [Supabase](https://supabase.com). Make sure to create th
 
 Export `SUPABASE_INSTANCE_ID` with the instance id displayed in your Supabase API settings.
 
+### Get a RapidAPI key for GeoDB
+
+Sign up to the basic plan on [RapidAPI](https://rapidapi.com/wirefreethought/api/geodb-cities/playground/apiendpoint_b648c05d-eef2-429f-a25a-1f3a743d8a3d) and create an API key. RapidAPI is used to access to the GeoDB API.
+
 ### Creating the secrets in Google Secret Manager
 
 Enable Google Secret Manager in the [Google Cloud console](https://console.cloud.google.com/apis/api/secretmanager.googleapis.com/overview). You will need to activate billing on your project.
 
-Create one secret for each key in common/src/secrets.ts. The important ones are the Supabase credentials which you can find in your Supabase API settings. You probably can put random values for the rest and let the features be broken.
+Create one secret for each key in common/src/secrets.ts.
+You can find the Supbase credentials in you Supabase API settings. Note that you should put the service_role/secret api key in SUPABASE_KEY, not the public key.
+
+The GeoDB one is the RapidAPI key you generated.
+
+You probably can put random values for the rest and let the features be broken.
 
 Run this command to get your service account email:
 
@@ -98,8 +111,16 @@ backend/supabase/user_events.sql
 backend/supabase/user_notifications.sql
 ```
 
+## Edit the client configuration
+
+Go on Firebase console and click on "Add a web app". Don't check the hosting checkbox.
+
+Then copy the Javascript config provided, and past it into `common/src/envs/dev.ts`, replacing the `firebaseConfig` key. Keep the `region` and `privateBucket` keys as is though.
+
+Update the `supabaseInstanceId` and `supabaseAnonKey` with the Supabase credentials in the Supabase API Settings.
+
 ## Running
 
-Run `yarn dev` to start the server.
+Run `./dev.sh dev` at the root of the project to start everything.
 
 See also [knowledge.md](knowledge.md), which is docs for AI coders.
