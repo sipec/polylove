@@ -26,8 +26,8 @@
 - [ ] db migrations and schema updates in CI
 - [ ] MCP server
 - [ ] Migrate tiptap json to markdown
-  - [ ] tiptap -> markdown
-  - [ ] markdown -> react
+  - [x] tiptap -> markdown
+  - [x] markdown -> react
   - [ ] markdown -> editor component
   - [ ] migrate mesages
   - [ ] migrate comments

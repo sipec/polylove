@@ -9,6 +9,8 @@ import { Row } from 'web/components/layout/row'
 import { Content } from 'web/components/widgets/editor'
 import { updateLover } from 'web/lib/api'
 import { EditableBio } from './editable-bio'
+import { tiptapToMarkdown } from 'common/util/tiptap-to-markdown'
+import { Richify } from '../widgets/richify'
 import { tryCatch } from 'common/util/try-catch'
 
 export function BioBlock(props: {
@@ -65,6 +67,7 @@ export function BioBlock(props: {
           />
         )}
       </Row>
+      <Richify text={tiptapToMarkdown(lover.bio as any)} className="px-4" />
     </Col>
   )
 }

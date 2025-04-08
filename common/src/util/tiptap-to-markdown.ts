@@ -17,6 +17,14 @@ function recurse(node: JSONContent): string {
   if (node.type === 'text') {
     let text = node.text || ''
 
+    // escape characters
+    if (!node.marks?.some((mark) => mark.type === 'code')) {
+      text = text
+        .replace(/\\/g, '\\\\') // \ -> \\
+        .replace(/\*/g, '\\*')
+        .replace(/_/g, '\\_')
+    }
+
     // Apply marks to the text
     if (node.marks) {
       const reversed = [...node.marks].reverse()
