@@ -5,7 +5,7 @@ export type ChatMessage = {
   id: string
   userId: string
   channelId: string
-  content: JSONContent
+  content: JSONContent | string
   createdTime: number
   visibility: ChatVisibility
 }

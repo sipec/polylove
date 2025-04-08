@@ -16,11 +16,11 @@ export const MediumDisplayImage = Image.extend({
   renderReact: (attrs: any) => <ExpandingImage size={'md'} {...attrs} />,
 })
 
-function ExpandingImage(props: {
+export function ExpandingImage(props: {
   src: string
   alt?: string
   title?: string
-  size?: 'md'
+  size?: 'sm' | 'md'
 }) {
   const [expanded, setExpanded] = useState(false)
   const { size, alt, ...rest } = props

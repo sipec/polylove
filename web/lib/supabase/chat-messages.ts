@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useIsVisible } from 'web/hooks/use-is-visible'
 import { forEach, last } from 'lodash'
 import { HOUR_MS, MINUTE_MS } from 'common/util/time'
-import { richTextToString } from 'common/util/parse'
+import { parseJsonContentToText } from 'common/util/parse'
 
 export const usePaginatedScrollingMessages = (
   realtimeMessages: ChatMessage[] | undefined,
@@ -128,7 +128,7 @@ export const useGroupedMessages = (messages: ChatMessage[]) => {
   }, [messages])
 }
 const systemStatusType = (message: ChatMessage) => {
-  const chatContent = richTextToString(message.content)
+  const chatContent = parseJsonContentToText(message.content)
   return chatContent.includes('left the chat')
     ? 'left'
     : chatContent.includes('joined the chat')

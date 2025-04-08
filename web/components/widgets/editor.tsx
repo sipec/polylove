@@ -13,7 +13,6 @@ import StarterKit from '@tiptap/starter-kit'
 import clsx from 'clsx'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { DisplayMention } from '../editor/user-mention/mention-extension'
-import { Linkify } from './linkify'
 import { linkClass } from './site-link'
 import Iframe from 'common/util/tiptap-iframe'
 import { debounce, noop } from 'lodash'
@@ -27,6 +26,7 @@ import { BasicImage, DisplayImage, MediumDisplayImage } from '../editor/image'
 import { usePersistentLocalState } from 'web/hooks/use-persistent-local-state'
 import { richTextToString } from 'common/util/parse'
 import { safeLocalStorage } from 'web/lib/util/local'
+import { Richify } from './richify'
 
 const DisplayLink = Link.extend({
   renderHTML({ HTMLAttributes }) {
@@ -62,13 +62,13 @@ const editorExtensions = (simple = false): Extensions =>
     Upload,
   ])
 
-const proseClass = (size: 'sm' | 'md' | 'lg') =>
+export const proseClass = (size: 'sm' | 'md' | 'lg') =>
   clsx(
     'prose dark:prose-invert max-w-none leading-relaxed',
     'prose-a:text-primary-700 prose-a:no-underline',
     size === 'sm' ? 'prose-sm' : 'text-md',
-    size !== 'lg' && 'prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0',
-    '[&>p]:prose-li:my-0',
+    size !== 'lg' && 'prose-p:my-0',
+    'prose-ul:my-0 prose-ol:my-0 prose-li:my-0 [&>p]:prose-li:my-0',
     'text-ink-900 prose-blockquote:text-teal-700',
     'break-anywhere'
   )
@@ -79,7 +79,7 @@ export function useTextEditor(props: {
   placeholder?: string
   max?: number
   defaultValue?: Content
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md'
   key?: string // unique key for autosave. If set, plz call `editor.commands.clearContent(true)` on submit to clear autosave
   extensions?: Extensions
   className?: string
@@ -210,7 +210,7 @@ export function TextEditor(props: {
 function RichContent(props: {
   content: JSONContent
   className?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md'
 }) {
   const { className, content, size = 'md' } = props
 
@@ -247,19 +247,15 @@ function RichContent(props: {
   )
 }
 
-// backwards compatibility: we used to store content as strings
 export function Content(props: {
   content: JSONContent | string
   /** font/spacing */
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md'
   className?: string
 }) {
   const { className, size = 'md', content } = props
   return typeof content === 'string' ? (
-    <Linkify
-      className={clsx('whitespace-pre-line', proseClass(size), className)}
-      text={content}
-    />
+    <Richify text={content} size={size} className={className} />
   ) : (
     <RichContent {...(props as any)} />
   )
