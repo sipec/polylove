@@ -3,12 +3,12 @@ import { Fragment } from 'react'
 import Link from 'next/link'
 import { linkClass } from './site-link'
 
-// Return a JSX span, linkifying @username, and https://...
+/**
+ * Return a JSX span, linkifying @username, and https://...
+ * @deprecated use Richify instead
+ */
 export function Linkify(props: { text: string; className?: string }) {
   const { text, className } = props
-  // Replace "m1234" with "ϻ1234"
-  // const mRegex = /(\W|^)m(\d+)/g
-  // text = text.replace(mRegex, (_, pre, num) => `${pre}ϻ${num}`)
 
   // Find instances of @username, #hashtag, and https://...
   const regex =
