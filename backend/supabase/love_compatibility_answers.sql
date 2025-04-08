@@ -42,10 +42,12 @@ drop index if exists love_compatibility_answers_creator_id_created_time_idx;
 
 create index love_compatibility_answers_creator_id_created_time_idx on public.love_compatibility_answers using btree (creator_id, created_time desc);
 
-drop index if exists love_compatibility_answers_pkey;
+/*
+DROP INDEX IF EXISTS love_compatibility_answers_pkey;
 
-create unique index love_compatibility_answers_pkey on public.love_compatibility_answers using btree (id);
+CREATE UNIQUE INDEX love_compatibility_answers_pkey ON public.love_compatibility_answers USING btree (id);
 
+*/
 drop index if exists love_compatibility_answers_question_creator_unique;
 
 create unique index love_compatibility_answers_question_creator_unique on public.love_compatibility_answers using btree (question_id, creator_id);

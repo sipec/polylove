@@ -37,6 +37,9 @@ drop index if exists users_name_idx;
 
 create index users_name_idx on public.users using btree (name);
 
-drop index if exists users_pkey;
+/*
+DROP INDEX IF EXISTS users_pkey;
 
-create unique index users_pkey on public.users using btree (id);
+CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id);
+
+*/

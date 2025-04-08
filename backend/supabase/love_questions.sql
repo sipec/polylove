@@ -19,6 +19,9 @@ drop policy if exists "public read" on love_questions;
 create policy "public read" on love_questions for all using (true);
 
 -- Indexes
-drop index if exists love_questions_pkey;
+/*
+DROP INDEX IF EXISTS love_questions_pkey;
 
-create unique index love_questions_pkey on public.love_questions using btree (id);
+CREATE UNIQUE INDEX love_questions_pkey ON public.love_questions USING btree (id);
+
+*/

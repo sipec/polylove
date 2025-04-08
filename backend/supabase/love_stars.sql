@@ -5,7 +5,7 @@ create table if not exists
     creator_id text not null,
     star_id text default random_alphanumeric (12) not null,
     target_id text not null,
-    constraint primary key (creator_id, star_id)
+    constraint love_stars_pkey primary key (creator_id, star_id)
   );
 
 -- Row Level Security
@@ -19,6 +19,9 @@ select
   using (true);
 
 -- Indexes
-drop index if exists love_stars_pkey;
+/*
+DROP INDEX IF EXISTS love_stars_pkey;
 
-create unique index love_stars_pkey on public.love_stars using btree (creator_id, star_id);
+CREATE UNIQUE INDEX love_stars_pkey ON public.love_stars USING btree (creator_id, star_id);
+
+*/

@@ -6,7 +6,7 @@ create table if not exists
     ship_id text default random_alphanumeric (12) not null,
     target1_id text not null,
     target2_id text not null,
-    constraint primary key (creator_id, ship_id)
+    constraint love_ships_pkey primary key (creator_id, ship_id)
   );
 
 -- Row Level Security
@@ -20,10 +20,12 @@ select
   using (true);
 
 -- Indexes
-drop index if exists love_ships_pkey;
+/*
+DROP INDEX IF EXISTS love_ships_pkey;
 
-create unique index love_ships_pkey on public.love_ships using btree (creator_id, ship_id);
+CREATE UNIQUE INDEX love_ships_pkey ON public.love_ships USING btree (creator_id, ship_id);
 
+*/
 drop index if exists love_ships_target1_id;
 
 create index love_ships_target1_id on public.love_ships using btree (target1_id);

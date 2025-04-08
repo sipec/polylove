@@ -7,10 +7,10 @@ create table if not exists
     user_id text not null
   );
 
--- Foreign Keys
-alter table private_user_seen_message_channels
-add constraint channel_id_fkey foreign key (channel_id) references private_user_message_channels (id) on update cascade on delete cascade;
-
+-- Foreign Keys (in foreign_keys.sql)
+-- ALTER TABLE private_user_seen_message_channels
+-- ADD CONSTRAINT channel_id_fkey FOREIGN KEY (channel_id) REFERENCES private_user_message_channels(id) ON UPDATE CASCADE ON DELETE CASCADE;
+--
 -- Row Level Security
 alter table private_user_seen_message_channels enable row level security;
 
@@ -38,10 +38,12 @@ select
   );
 
 -- Indexes
-drop index if exists private_user_seen_message_channels_pkey;
+/*
+DROP INDEX IF EXISTS private_user_seen_message_channels_pkey;
 
-create unique index private_user_seen_message_channels_pkey on public.private_user_seen_message_channels using btree (id);
+CREATE UNIQUE INDEX private_user_seen_message_channels_pkey ON public.private_user_seen_message_channels USING btree (id);
 
+*/
 drop index if exists user_seen_private_messages_created_time_desc_idx;
 
 create index user_seen_private_messages_created_time_desc_idx on public.private_user_seen_message_channels using btree (user_id, channel_id, created_time desc);

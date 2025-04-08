@@ -16,6 +16,9 @@ select
   using ((firebase_uid () = id));
 
 -- Indexes
-drop index if exists private_users_pkey;
+/*
+DROP INDEX IF EXISTS private_users_pkey;
 
-create unique index private_users_pkey on public.private_users using btree (id);
+CREATE UNIQUE INDEX private_users_pkey ON public.private_users USING btree (id);
+
+*/

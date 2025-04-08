@@ -4,7 +4,7 @@ create table if not exists
     data jsonb not null,
     notification_id text not null,
     user_id text not null,
-    constraint primary key (notification_id, user_id)
+    constraint user_notifications_pkey primary key (notification_id, user_id)
   );
 
 -- Row Level Security
@@ -22,10 +22,12 @@ drop index if exists user_notifications_notification_id;
 
 create index user_notifications_notification_id on public.user_notifications using btree (notification_id, user_id);
 
-drop index if exists user_notifications_pkey;
+/*
+DROP INDEX IF EXISTS user_notifications_pkey;
 
-create unique index user_notifications_pkey on public.user_notifications using btree (user_id, notification_id);
+CREATE UNIQUE INDEX user_notifications_pkey ON public.user_notifications USING btree (user_id, notification_id);
 
+*/
 drop index if exists user_notifications_user_id_created_time;
 
 create index user_notifications_user_id_created_time on public.user_notifications using btree (

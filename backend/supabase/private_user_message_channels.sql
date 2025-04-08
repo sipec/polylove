@@ -16,6 +16,9 @@ drop policy if exists "public read" on private_user_message_channels;
 create policy "public read" on private_user_message_channels for all using (true);
 
 -- Indexes
-drop index if exists private_user_message_channels_pkey;
+/*
+DROP INDEX IF EXISTS private_user_message_channels_pkey;
 
-create unique index private_user_message_channels_pkey on public.private_user_message_channels using btree (id);
+CREATE UNIQUE INDEX private_user_message_channels_pkey ON public.private_user_message_channels USING btree (id);
+
+*/

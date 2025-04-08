@@ -33,10 +33,12 @@ with
   check (true);
 
 -- Indexes
-drop index if exists user_events_pkey;
+/*
+DROP INDEX IF EXISTS user_events_pkey;
 
-create unique index user_events_pkey on public.user_events using btree (id);
+CREATE UNIQUE INDEX user_events_pkey ON public.user_events USING btree (id);
 
+*/
 drop index if exists user_events_ts;
 
 create index user_events_ts on public.user_events using btree (ts desc);

@@ -17,6 +17,9 @@ with
   check (true);
 
 -- Indexes
-drop index if exists love_waitlist_pkey;
+/*
+DROP INDEX IF EXISTS love_waitlist_pkey;
 
-create unique index love_waitlist_pkey on public.love_waitlist using btree (id);
+CREATE UNIQUE INDEX love_waitlist_pkey ON public.love_waitlist USING btree (id);
+
+*/

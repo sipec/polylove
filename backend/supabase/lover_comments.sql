@@ -22,10 +22,12 @@ drop policy if exists "public read" on lover_comments;
 create policy "public read" on lover_comments for all using (true);
 
 -- Indexes
-drop index if exists lover_comments_pkey;
+/*
+DROP INDEX IF EXISTS lover_comments_pkey;
 
-create unique index lover_comments_pkey on public.lover_comments using btree (id);
+CREATE UNIQUE INDEX lover_comments_pkey ON public.lover_comments USING btree (id);
 
+*/
 drop index if exists lover_comments_user_id_idx;
 
 create index lover_comments_user_id_idx on public.lover_comments using btree (on_user_id);

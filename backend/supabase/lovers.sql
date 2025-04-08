@@ -63,10 +63,12 @@ with
   check ((user_id = firebase_uid ()));
 
 -- Indexes
-drop index if exists lovers_pkey;
+/*
+DROP INDEX IF EXISTS lovers_pkey;
 
-create unique index lovers_pkey on public.lovers using btree (id);
+CREATE UNIQUE INDEX lovers_pkey ON public.lovers USING btree (id);
 
+*/
 drop index if exists lovers_user_id_idx;
 
 create index lovers_user_id_idx on public.lovers using btree (user_id);
