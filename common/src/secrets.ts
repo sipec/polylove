@@ -5,41 +5,26 @@ import { zip } from 'lodash'
 // List of secrets that are available to backend (api, functions, scripts, etc.)
 // Edit them at:
 // https://console.cloud.google.com/security/secret-manager?project=polylove
-export const secrets = (
-  [
-    // 'STRIPE_APIKEY',
-    // 'STRIPE_WEBHOOKSECRET',
-    'SUPABASE_KEY',
-    'SUPABASE_JWT_SECRET',
-    'SUPABASE_PASSWORD',
-    'TEST_CREATE_USER_KEY',
-    'GEODB_API_KEY',
-    'RESEND_KEY',
-    // Some typescript voodoo to keep the string literal types while being not readonly.
-  ] as const
-).concat()
+export const secrets = [
+  // 'STRIPE_APIKEY',
+  // 'STRIPE_WEBHOOKSECRET',
+  'SUPABASE_KEY',
+  'SUPABASE_JWT_SECRET',
+  'SUPABASE_PASSWORD',
+  'TEST_CREATE_USER_KEY',
+  'GEODB_API_KEY',
+  'RESEND_KEY',
+] as const
 
-type SecretId = (typeof secrets)[number]
+export type SecretName = (typeof secrets)[number]
 
 // Fetches all secrets from google cloud.
 // For deployed google cloud service, no credential is needed.
 // For local and Vercel deployments: requires credentials json object.
-export const getSecrets = async (credentials?: any, ...ids: SecretId[]) => {
-  let client: SecretManagerServiceClient
-  if (credentials) {
-    const projectId = credentials['project_id']
-    client = new SecretManagerServiceClient({
-      credentials,
-      projectId,
-    })
-  } else {
-    client = new SecretManagerServiceClient()
-  }
-  const projectId = await client.getProjectId()
+export const getSecrets = async (credentials?: any) => {
+  const { client, projectId } = await initSecretClient(credentials)
 
-  const secretIds = ids.length > 0 ? ids : secrets
-
-  const fullSecretNames = secretIds.map(
+  const fullSecretNames = secrets.map(
     (secret: string) =>
       `${client.projectPath(projectId)}/secrets/${secret}/versions/latest`
   )
@@ -54,8 +39,24 @@ export const getSecrets = async (credentials?: any, ...ids: SecretId[]) => {
   const secretValues = secretResponses.map(([response]) =>
     response.payload!.data!.toString()
   )
-  const pairs = zip(secretIds, secretValues) as [string, string][]
+  const pairs = zip(secrets, secretValues) as [string, string][]
   return Object.fromEntries(pairs)
+}
+
+export const initSecretClient = async (credentials?: any) => {
+  let client: SecretManagerServiceClient
+  if (credentials) {
+    const projectId = credentials['project_id']
+    client = new SecretManagerServiceClient({
+      credentials,
+      projectId,
+    })
+  } else {
+    client = new SecretManagerServiceClient()
+  }
+
+  const projectId = await client.getProjectId()
+  return { client, projectId }
 }
 
 // Fetches all secrets and loads them into process.env.
