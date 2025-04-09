@@ -72,8 +72,9 @@ export function LoverProfile(props: {
         starredUserIds={starredUserIds ?? []}
         refreshStars={refreshStars}
         showMessageButton={showMessageButton}
+        refreshLover={refreshLover}
       />
-      {currentUser ? (
+      {currentUser || lover.visibility === 'public' ? (
         <LoverContent
           user={user}
           lover={lover}
