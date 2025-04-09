@@ -17,18 +17,16 @@ import { AddPhotosWidget } from './widgets/add-photos'
 import { Row as rowFor } from 'common/supabase/utils'
 import { Row } from 'web/components/layout/row'
 import { useUser } from 'web/hooks/use-user'
-import { PencilIcon } from '@heroicons/react/solid'
+import { PlusIcon } from '@heroicons/react/solid'
 import { api } from 'web/lib/api'
 
-export default function ProfileCarousel(props: {
-  lover: Lover
-  hideAdminButton?: boolean
-}) {
-  const { lover, hideAdminButton } = props
+export default function ProfileCarousel(props: { lover: Lover }) {
+  const { lover } = props
   const photoNums = lover.photo_urls ? lover.photo_urls.length : 0
 
   const [lightboxUrl, setLightboxUrl] = useState('')
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [editPhotosOpen, setEditPhotosOpen] = useState(false)
 
   const isAdmin = useAdmin()
   const currentUser = useUser()
@@ -68,22 +66,32 @@ export default function ProfileCarousel(props: {
   }
   return (
     <>
-      {!hideAdminButton && isAdmin && (
-        <Button
-          className="self-end"
-          size="2xs"
-          color="red"
-          onClick={() => {
-            console.log('deleting')
-            api('remove-pinned-photo', { userId: lover.user_id }).then(() =>
-              Router.back()
-            )
-          }}
-        >
-          Admin: Delete pinned photo
-        </Button>
-      )}
-      <Carousel className="group relative">
+      <div className="flex gap-2 self-end">
+        {isAdmin && (
+          <Button
+            size="sm"
+            color="red"
+            onClick={() => {
+              console.log('deleting')
+              api('remove-pinned-photo', { userId: lover.user_id }).then(() =>
+                Router.back()
+              )
+            }}
+          >
+            Admin: Delete pinned photo
+          </Button>
+        )}
+        {isCurrentUser && (
+          <Button
+            onClick={() => setEditPhotosOpen(true)}
+            color="gray-outline"
+            size="sm"
+          >
+            Edit photos
+          </Button>
+        )}
+      </div>
+      <Carousel>
         {buildArray(lover.pinned_url, lover.photo_urls).map((url, i) => {
           return (
             <div key={url} className="h-80 w-[250px] flex-none snap-start">
@@ -97,36 +105,41 @@ export default function ProfileCarousel(props: {
                 className="h-full cursor-pointer rounded object-cover"
                 onClick={() => {
                   setLightboxUrl(url)
-                  setDialogOpen(true)
+                  setLightboxOpen(true)
                 }}
               />
             </div>
           )
         })}
-
-        {isCurrentUser && (
-          <div
-            className={clsx(
-              'absolute top-2 z-[10] transition-opacity sm:opacity-0 sm:group-hover:opacity-100',
-              !lover.photo_urls || lover.photo_urls.length < 1
-                ? 'left-[200px]'
-                : 'right-2'
-            )}
+        {isCurrentUser && (lover.photo_urls?.length ?? 0) > 1 && (
+          <button
+            className="bg-ink-200 text-ink-0 group flex h-80 w-[250px] flex-none cursor-pointer snap-start items-center justify-center rounded ease-in-out"
+            onClick={() => setEditPhotosOpen(true)}
           >
-            <EditPhotosButton user={currentUser} lover={lover} />
-          </div>
+            <PlusIcon className="w-20 transition-all group-hover:w-24" />
+          </button>
         )}
       </Carousel>
-      <Modal open={dialogOpen} setOpen={setDialogOpen}>
+      <Modal open={lightboxOpen} setOpen={setLightboxOpen}>
         <Image src={lightboxUrl} width={1000} height={1000} alt="" />
       </Modal>
+      <EditPhotosDialog
+        user={currentUser}
+        lover={lover}
+        open={editPhotosOpen}
+        setOpen={setEditPhotosOpen}
+      />
     </>
   )
 }
 
-const EditPhotosButton = (props: { user: User; lover: Lover }) => {
-  const { user } = props
-  const [dialogOpen, setDialogOpen] = useState(false)
+const EditPhotosDialog = (props: {
+  user: User
+  lover: Lover
+  open: boolean
+  setOpen: (open: boolean) => void
+}) => {
+  const { user, open, setOpen } = props
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [lover, setLover] = useState<Lover>(props.lover)
@@ -139,19 +152,13 @@ const EditPhotosButton = (props: { user: User; lover: Lover }) => {
     setIsSubmitting(true)
     await updateLover(lover)
     setIsSubmitting(false)
-    setDialogOpen(false)
+    setOpen(false)
     window.location.reload()
   }
 
   return (
     <>
-      <button
-        onClick={() => setDialogOpen(true)}
-        className="bg-ink-500 hover:bg-ink-300 rounded p-1 transition-colors"
-      >
-        <PencilIcon className=" h-5 w-5 text-white" />
-      </button>
-      <Modal open={dialogOpen} setOpen={setDialogOpen}>
+      <Modal open={open} setOpen={setOpen}>
         <Col className={clsx(MODAL_CLASS)}>
           <AddPhotosWidget
             user={user}
@@ -161,7 +168,7 @@ const EditPhotosButton = (props: { user: User; lover: Lover }) => {
             setPinnedUrl={(url) => setLoverState('pinned_url', url)}
           />
           <Row className="gap-4 self-end">
-            <Button color="gray-outline" onClick={() => setDialogOpen(false)}>
+            <Button color="gray-outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button
