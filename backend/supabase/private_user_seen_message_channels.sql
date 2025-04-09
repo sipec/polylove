@@ -3,7 +3,7 @@ create table if not exists
   private_user_seen_message_channels (
     channel_id bigint not null,
     created_time timestamp with time zone default now() not null,
-    id bigint primary key private_user_seen_message_channels_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- private_user_seen_message_channels_pkey
     user_id text not null
   );
 

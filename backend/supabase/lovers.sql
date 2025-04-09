@@ -18,7 +18,7 @@ create table if not exists
     geodb_city_id text,
     has_kids integer,
     height_in_inches integer,
-    id bigint primary key lovers_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- lovers_pkey
     is_smoker boolean,
     is_vegetarian_or_vegan boolean,
     last_online_time timestamp with time zone default now() not null,

@@ -4,7 +4,7 @@ create table if not exists
     answer_type text default 'free_response'::text not null,
     created_time timestamp with time zone default now() not null,
     creator_id text not null,
-    id bigint primary key love_questions_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- love_questions_pkey
     importance_score numeric default 0 not null,
     multiple_choice_options jsonb,
     question text not null

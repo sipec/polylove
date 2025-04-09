@@ -4,7 +4,7 @@ create table if not exists
     content jsonb not null,
     created_time timestamp with time zone default now() not null,
     hidden boolean default false not null,
-    id bigint primary key lover_comments_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- lover_comments_pkey
     on_user_id text not null,
     reply_to_comment_id bigint,
     user_avatar_url text not null,

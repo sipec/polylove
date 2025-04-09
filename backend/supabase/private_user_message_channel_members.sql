@@ -3,7 +3,7 @@ create table if not exists
   private_user_message_channel_members (
     channel_id bigint not null,
     created_time timestamp with time zone default now() not null,
-    id bigint primary key private_user_message_channel_members_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- private_user_message_channel_members_pkey
     notify_after_time timestamp with time zone default now() not null,
     role text default 'member'::text not null,
     status text default 'proposed'::text not null,

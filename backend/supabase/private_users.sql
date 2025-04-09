@@ -2,7 +2,7 @@
 create table if not exists
   private_users (
     data jsonb not null,
-    id text primary key private_users_pkey not null
+    id text primary key -- private_users_pkey
   );
 
 -- Row Level Security

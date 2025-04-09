@@ -3,7 +3,7 @@ create table if not exists
   users (
     created_time timestamp with time zone default now() not null,
     data jsonb not null,
-    id text primary key users_pkey default random_alphanumeric (12) not null,
+    id text default random_alphanumeric (12) primary key, -- users_pkey
     name text not null,
     name_username_vector tsvector generated always as (
       to_tsvector(

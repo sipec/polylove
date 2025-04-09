@@ -4,7 +4,7 @@ create table if not exists
     created_time timestamp with time zone default now() not null,
     creator_id text not null,
     free_response text,
-    id bigint primary key love_answers_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- love_answers_pkey
     integer integer,
     multiple_choice integer,
     question_id bigint not null

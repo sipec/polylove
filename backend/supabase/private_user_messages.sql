@@ -4,7 +4,7 @@ create table if not exists
     channel_id bigint not null,
     content jsonb not null,
     created_time timestamp with time zone default now() not null,
-    id bigint primary key private_user_messages_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- private_user_messages_pkey
     old_id bigint,
     user_id text not null,
     visibility text default 'private'::text not null

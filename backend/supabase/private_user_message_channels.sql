@@ -2,7 +2,7 @@
 create table if not exists
   private_user_message_channels (
     created_time timestamp with time zone default now() not null,
-    id bigint primary key private_user_message_channels_pkey generated always as identity not null,
+    id bigint generated always as identity primary key, -- private_user_message_channels_pkey
     last_updated_time timestamp with time zone default now() not null,
     title text
   );

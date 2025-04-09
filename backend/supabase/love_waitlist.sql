@@ -3,7 +3,7 @@ create table if not exists
   love_waitlist (
     created_time timestamp with time zone default now() not null,
     email text not null,
-    id bigint primary key love_waitlist_pkey generated always as identity not null
+    id bigint generated always as identity primary key -- love_waitlist_pkey
   );
 
 -- Row Level Security

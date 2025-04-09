@@ -251,23 +251,28 @@ async function generateSQLFiles(pg: SupabaseDirectClient) {
 
     for (const c of tableInfo.columns) {
       const isSerial = c.default?.startsWith('nextval(')
+      const isPrimary = pkeys.length === 1 && pkeys[0].column_name === c.name
 
       if (isSerial) {
         content += `  ${c.name} ${c.type === 'bigint' ? 'bigserial' : 'serial'}`
       } else {
         content += `  ${c.name} ${c.type}`
-        if (pkeys.length === 1 && pkeys[0].column_name === c.name)
-          content += ` PRIMARY KEY ${pkeys[0].name}`
+
         if (c.default) content += ` DEFAULT ${c.default}`
         else if (c.identity) content += ` GENERATED ${c.always} AS IDENTITY`
         else if (c.gen) content += ` GENERATED ALWAYS AS (${c.gen}) ${c.stored}`
       }
-      if (c.not_null) content += ' NOT NULL'
+
+      if (isPrimary) content += ` PRIMARY KEY`
+      else if (c.not_null) content += ' NOT NULL'
+
       const check = checksByColumn[c.name]
       if (check)
         content += ` CONSTRAINT ${check.name} CHECK ${check.definition}`
 
-      content += ',\n'
+      content += ','
+      if (isPrimary) content += `-- ${pkeys[0].name}`
+      content += '\n'
     }
 
     if (pkeys.length > 1) {
