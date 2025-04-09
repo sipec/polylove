@@ -388,7 +388,15 @@ export type Database = {
           status?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'channel_id_fkey'
+            columns: ['channel_id']
+            isOneToOne: false
+            referencedRelation: 'private_user_message_channels'
+            referencedColumns: ['id']
+          }
+        ]
       }
       private_user_message_channels: {
         Row: {
@@ -439,7 +447,15 @@ export type Database = {
           user_id?: string
           visibility?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'private_user_messages_channel_id_fkey'
+            columns: ['channel_id']
+            isOneToOne: false
+            referencedRelation: 'private_user_message_channels'
+            referencedColumns: ['id']
+          }
+        ]
       }
       private_user_seen_message_channels: {
         Row: {
@@ -460,7 +476,15 @@ export type Database = {
           id?: never
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'channel_id_fkey'
+            columns: ['channel_id']
+            isOneToOne: false
+            referencedRelation: 'private_user_message_channels'
+            referencedColumns: ['id']
+          }
+        ]
       }
       private_users: {
         Row: {
