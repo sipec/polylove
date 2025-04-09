@@ -32,7 +32,7 @@ export default function ProfileCarousel(props: { lover: Lover }) {
   const currentUser = useUser()
   const isCurrentUser = currentUser?.id === lover.user_id
 
-  if (!currentUser) {
+  if (!currentUser && lover.visibility !== 'public') {
     return (
       <Carousel>
         {lover.pinned_url && (
@@ -123,12 +123,14 @@ export default function ProfileCarousel(props: { lover: Lover }) {
       <Modal open={lightboxOpen} setOpen={setLightboxOpen}>
         <Image src={lightboxUrl} width={1000} height={1000} alt="" />
       </Modal>
-      <EditPhotosDialog
-        user={currentUser}
-        lover={lover}
-        open={editPhotosOpen}
-        setOpen={setEditPhotosOpen}
-      />
+      {isCurrentUser && (
+        <EditPhotosDialog
+          user={currentUser}
+          lover={lover}
+          open={editPhotosOpen}
+          setOpen={setEditPhotosOpen}
+        />
+      )}
     </>
   )
 }

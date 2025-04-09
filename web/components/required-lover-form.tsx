@@ -19,6 +19,7 @@ import { range } from 'lodash'
 import { Select } from 'web/components/widgets/select'
 import { City, loverToCity, CityRow, useCitySearch } from './search-location'
 import { AddPhotosWidget } from './widgets/add-photos'
+import { LoverVisibility } from 'common/love/lover'
 
 export const initialRequiredState = {
   age: 0,
@@ -30,7 +31,7 @@ export const initialRequiredState = {
   wants_kids_strength: 2,
   looking_for_matches: true,
   messaging_status: 'open',
-  visibility: 'public',
+  visibility: 'member' as LoverVisibility,
   city: '',
   pinned_url: '',
   photo_urls: [],

@@ -1,4 +1,4 @@
-import { PencilIcon } from '@heroicons/react/outline'
+import { PencilIcon, EyeIcon, LockClosedIcon } from '@heroicons/react/outline'
 import { DotsHorizontalIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
 import Router from 'next/router'
@@ -18,7 +18,9 @@ import { Lover } from 'common/love/lover'
 import { useUser } from 'web/hooks/use-user'
 import { linkClass } from 'web/components/widgets/site-link'
 import { StarButton } from '../widgets/star-button'
-import { api } from 'web/lib/api'
+import { api, updateLover } from 'web/lib/api'
+import { useState } from 'react'
+import { VisibilityConfirmationModal } from './visibility-confirmation-modal'
 
 export default function LoverProfileHeader(props: {
   user: User
@@ -27,6 +29,7 @@ export default function LoverProfileHeader(props: {
   starredUserIds: string[]
   refreshStars: () => Promise<void>
   showMessageButton: boolean
+  refreshLover: () => void
 }) {
   const {
     user,
@@ -35,9 +38,11 @@ export default function LoverProfileHeader(props: {
     starredUserIds,
     refreshStars,
     showMessageButton,
+    refreshLover,
   } = props
   const currentUser = useUser()
   const isCurrentUser = currentUser?.id === user.id
+  const [showVisibilityModal, setShowVisibilityModal] = useState(false)
 
   return (
     <Col className="w-full">
@@ -78,11 +83,24 @@ export default function LoverProfileHeader(props: {
             </Button>
 
             <DropdownMenu
-              menuWidth={'w-36'}
+              menuWidth={'w-52'}
               icon={
                 <DotsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
               }
               items={[
+                {
+                  name:
+                    lover.visibility === 'member'
+                      ? 'List Profile Publicly'
+                      : 'Limit to Members Only',
+                  icon:
+                    lover.visibility === 'member' ? (
+                      <EyeIcon className="h-4 w-4" />
+                    ) : (
+                      <LockClosedIcon className="h-4 w-4" />
+                    ),
+                  onClick: () => setShowVisibilityModal(true),
+                },
                 {
                   name: 'Delete profile',
                   icon: null,
@@ -124,6 +142,21 @@ export default function LoverProfileHeader(props: {
       <Row className="justify-end sm:hidden">
         <ShareProfileButton username={user.username} />
       </Row>
+
+      <VisibilityConfirmationModal
+        open={showVisibilityModal}
+        setOpen={setShowVisibilityModal}
+        currentVisibility={lover.visibility}
+        onConfirm={async () => {
+          const newVisibility =
+            lover.visibility === 'member' ? 'public' : 'member'
+          await updateLover({
+            ...lover,
+            visibility: newVisibility,
+          })
+          refreshLover()
+        }}
+      />
     </Col>
   )
 }

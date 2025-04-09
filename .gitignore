@@ -9,3 +9,5 @@ tsconfig.tsbuildinfo
 
 .env
 .env.*
+.envrc
+supabase/*
