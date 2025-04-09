@@ -3,7 +3,7 @@ import { filterDefined } from 'common/util/array'
 import { cloneDeep, debounce, isEqual } from 'lodash'
 import { useCallback } from 'react'
 import { useEffectCheckEquality } from 'web/hooks/use-effect-check-equality'
-import { useIsMatchmaker } from 'web/hooks/use-is-matchmaker'
+import { useIsLooking } from 'web/hooks/use-is-looking'
 import { useNearbyCities } from 'web/hooks/use-nearby-locations'
 import { usePersistentLocalState } from 'web/hooks/use-persistent-local-state'
 import { OriginLocation } from './location-filter'
@@ -54,11 +54,9 @@ const initialFilters: Partial<FilterFields> = {
 }
 
 export const useFilters = (you: Lover | undefined) => {
-  const isMatchmaker = useIsMatchmaker()
+  const isLooking = useIsLooking()
   const [filters, setFilters] = usePersistentLocalState<Partial<FilterFields>>(
-    isMatchmaker
-      ? { ...initialFilters, orderBy: 'created_time' }
-      : initialFilters,
+    isLooking ? initialFilters : { ...initialFilters, orderBy: 'created_time' },
     'profile-filters-2'
   )
 
@@ -67,7 +65,11 @@ export const useFilters = (you: Lover | undefined) => {
   }
 
   const clearFilters = () => {
-    setFilters(initialFilters)
+    setFilters(
+      isLooking
+        ? initialFilters
+        : { ...initialFilters, orderBy: 'created_time' }
+    )
     setNearbyOriginLocation(undefined)
   }
 

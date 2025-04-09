@@ -44,7 +44,7 @@ import {
 } from './compatibility-question-preferred-list'
 import { useUser } from 'web/hooks/use-user'
 import { usePersistentInMemoryState } from 'web/hooks/use-persistent-in-memory-state'
-import { useIsMatchmaker } from 'web/hooks/use-is-matchmaker'
+import { useIsLooking } from 'web/hooks/use-is-looking'
 import { DropdownButton } from '../filters/desktop-filters'
 import { buildArray } from 'common/util/array'
 
@@ -118,9 +118,9 @@ export function CompatibilityQuestionsDisplay(props: {
     refreshCompatibilityQuestions()
   }
 
-  const isMatchmaker = useIsMatchmaker()
+  const isLooking = useIsLooking()
   const [sort, setSort] = usePersistentInMemoryState<CompatibilitySort>(
-    isMatchmaker && !fromLoverPage ? 'their-important' : 'your-important',
+    !isLooking && !fromLoverPage ? 'their-important' : 'your-important',
     `compatibility-sort-${user.id}`
   )
 
