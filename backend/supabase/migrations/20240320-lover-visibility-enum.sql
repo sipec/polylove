@@ -19,5 +19,4 @@ type lover_visibility using visibility::lover_visibility;
 -- Add back the default with the new enum type
 alter table lovers
 alter column visibility
-set default 'public'::lover_visibility;
- 
+set default 'member'::lover_visibility;
