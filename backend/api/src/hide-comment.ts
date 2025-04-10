@@ -1,13 +1,16 @@
 import { APIError, APIHandler } from 'api/helpers/endpoint'
 import { isAdminId } from 'common/envs/constants'
+import { convertComment } from 'common/supabase/comment'
+import { Row } from 'common/supabase/utils'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
+import { broadcastUpdatedComment } from 'shared/websockets/helpers'
 
 export const hideComment: APIHandler<'hide-comment'> = async (
   { commentId, hide },
   auth
 ) => {
   const pg = createSupabaseDirectClient()
-  const comment = await pg.oneOrNone(
+  const comment = await pg.oneOrNone<Row<'lover_comments'>>(
     `select * from lover_comments where id = $1`,
     [commentId]
   )
@@ -27,4 +30,6 @@ export const hideComment: APIHandler<'hide-comment'> = async (
     commentId,
     hide,
   ])
+
+  broadcastUpdatedComment(convertComment(comment))
 }

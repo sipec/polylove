@@ -22,9 +22,7 @@ export const LoverCommentSection = (props: {
   simpleView?: boolean
 }) => {
   const { onUser, currentUser, simpleView } = props
-  const comments = (useLiveCommentsOnLover(onUser.id) ?? []).filter(
-    (c) => !c.hidden
-  )
+  const comments = useLiveCommentsOnLover(onUser.id).filter((c) => !c.hidden)
   const parentComments = comments.filter((c) => !c.replyToCommentId)
   const commentsByParent = groupBy(comments, (c) => c.replyToCommentId ?? '_')
   const [lover, setLover] = useState<Lover>(props.lover)

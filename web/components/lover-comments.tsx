@@ -21,7 +21,7 @@ import { Button, IconButton } from 'web/components/buttons/button'
 import { ReplyToggle } from 'web/components/comments/reply-toggle'
 import { Content, useTextEditor } from 'web/components/widgets/editor'
 import { Tooltip } from 'web/components/widgets/tooltip'
-import { LoverComment } from 'common/love/love-comment'
+import { type Comment } from 'common/comment'
 import { CommentInputTextArea } from 'web/components/comments/comment-input'
 import { Editor } from '@tiptap/react'
 import { track } from 'web/lib/service/analytics'
@@ -35,8 +35,8 @@ import { safeLocalStorage } from 'web/lib/util/local'
 
 export function LoverProfileCommentThread(props: {
   onUser: User
-  threadComments: LoverComment[]
-  parentComment: LoverComment
+  threadComments: Comment[]
+  parentComment: Comment
   trackingLocation: string
   collapseMiddle?: boolean
   inTimeline?: boolean
@@ -65,7 +65,7 @@ export function LoverProfileCommentThread(props: {
 
   const onSeeRepliesClick = useEvent(() => setSeeReplies(!seeReplies))
   const clearReply = useEvent(() => setReplyToUserInfo(undefined))
-  const onReplyClick = useEvent((comment: LoverComment) => {
+  const onReplyClick = useEvent((comment: Comment) => {
     setSeeReplies(true)
     setReplyToUserInfo({ id: comment.id, username: comment.userUsername })
   })
@@ -139,10 +139,10 @@ export function LoverProfileCommentThread(props: {
 
 const ProfileComment = memo(function FeedComment(props: {
   onUser: User
-  comment: LoverComment
+  comment: Comment
   trackingLocation: string
   highlighted?: boolean
-  onReplyClick?: (comment: LoverComment) => void
+  onReplyClick?: (comment: Comment) => void
   children?: ReactNode
   isParent?: boolean
 }) {
@@ -230,11 +230,11 @@ const ProfileComment = memo(function FeedComment(props: {
 
 const ParentProfileComment = memo(function ParentFeedComment(props: {
   onUser: User
-  comment: LoverComment
+  comment: Comment
   highlighted?: boolean
   seeReplies: boolean
   numReplies: number
-  onReplyClick?: (comment: LoverComment) => void
+  onReplyClick?: (comment: Comment) => void
   onSeeReplyClick: () => void
   trackingLocation: string
 }) {
@@ -269,7 +269,7 @@ const ParentProfileComment = memo(function ParentFeedComment(props: {
 
 function DotMenu(props: {
   onUser: User
-  comment: LoverComment
+  comment: Comment
   onHide: () => void
 }) {
   const { comment, onHide, onUser } = props
@@ -347,8 +347,8 @@ function DotMenu(props: {
 }
 
 function CommentActions(props: {
-  onReplyClick?: (comment: LoverComment) => void
-  comment: LoverComment
+  onReplyClick?: (comment: Comment) => void
+  comment: Comment
   trackingLocation: string
 }) {
   const { onReplyClick, comment } = props
@@ -499,7 +499,7 @@ function CommentInput(props: {
 
 function FeedCommentHeader(props: {
   onUser: User
-  comment: LoverComment
+  comment: Comment
   onHide: () => void
   isParent?: boolean
 }) {

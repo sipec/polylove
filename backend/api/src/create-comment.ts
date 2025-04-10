@@ -12,6 +12,9 @@ import { User } from 'common/user'
 import { richTextToString } from 'common/util/parse'
 import * as crypto from 'crypto'
 import { sendNewEndorsementEmail } from 'email/functions/helpers'
+import { type Row } from 'common/supabase/utils'
+import { broadcastUpdatedComment } from 'shared/websockets/helpers'
+import { convertComment } from 'common/supabase/comment'
 
 export const MAX_COMMENT_JSON_LENGTH = 20000
 
@@ -29,7 +32,7 @@ export const createComment: APIHandler<'create-comment'> = async (
   if (!onUser) throw new APIError(404, 'User not found')
 
   const pg = createSupabaseDirectClient()
-  const comment = await pg.oneOrNone(
+  const comment = await pg.one<Row<'lover_comments'>>(
     `insert into lover_comments (user_id, user_name, user_username, user_avatar_url, on_user_id, content, reply_to_comment_id)
         values ($1, $2, $3, $4, $5, $6, $7) returning *`,
     [
@@ -50,6 +53,8 @@ export const createComment: APIHandler<'create-comment'> = async (
       comment.id,
       pg
     )
+
+  broadcastUpdatedComment(convertComment(comment))
 
   return { status: 'success' }
 }

@@ -31,7 +31,7 @@ export const useWebsocketUser = (userId: string | undefined) => {
     onBroadcast: ({ data }) => {
       console.log(data)
       setUser((user) => {
-        if (!user) {
+        if (!user || !data.user) {
           return user
         } else {
           return {
