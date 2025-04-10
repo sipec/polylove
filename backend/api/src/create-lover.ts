@@ -1,23 +1,21 @@
 import { APIError, APIHandler } from 'api/helpers/endpoint'
-import {
-  createSupabaseClient,
-  createSupabaseDirectClient,
-} from 'shared/supabase/init'
+import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { log, getUser } from 'shared/utils'
 import { HOUR_MS } from 'common/util/time'
 import { removePinnedUrlFromPhotoUrls } from 'shared/love/parse-photos'
 import { track } from 'shared/analytics'
 import { updateUser } from 'shared/supabase/users'
+import { tryCatch } from 'common/util/try-catch'
+import { insert } from 'shared/supabase/utils'
 
 export const createLover: APIHandler<'create-lover'> = async (body, auth) => {
-  const db = createSupabaseClient()
   const pg = createSupabaseDirectClient()
 
-  const { data: existingUser } = await db
-    .from('lovers')
-    .select('id')
-    .eq('user_id', auth.uid)
-    .single()
+  const { data: existingUser } = await tryCatch(
+    pg.oneOrNone<{ id: string }>('select id from lovers where user_id = $1', [
+      auth.uid,
+    ])
+  )
   if (existingUser) {
     throw new APIError(400, 'User already exists')
   }
@@ -30,25 +28,17 @@ export const createLover: APIHandler<'create-lover'> = async (body, auth) => {
     updateUser(pg, auth.uid, { avatarUrl: body.pinned_url })
   }
 
-  const { data, error } = await db
-    .from('lovers')
-    .insert([
-      {
-        ...body,
-        user_id: auth.uid,
-      },
-    ])
-    .select()
+  const { data, error } = await tryCatch(
+    insert(pg, 'lovers', { user_id: auth.uid, ...body })
+  )
 
   if (error) {
-    log.error('Error creating user', error)
+    log.error('Error creating user: ' + error.message)
     throw new APIError(500, 'Error creating user')
   }
 
-  const lover = data[0]
-
-  log('Created user', lover)
+  log('Created user', data)
   await track(user.id, 'create lover', { username: user.username })
 
-  return lover
+  return data
 }

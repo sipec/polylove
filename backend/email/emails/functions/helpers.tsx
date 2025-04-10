@@ -1,13 +1,11 @@
 import { PrivateUser, User } from 'common/user'
-import { getLoverRow } from 'common/love/lover'
 import { getNotificationDestinationsForUser } from 'common/user-notification-preferences'
-import { createSupabaseClient } from 'shared/supabase/init'
-import { getUser } from 'shared/utils'
 import { sendEmail } from './send-email'
 import { NewMatchEmail } from '../new-match'
 import { NewMessageEmail } from '../new-message'
 import { NewEndorsementEmail } from '../new-endorsement'
 import { Test } from '../test'
+import { getLover } from 'shared/love/supabase'
 
 const from = 'Love <no-reply@poly.love>'
 
@@ -20,10 +18,8 @@ export const sendNewMatchEmail = async (
     'new_match'
   )
   if (!privateUser.email || !sendToEmail) return
-  const user = await getUser(privateUser.id)
-  if (!user) return
-
-  const lover = await getLoverRow(matchedWithUser.id, createSupabaseClient())
+  const lover = await getLover(privateUser.id)
+  if (!lover) return
 
   return await sendEmail({
     from,
@@ -31,7 +27,7 @@ export const sendNewMatchEmail = async (
     to: privateUser.email,
     react: (
       <NewMatchEmail
-        onUser={user}
+        onUser={lover.user}
         matchedWithUser={matchedWithUser}
         matchedLover={lover}
         unsubscribeUrl={unsubscribeUrl}
@@ -52,7 +48,12 @@ export const sendNewMessageEmail = async (
   )
   if (!privateUser.email || !sendToEmail) return
 
-  const lover = await getLoverRow(fromUser.id, createSupabaseClient())
+  const lover = await getLover(fromUser.id)
+
+  if (!lover) {
+    console.error('Could not send email notification: Lover not found')
+    return
+  }
 
   return await sendEmail({
     from,

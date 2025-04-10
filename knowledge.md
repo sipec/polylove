@@ -38,7 +38,7 @@ This is a dating app. It has questions and profiles.
 
 Here's an example component from web in our style:
 
-```ts
+```tsx
 import clsx from 'clsx'
 import Link from 'next/link'
 
@@ -424,41 +424,25 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
 We have two ways to access our postgres database.
 
 ```ts
-const pg = createSupabaseDirectClient()
+import { db } from 'web/lib/supabase/db'
+
+db.from('lovers').select('*').eq('user_id', userId)
 ```
 
 and
 
 ```ts
-/* @deprecated */
-const db = createSupabaseClient()
+import { createSupabaseDirectClient } from 'shared/supabase/init'
+
+const pg = createSupabaseDirectClient()
+pg.oneOrNone<Row<'lovers'>>('select * from lovers where user_id = $1', [userId])
 ```
 
-We are deprecating `createSupabaseClient`, so avoid using it entirely for new code. It uses postgREST, a rest api that is turned into sql. The client can also use this to connect directly to our database. The recommended path is to instead create an endpoint on our server, and have that use the supabase direct client to return data to the client.
+The supabase client just uses the supabase client library, which is a wrapper around postgREST. It allows us to query and update the database directly from the frontend.
 
-Example using supabase client:
+`createSupabaseDirectClient` is used on the backend. it lets us specify sql strings to run directly on our database, using the pg-promise library. The client (code in web) does not have permission to do this.
 
-```ts
-export const getContractIdFromSlug = async (
-  db: SupabaseClient,
-  slug?: string
-) => {
-  if (!slug) return undefined
-
-  const { data, error } = await db
-    .from('contracts')
-    .select('id')
-    .eq('slug', slug)
-    .single()
-
-  if (error) throw new APIError(404, `Contract with slug ${slug} not found`)
-  return data.id
-}
-```
-
-`createSupabaseDirectClient` lets us specify sql strings to run directly on our database, using the pg-promise library. The client (code in web) does not have permission to do this.
-
-Example using the direct client:
+Another example using the direct client:
 
 ```ts
 export const getUniqueBettorIds = async (
@@ -471,6 +455,35 @@ export const getUniqueBettorIds = async (
   )
   return res.map((r) => r.user_id as string)
 }
+```
+
+We have a few helper functions for updating and inserting data into the database.
+
+```ts
+import {
+  buikInsert,
+  bulkUpdate,
+  bulkUpdateData,
+  bulkUpsert,
+  insert,
+  update,
+  updateData,
+} from 'shared/supabase/utils'
+
+...
+
+const pg = createSupabaseDirectClient()
+
+// you are encouraged to use tryCatch for these
+const { data, error } = await tryCatch(
+  insert(pg, 'lovers', { user_id: auth.uid, ...body })
+)
+
+if (error) throw APIError(500, 'Error creating lover: ' + error.message)
+
+await update(pg, 'lovers', 'user_id', { user_id: auth.uid, age: 99 })
+
+await updateData(pg, 'private_users', { id: userId, notifications: { ... } })
 ```
 
 The sqlBuilder from `shared/supabase/sql-builder.ts` can be used to construct SQL queries with re-useable parts. All it does is sanitize and output sql query strings. It has several helper functions including:

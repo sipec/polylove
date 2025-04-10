@@ -1,6 +1,8 @@
-import { createSupabaseClient } from 'shared/supabase/init'
+import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { getUser } from 'shared/utils'
 import { APIHandler, APIError } from './helpers/endpoint'
+import { insert } from 'shared/supabase/utils'
+import { tryCatch } from 'common/util/try-catch'
 
 export const createCompatibilityQuestion: APIHandler<
   'create-compatibility-question'
@@ -8,23 +10,18 @@ export const createCompatibilityQuestion: APIHandler<
   const creator = await getUser(auth.uid)
   if (!creator) throw new APIError(401, 'Your account was not found')
 
-  const db = createSupabaseClient()
+  const pg = createSupabaseDirectClient()
 
-  const compatibilityQuestionData = [
-    {
+  const { data, error } = await tryCatch(
+    insert(pg, 'love_questions', {
       creator_id: creator.id,
       question,
       answer_type: 'compatibility_multiple_choice',
       multiple_choice_options: options,
-    },
-  ]
+    })
+  )
 
-  const result = await db
-    .from('love_questions')
-    .insert(compatibilityQuestionData)
-    .select()
+  if (error) throw new APIError(401, 'Error creating question')
 
-  if (result.error) throw new APIError(401, 'Error creating question')
-
-  return { question: result.data[0] }
+  return { question: data }
 }

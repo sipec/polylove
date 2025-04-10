@@ -1,16 +1,21 @@
-import { createSupabaseClient } from 'shared/supabase/init'
+import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { APIError, APIHandler } from './helpers/endpoint'
 import { PrivateUser } from 'common/user'
+import { Row } from 'common/supabase/utils'
+import { tryCatch } from 'common/util/try-catch'
 
 export const getCurrentPrivateUser: APIHandler<'me/private'> = async (
   _,
   auth
 ) => {
-  const db = createSupabaseClient()
+  const pg = createSupabaseDirectClient()
 
-  const q = db.from('private_users').select('data').eq('id', auth.uid)
-
-  const { data, error } = await q
+  const { data, error } = await tryCatch(
+    pg.oneOrNone<Row<'private_users'>>(
+      'select * from private_users where id = $1',
+      [auth.uid]
+    )
+  )
 
   if (error) {
     throw new APIError(
@@ -19,9 +24,9 @@ export const getCurrentPrivateUser: APIHandler<'me/private'> = async (
     )
   }
 
-  if (!data.length) {
+  if (!data) {
     throw new APIError(401, 'Your account was not found')
   }
 
-  return data[0].data as PrivateUser
+  return data.data as PrivateUser
 }

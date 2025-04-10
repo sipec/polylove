@@ -1,5 +1,4 @@
 import pgPromise from 'pg-promise'
-import { createClient } from 'common/supabase/utils'
 export { SupabaseClient } from 'common/supabase/utils'
 import { DEV_CONFIG } from 'common/envs/dev'
 import { PROD_CONFIG } from 'common/envs/prod'
@@ -43,25 +42,6 @@ export function getInstanceId() {
     process.env.SUPABASE_INSTANCE_ID ??
     (isProd() ? PROD_CONFIG.supabaseInstanceId : DEV_CONFIG.supabaseInstanceId)
   )
-}
-
-export function createSupabaseClient() {
-  const instanceId = getInstanceId()
-  if (!instanceId) {
-    throw new Error(
-      "Can't connect to Supabase; no process.env.SUPABASE_INSTANCE_ID and no instance ID in config."
-    )
-  }
-  const key = process.env.SUPABASE_KEY
-  if (!key) {
-    throw new Error("Can't connect to Supabase; no process.env.SUPABASE_KEY.")
-  }
-
-  // mqp - note that if you want to pass autoRefreshToken: true, you MUST call
-  // `client.auth.stopAutoRefresh` on the client when you are done or it will
-  // leak the refresh interval!
-
-  return createClient(instanceId, key, { auth: { autoRefreshToken: false } })
 }
 
 const newClient = (
