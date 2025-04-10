@@ -40,7 +40,7 @@ create table if not exists
     twitter text,
     university text,
     user_id text not null,
-    visibility text default 'public'::text not null,
+    visibility lover_visibility default 'member'::lover_visibility not null,
     wants_kids_strength integer default 0 not null,
     website text
   );

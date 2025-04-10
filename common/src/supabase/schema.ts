@@ -501,6 +501,57 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          content_id: string
+          content_owner_id: string
+          content_type: string
+          created_time: string | null
+          description: string | null
+          id: string
+          parent_id: string | null
+          parent_type: string | null
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_owner_id: string
+          content_type: string
+          created_time?: string | null
+          description?: string | null
+          id?: string
+          parent_id?: string | null
+          parent_type?: string | null
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_owner_id?: string
+          content_type?: string
+          created_time?: string | null
+          description?: string | null
+          id?: string
+          parent_id?: string | null
+          parent_type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'reports_content_owner_id_fkey'
+            columns: ['content_owner_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'reports_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       temp_users: {
         Row: {
           created_time: string | null
