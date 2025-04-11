@@ -10,15 +10,17 @@ import { Button } from 'web/components/buttons/button'
 import { colClassName, labelClassName } from 'web/pages/signup'
 import { useRouter } from 'next/router'
 import { updateLover } from 'web/lib/api'
-import { Row as rowFor } from 'common/supabase/utils'
+import { Column } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { track } from 'web/lib/service/analytics'
 import { Races } from './race'
 import { Carousel } from 'web/components/widgets/carousel'
+import { tryCatch } from 'common/util/try-catch'
+import { LoverRow } from 'common/love/lover'
 
 export const OptionalLoveUserForm = (props: {
-  lover: rowFor<'lovers'>
-  setLover: (key: keyof rowFor<'lovers'>, value: any) => void
+  lover: LoverRow
+  setLover: <K extends Column<'lovers'>>(key: K, value: LoverRow[K]) => void
   user: User
   buttonLabel?: string
   fromSignup?: boolean
@@ -42,19 +44,17 @@ export const OptionalLoveUserForm = (props: {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const { bio: _, ...otherLoverProps } = lover
-    const res = await updateLover(otherLoverProps).catch((e: unknown) => {
-      console.error(e)
-      return false
-    })
+    const { error } = await tryCatch(updateLover(otherLoverProps as any))
+    if (error) {
+      console.error(error)
+      return
+    }
     onSubmit && (await onSubmit())
     setIsSubmitting(false)
-    if (res) {
-      console.log('success')
-      track('submit love optional profile')
-      if (user)
-        router.push(`/${user.username}${fromSignup ? '?fromSignup=true' : ''}`)
-      else router.push('/')
-    }
+    track('submit love optional profile')
+    if (user)
+      router.push(`/${user.username}${fromSignup ? '?fromSignup=true' : ''}`)
+    else router.push('/')
   }
   return (
     <>
@@ -129,7 +129,7 @@ export const OptionalLoveUserForm = (props: {
         <Col className={clsx(colClassName)}>
           <label className={clsx(labelClassName)}>Do you smoke?</label>
           <ChoicesToggleGroup
-            currentChoice={lover['is_smoker'] ?? -1}
+            currentChoice={lover['is_smoker'] ?? undefined}
             choicesMap={{
               Yes: true,
               No: false,

@@ -14,7 +14,6 @@ import { useAdmin } from 'web/hooks/use-admin'
 import { Button } from 'web/components/buttons/button'
 import { updateLover } from 'web/lib/api'
 import { AddPhotosWidget } from './widgets/add-photos'
-import { Row as rowFor } from 'common/supabase/utils'
 import { Row } from 'web/components/layout/row'
 import { useUser } from 'web/hooks/use-user'
 import { PlusIcon } from '@heroicons/react/solid'
@@ -141,18 +140,16 @@ const EditPhotosDialog = (props: {
   open: boolean
   setOpen: (open: boolean) => void
 }) => {
-  const { user, open, setOpen } = props
+  const { user, lover, open, setOpen } = props
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [lover, setLover] = useState<Lover>(props.lover)
+  const [pinnedUrl, setPinnedUrl] = useState<string | null>(lover.pinned_url)
+  const [photoUrls, setPhotoUrls] = useState<string[] | null>(lover.photo_urls ?? [])
 
-  const setLoverState = (key: keyof rowFor<'lovers'>, value: any) => {
-    setLover((prevState) => ({ ...prevState, [key]: value }))
-  }
 
   const submit = async () => {
     setIsSubmitting(true)
-    await updateLover(lover)
+    await updateLover(({ pinned_url: pinnedUrl ?? undefined, photo_urls: photoUrls ?? undefined }))
     setIsSubmitting(false)
     setOpen(false)
     window.location.reload()
@@ -164,10 +161,10 @@ const EditPhotosDialog = (props: {
         <Col className={clsx(MODAL_CLASS)}>
           <AddPhotosWidget
             user={user}
-            photo_urls={lover.photo_urls}
-            pinned_url={lover.pinned_url}
-            setPhotoUrls={(urls) => setLoverState('photo_urls', urls)}
-            setPinnedUrl={(url) => setLoverState('pinned_url', url)}
+            photo_urls={photoUrls}
+            pinned_url={pinnedUrl}
+            setPhotoUrls={(urls) => setPhotoUrls(urls)}
+            setPinnedUrl={(url) => setPinnedUrl(url)}
           />
           <Row className="gap-4 self-end">
             <Button color="gray-outline" onClick={() => setOpen(false)}>

@@ -13,13 +13,13 @@ import { RadioToggleGroup } from 'web/components/widgets/radio-toggle-group'
 import { MultipleChoiceOptions } from 'common/love/multiple-choice'
 import { useEditableUserInfo } from 'web/hooks/use-editable-user-info'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
-import { Row as rowFor } from 'common/supabase/utils'
+import { Column } from 'common/supabase/utils'
 import { Checkbox } from 'web/components/widgets/checkbox'
 import { range } from 'lodash'
 import { Select } from 'web/components/widgets/select'
 import { City, loverToCity, CityRow, useCitySearch } from './search-location'
 import { AddPhotosWidget } from './widgets/add-photos'
-import { LoverVisibility } from 'common/love/lover'
+import { LoverRow } from 'common/love/lover'
 
 export const initialRequiredState = {
   age: 0,
@@ -31,7 +31,7 @@ export const initialRequiredState = {
   wants_kids_strength: 2,
   looking_for_matches: true,
   messaging_status: 'open',
-  visibility: 'member' as LoverVisibility,
+  visibility: 'member',
   city: '',
   pinned_url: '',
   photo_urls: [],
@@ -46,9 +46,8 @@ export const RequiredLoveUserForm = (props: {
   // TODO thread this properly instead of this jank
   setEditUsername?: (name: string) => unknown
   setEditDisplayName?: (name: string) => unknown
-
-  lover: rowFor<'lovers'>
-  setLover: (key: keyof rowFor<'lovers'>, value: any) => void
+  lover: LoverRow
+  setLover: <K extends Column<'lovers'>>(key: K, value: LoverRow[K] | undefined) => void
   isSubmitting: boolean
   onSubmit?: () => void
   loverCreatedAlready?: boolean

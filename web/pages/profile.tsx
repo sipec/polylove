@@ -1,5 +1,5 @@
-import { Lover } from 'common/love/lover'
-import { Row as rowFor } from 'common/supabase/utils'
+import { Lover, LoverRow } from 'common/love/lover'
+import { Column } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { OptionalLoveUserForm } from 'web/components/optional-lover-form'
 import { RequiredLoveUserForm } from 'web/components/required-lover-form'
@@ -30,7 +30,7 @@ function ProfilePageInner(props: { user: User; lover: Lover }) {
     user,
   })
 
-  const setLoverState = (key: keyof rowFor<'lovers'>, value: any) => {
+  const setLoverState = <K extends Column<'lovers'>> (key: K, value: LoverRow[K] | undefined) => {
     setLover((prevState) => ({ ...prevState, [key]: value }))
   }
 

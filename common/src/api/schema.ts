@@ -7,7 +7,7 @@ import {
 import { PrivateChatMessage } from 'common/chat-message'
 import { CompatibilityScore } from 'common/love/compatibility-score'
 import { MAX_COMPATIBILITY_QUESTION_LENGTH } from 'common/love/constants'
-import { Lover } from 'common/love/lover'
+import { Lover, LoverRow } from 'common/love/lover'
 import { Row } from 'common/supabase/utils'
 import { PrivateUser, User } from 'common/user'
 import { z } from 'zod'
@@ -139,8 +139,8 @@ export const API = (_apiTypeCheck = {
   'update-lover': {
     method: 'POST',
     authed: true,
-    props: combinedLoveUsersSchema,
-    returns: {} as any,
+    props: combinedLoveUsersSchema.partial(),
+    returns: {} as LoverRow,
   },
   'me/delete': {
     method: 'POST',

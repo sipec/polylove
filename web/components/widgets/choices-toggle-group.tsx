@@ -13,12 +13,13 @@ const colorClasses = {
 
 export type ColorType = keyof typeof colorClasses
 
-export function ChoicesToggleGroup(props: {
-  currentChoice: number | string | boolean | undefined
-  choicesMap: { [key: string]: string | number | boolean }
+export function ChoicesToggleGroup<T extends Record<string, string | number | boolean>>(
+  props: {
+  currentChoice: T[keyof T] | undefined
+  choicesMap: T
   disabled?: boolean
-  disabledOptions?: Array<string | number | boolean> //values
-  setChoice: (val: number | string | boolean) => void
+  disabledOptions?: Array<T[keyof T]>
+  setChoice: (val: T[keyof T]) => void
   color?: ColorType
   className?: string
   toggleClassName?: string
@@ -50,7 +51,7 @@ export function ChoicesToggleGroup(props: {
         <RadioGroup.Option
           key={choiceKey}
           value={choice}
-          disabled={disabledOptions?.includes(choice)}
+          disabled={disabledOptions?.includes(choice as any)}
           className={({ disabled }) =>
             clsx(
               disabled

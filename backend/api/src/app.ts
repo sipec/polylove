@@ -34,7 +34,7 @@ import { searchLocation } from './search-location'
 import { searchNearCity } from './search-near-city'
 import { shipLovers } from './ship-lovers'
 import { starLover } from './star-lover'
-import { updateLovers } from './update-lover'
+import { updateLover } from './update-lover'
 import { updateMe } from './update-me'
 import { deleteMe } from './delete-me'
 import { getCurrentPrivateUser } from './get-current-private-user'
@@ -120,7 +120,7 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   'me/private': getCurrentPrivateUser,
   'me/update': updateMe,
   'me/delete': deleteMe,
-  'update-lover': updateLovers,
+  'update-lover': updateLover,
   'like-lover': likeLover,
   'ship-lovers': shipLovers,
   'get-likes-and-ships': getLikesAndShips,

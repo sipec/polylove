@@ -9,6 +9,7 @@ import { Row } from 'web/components/layout/row'
 import { Content } from 'web/components/widgets/editor'
 import { updateLover } from 'web/lib/api'
 import { EditableBio } from './editable-bio'
+import { tryCatch } from 'common/util/try-catch'
 
 export function BioBlock(props: {
   isCurrentUser: boolean
@@ -54,14 +55,9 @@ export function BioBlock(props: {
                 name: 'Delete',
                 icon: <XIcon className="h-5 w-5" />,
                 onClick: async () => {
-                  await updateLover({
-                    ...lover,
-                    bio: null,
-                  }).catch((e: unknown) => {
-                    console.error(e)
-                    return false
-                  })
-                  refreshLover()
+                  const { error } = await tryCatch(updateLover({ bio: null }))
+                  if (error) console.error(error)
+                  else refreshLover()
                 },
               },
             ]}

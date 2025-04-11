@@ -45,22 +45,17 @@ export const LoverCommentSection = (props: {
             <ShortToggle
               on={lover.comments_enabled}
               setOn={(on) => {
-                const update = { ...lover, comments_enabled: on }
-                setLover(update)
-                toast.promise(
-                  updateLover({
-                    ...update,
-                  }),
-                  {
-                    loading: on
-                      ? 'Enabling endorsements from others'
-                      : 'Disabling endorsements from others',
-                    success: on
-                      ? 'Endorsements enabled from others'
-                      : 'Endorsements disabled from others',
-                    error: 'Failed to update endorsement status',
-                  }
-                )
+                const update = { comments_enabled: on }
+                setLover((l) => ({ ...l, ...update }))
+                toast.promise(updateLover(update), {
+                  loading: on
+                    ? 'Enabling endorsements from others'
+                    : 'Disabling endorsements from others',
+                  success: on
+                    ? 'Endorsements enabled from others'
+                    : 'Endorsements disabled from others',
+                  error: 'Failed to update endorsement status',
+                })
               }}
             />
           </Tooltip>

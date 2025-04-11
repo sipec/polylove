@@ -7,7 +7,7 @@ import { tryCatch } from 'common/util/try-catch'
 import { update } from 'shared/supabase/utils'
 import { type Row } from 'common/supabase/utils'
 
-export const updateLovers: APIHandler<'update-lover'> = async (
+export const updateLover: APIHandler<'update-lover'> = async (
   parsedBody,
   auth
 ) => {

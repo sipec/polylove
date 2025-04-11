@@ -150,10 +150,7 @@ export default function LoverProfileHeader(props: {
         onConfirm={async () => {
           const newVisibility =
             lover.visibility === 'member' ? 'public' : 'member'
-          await updateLover({
-            ...lover,
-            visibility: newVisibility,
-          })
+          await updateLover({ visibility: newVisibility })
           refreshLover()
         }}
       />

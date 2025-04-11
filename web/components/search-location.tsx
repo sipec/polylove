@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { OriginLocation } from './filters/location-filter'
 import { api } from 'web/lib/api'
 import { countryCodeToFlag } from 'web/lib/util/location'
+import { LoverRow } from 'common/love/lover'
 
 export type City = {
   geodb_city_id: string
@@ -15,7 +16,7 @@ export type City = {
   longitude: number
 }
 
-export function loverToCity(lover: rowFor<'lovers'>): City {
+export function loverToCity(lover: LoverRow): City {
   return {
     geodb_city_id: lover.geodb_city_id!,
     city: lover.city,
