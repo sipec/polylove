@@ -4,7 +4,8 @@ import { IoLocationOutline } from 'react-icons/io5'
 import { MdHeight } from 'react-icons/md'
 
 import { Row } from 'web/components/layout/row'
-import GenderIcon, { Gender, convertGender } from '../gender-icon'
+import GenderIcon from '../gender-icon'
+import { Gender, convertGender } from 'common/gender'
 import { formatLoverValue } from '../lover-about'
 import { Lover } from 'common/love/lover'
 

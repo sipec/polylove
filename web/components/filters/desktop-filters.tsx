@@ -6,7 +6,7 @@ import DropdownMenu from 'web/components/comments/dropdown-menu'
 import { Col } from 'web/components/layout/col'
 import { Row } from 'web/components/layout/row'
 import { CustomizeableDropdown } from 'web/components/widgets/customizeable-dropdown'
-import { Gender } from '../gender-icon'
+import { Gender } from 'common/gender'
 import { AgeFilter, AgeFilterText } from './age-filter'
 import { GenderFilter, GenderFilterText } from './gender-filter'
 import {

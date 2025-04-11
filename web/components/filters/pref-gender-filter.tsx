@@ -1,5 +1,6 @@
 import clsx from 'clsx'
-import GenderIcon, { Gender } from '../gender-icon'
+import GenderIcon from '../gender-icon'
+import { Gender } from 'common/gender'
 import { Row } from 'web/components/layout/row'
 import { MultiCheckbox } from 'web/components/multi-checkbox'
 import { FilterFields } from './search'

@@ -7,7 +7,7 @@ import { Avatar } from 'web/components/widgets/avatar'
 import { Linkify } from 'web/components/widgets/linkify'
 import { LoadingIndicator } from 'web/components/widgets/loading-indicator'
 import { UserLink } from 'web/components/widgets/user-link'
-import { Gender, convertGender } from '../gender-icon'
+import { Gender, convertGender } from 'common/gender'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
 import { shortenedFromNow } from 'web/lib/util/shortenedFromNow'
@@ -17,7 +17,7 @@ export function OtherLoverAnswers(props: {
   user?: User
   className?: string
 }) {
-  const { question, user, className } = props
+  const { question, className } = props
   const otherAnswers = useOtherAnswers(question.id)
   const shownAnswers = otherAnswers?.filter(
     (a) => a.multiple_choice != null || a.free_response || a.integer
