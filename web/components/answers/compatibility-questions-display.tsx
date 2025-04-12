@@ -367,7 +367,7 @@ function CompatibilityAnswerBlock(props: {
         'bg-canvas-0 flex-grow gap-4 whitespace-pre-line rounded-md px-3 py-2 leading-relaxed'
       }
     >
-      <Row className="text-ink-600 justify-between gap-1 text-sm">
+      <Row className="text-ink-800 justify-between gap-1 text-sm">
         {question.question}
         <Row className="gap-4">
           {comparedLover && (
@@ -409,7 +409,7 @@ function CompatibilityAnswerBlock(props: {
       </Row>
       {distinctPreferredAnswersText.length > 0 && (
         <Col className="gap-2">
-          <div className="text-ink-600 text-sm">
+          <div className="text-ink-800 text-sm">
             {preferredDoesNotIncludeAnswerText
               ? 'Acceptable'
               : 'Also acceptable'}
