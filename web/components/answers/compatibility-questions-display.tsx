@@ -367,9 +367,9 @@ function CompatibilityAnswerBlock(props: {
         'bg-canvas-0 flex-grow gap-4 whitespace-pre-line rounded-md px-3 py-2 leading-relaxed'
       }
     >
-      <Row className="text-ink-800 justify-between gap-1 text-sm">
+      <Row className="text-ink-800 justify-between gap-1 font-semibold">
         {question.question}
-        <Row className="gap-4">
+        <Row className="gap-4 font-normal">
           {comparedLover && (
             <div className="hidden sm:block">
               <CompatibilityDisplay
@@ -407,6 +407,11 @@ function CompatibilityAnswerBlock(props: {
       <Row className="bg-canvas-50 w-fit gap-1 rounded px-2 py-1 text-sm">
         {answerText}
       </Row>
+      <Row className="px-2 -mt-4">
+        {answer.explanation && (
+          <Linkify className="" text={answer.explanation} />
+        )}
+      </Row>
       {distinctPreferredAnswersText.length > 0 && (
         <Col className="gap-2">
           <div className="text-ink-800 text-sm">
@@ -414,7 +419,7 @@ function CompatibilityAnswerBlock(props: {
               ? 'Acceptable'
               : 'Also acceptable'}
           </div>
-          <Row className="flex-wrap gap-2">
+          <Row className="flex-wrap gap-2 -mt-2">
             {distinctPreferredAnswersText.map((text) => (
               <Row
                 key={text}
@@ -426,10 +431,8 @@ function CompatibilityAnswerBlock(props: {
           </Row>
         </Col>
       )}
-      <Col className="gap-2">
-        {answer.explanation && (
-          <Linkify className="font-semibold" text={answer.explanation} />
-        )}
+      <Col>
+
         {comparedLover && (
           <Row className="w-full justify-end sm:hidden">
             <CompatibilityDisplay
