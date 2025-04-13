@@ -1,5 +1,5 @@
-import { Row, run, SupabaseClient } from './utils'
 import { PrivateUser, User } from 'common/user'
+import { Row, run, SupabaseClient, tsToMillis } from './utils'
 
 export async function getUserForStaticProps(
   db: SupabaseClient,
@@ -18,6 +18,7 @@ export function convertUser(row: Row<'users'> | null): User | null {
     id: row.id,
     username: row.username,
     name: row.name,
+    createdTime: tsToMillis(row.created_time)
   } as User
 }
 
