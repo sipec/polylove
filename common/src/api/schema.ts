@@ -16,6 +16,7 @@ import { DisplayUser, FullUser } from './user-types'
 import { PrivateMessageChannel } from 'common/supabase/private-messages'
 import { Notification } from 'common/notifications'
 import { arrify } from 'common/util/array'
+import { MAX_COMMENT_LENGTH } from 'common/comment'
 
 // mqp: very unscientific, just balancing our willingness to accept load
 // with user willingness to put up with stale data
@@ -404,7 +405,7 @@ export const API = (_apiTypeCheck = {
     authed: true,
     returns: {} as any,
     props: z.object({
-      content: contentSchema,
+      content: z.string().max(MAX_COMMENT_LENGTH),
       channelId: z.number(),
     }),
   },

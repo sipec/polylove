@@ -16,6 +16,7 @@ import { CommentInputTextArea } from 'web/components/comments/comment-input'
 import { Title } from 'web/components/widgets/title'
 import { Row } from 'web/components/layout/row'
 import { firebaseLogin } from 'web/lib/firebase/users'
+import { tiptapToMarkdown } from 'common/util/tiptap-to-markdown'
 
 export const SendMessageButton = (props: {
   toUser: User
@@ -69,7 +70,7 @@ export const SendMessageButton = (props: {
 
     const msgRes = await api('create-private-user-message', {
       channelId: res.channelId,
-      content: editor.getJSON(),
+      content: tiptapToMarkdown(editor.getJSON()),
     }).catch((e: any) => {
       setError(e.message)
       setSubmitting(false)

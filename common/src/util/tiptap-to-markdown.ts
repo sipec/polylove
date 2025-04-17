@@ -2,7 +2,7 @@ import { type JSONContent } from '@tiptap/core' // Assuming you have the correct
 
 export function tiptapToMarkdown(doc: JSONContent) {
   if (doc.type !== 'doc') console.warn('not a doc')
-  return recurse(doc)
+  return recurse(doc).trim()
 }
 
 // block behavoirs:

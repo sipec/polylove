@@ -44,6 +44,7 @@ import {
 import { PrivateMessageChannel } from 'common/supabase/private-messages'
 import { ChatMessage } from 'common/chat-message'
 import { BackButton } from 'web/components/back-button'
+import { tiptapToMarkdown } from 'common/util/tiptap-to-markdown'
 
 export default function PrivateMessagesPage() {
   const router = useRouter()
@@ -165,7 +166,7 @@ export const PrivateChat = (props: {
 
     await api('create-private-user-message', {
       channelId,
-      content: editor.getJSON(),
+      content: tiptapToMarkdown(editor.getJSON()),
     })
       .then(() => {
         editor.commands.clearContent()
