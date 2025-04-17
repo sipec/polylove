@@ -8,7 +8,6 @@ import { Col } from './layout/col'
 import { Row } from './layout/row'
 import { RelativeTimestampNoTooltip } from './relative-timestamp'
 import { Linkify } from './widgets/linkify'
-import { UserHovercard } from './user/user-hovercard'
 import { UserLink } from './widgets/user-link'
 import { Avatar } from './widgets/avatar'
 import { MultiUserReactionModal } from './multi-user-reaction-link'
@@ -239,15 +238,13 @@ export function NotificationUserLink(props: {
 }) {
   const { userId, name, username, className, hideBadge } = props
   return (
-    <UserHovercard userId={userId ?? ''}>
-      <UserLink
-        user={{ id: userId || '', name: name || '', username: username || '' }}
-        className={clsx(
-          className ?? 'hover:text-primary-500 relative flex-shrink-0'
-        )}
-        hideBadge={hideBadge}
-      />
-    </UserHovercard>
+    <UserLink
+      user={{ id: userId || '', name: name || '', username: username || '' }}
+      className={clsx(
+        className ?? 'hover:text-primary-500 relative flex-shrink-0'
+      )}
+      hideBadge={hideBadge}
+    />
   )
 }
 

@@ -24,7 +24,6 @@
     "@headlessui/react": "1.7.11",
     "@heroicons/react": "1.0.6",
     "@popperjs/core": "2.0.0",
-    "@radix-ui/react-hover-card": "1.0.7",
     "@radix-ui/react-slider": "1.1.2",
     "@react-spring/web": "9.7.1",
     "@tiptap/core": "2.3.2",

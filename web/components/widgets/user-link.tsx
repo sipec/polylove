@@ -9,7 +9,6 @@ import { Avatar } from './avatar'
 import { DAY_MS } from 'common/util/time'
 import { linkClass } from './site-link'
 import { Col } from 'web/components/layout/col'
-import { UserHovercard } from '../user/user-hovercard'
 
 export const isFresh = (createdTime: number) =>
   createdTime > Date.now() - DAY_MS * 14
@@ -37,17 +36,15 @@ export function UserAvatarAndBadge(props: {
   const { username, avatarUrl } = user
 
   return (
-    <UserHovercard userId={user.id}>
-      <Row className={clsx('items-center gap-2', className)}>
-        <Avatar
-          avatarUrl={avatarUrl}
-          username={username}
-          size={'sm'}
-          noLink={noLink}
-        />
-        <UserLink user={user} noLink={noLink} />
-      </Row>
-    </UserHovercard>
+    <Row className={clsx('items-center gap-2', className)}>
+      <Avatar
+        avatarUrl={avatarUrl}
+        username={username}
+        size={'sm'}
+        noLink={noLink}
+      />
+      <UserLink user={user} noLink={noLink} />
+    </Row>
   )
 }
 

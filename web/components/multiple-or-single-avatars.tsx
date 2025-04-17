@@ -2,7 +2,6 @@ import { Avatar, AvatarSizeType } from 'web/components/widgets/avatar'
 import { Col } from 'web/components/layout/col'
 import { Row } from './layout/row'
 import clsx from 'clsx'
-import { UserHovercard } from './user/user-hovercard'
 
 export const MultipleOrSingleAvatars = (props: {
   avatars: Array<{ avatarUrl: string; id: string }>
@@ -14,6 +13,8 @@ export const MultipleOrSingleAvatars = (props: {
   className?: string
 }) => {
   const { avatars, className, onClick, size } = props
+
+  if (avatars.length === 0) return null
 
   if (avatars.length === 1) {
     return <Avatar size={size} avatarUrl={avatars[0].avatarUrl} />
@@ -43,9 +44,7 @@ export const MultipleOrSingleAvatars = (props: {
                 : {}
             }
           >
-            <UserHovercard userId={n.id}>
-              <Avatar size={size} avatarUrl={n.avatarUrl} />
-            </UserHovercard>
+            <Avatar size={size} avatarUrl={n.avatarUrl} />
           </div>
         ))}
       </Row>
