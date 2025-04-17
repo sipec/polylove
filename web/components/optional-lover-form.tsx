@@ -17,6 +17,7 @@ import { Races } from './race'
 import { Carousel } from 'web/components/widgets/carousel'
 import { tryCatch } from 'common/util/try-catch'
 import { LoverRow } from 'common/love/lover'
+import { removeNullOrUndefinedProps } from 'common/util/object'
 
 export const OptionalLoveUserForm = (props: {
   lover: LoverRow
@@ -44,7 +45,9 @@ export const OptionalLoveUserForm = (props: {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const { bio: _, ...otherLoverProps } = lover
-    const { error } = await tryCatch(updateLover(otherLoverProps as any))
+    const { error } = await tryCatch(
+      updateLover(removeNullOrUndefinedProps(otherLoverProps) as any)
+    )
     if (error) {
       console.error(error)
       return
