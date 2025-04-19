@@ -18,3 +18,6 @@ add constraint reports_content_owner_id_fkey foreign key (content_owner_id) refe
 
 alter table reports
 add constraint reports_user_id_fkey foreign key (user_id) references users (id);
+
+-- Row Level Security
+alter table reports enable row level security;
