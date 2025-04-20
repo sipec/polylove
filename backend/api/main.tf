@@ -17,7 +17,7 @@ locals {
   region  = "us-west1"
   zone         = "us-west1-b"
   service_name = "api"
-  machine_type = var.env == "dev" ? "e2-small" : "e2-medium"
+  machine_type = "e2-small"
 }
 
 terraform {
