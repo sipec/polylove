@@ -120,7 +120,7 @@ export function DesktopFilters(props: {
             content={
               <LocationFilterText
                 youLover={youLover}
-                nearbyOriginLocation={locationFilterProps.nearbyOriginLocation}
+                location={locationFilterProps.location}
                 radius={locationFilterProps.radius}
                 highlightedClass={open ? 'text-primary-500' : ''}
               />

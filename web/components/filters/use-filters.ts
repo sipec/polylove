@@ -70,7 +70,7 @@ export const useFilters = (you: Lover | undefined) => {
         ? initialFilters
         : { ...initialFilters, orderBy: 'created_time' }
     )
-    setNearbyOriginLocation(undefined)
+    setLocation(undefined)
   }
 
   const [radius, setRadius] = usePersistentLocalState<number>(
@@ -80,21 +80,19 @@ export const useFilters = (you: Lover | undefined) => {
 
   const debouncedSetRadius = useCallback(debounce(setRadius, 200), [setRadius])
 
-  const [nearbyOriginLocation, setNearbyOriginLocation] =
-    usePersistentLocalState<OriginLocation | undefined | null>(
-      undefined,
-      'nearby-origin-location'
-    )
+  const [location, setLocation] = usePersistentLocalState<
+    OriginLocation | undefined | null
+  >(undefined, 'nearby-origin-location')
 
-  const nearbyCities = useNearbyCities(nearbyOriginLocation?.id, radius)
+  const nearbyCities = useNearbyCities(location?.id, radius)
 
   useEffectCheckEquality(() => {
     updateFilter({ geodbCityIds: nearbyCities })
   }, [nearbyCities])
 
   const locationFilterProps = {
-    nearbyOriginLocation,
-    setNearbyOriginLocation,
+    location,
+    setLocation,
     radius,
     setRadius: debouncedSetRadius,
   }
@@ -115,8 +113,8 @@ export const useFilters = (you: Lover | undefined) => {
 
   const isYourFilters =
     !!you &&
-    !!nearbyOriginLocation &&
-    nearbyOriginLocation.id === you.geodb_city_id &&
+    !!location &&
+    location.id === you.geodb_city_id &&
     isEqual(filters.genders, yourFilters.genders) &&
     !!filters.pref_gender &&
     filters.pref_gender.length == 1 &&
@@ -128,12 +126,10 @@ export const useFilters = (you: Lover | undefined) => {
   const setYourFilters = (checked: boolean) => {
     if (checked) {
       updateFilter(yourFilters)
-      debouncedSetRadius(100)
+      setRadius(100)
+      debouncedSetRadius(100) // clear any pending debounced sets
       if (you?.geodb_city_id && you.city) {
-        setNearbyOriginLocation({
-          id: you?.geodb_city_id,
-          name: you?.city,
-        })
+        setLocation({ id: you?.geodb_city_id, name: you?.city })
       }
     } else {
       clearFilters()

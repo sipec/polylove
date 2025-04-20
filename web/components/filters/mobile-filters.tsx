@@ -126,14 +126,14 @@ export function MobileFilters(props: {
         title="Location"
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}
-        isActive={!!locationFilterProps.nearbyOriginLocation}
+        isActive={!!locationFilterProps.location}
         selection={
           <LocationFilterText
-            nearbyOriginLocation={locationFilterProps.nearbyOriginLocation}
+            location={locationFilterProps.location}
             radius={locationFilterProps.radius}
             youLover={youLover}
             highlightedClass={
-              !locationFilterProps.nearbyOriginLocation
+              !locationFilterProps.location
                 ? 'text-ink-400'
                 : 'text-primary-600'
             }
@@ -214,7 +214,7 @@ export function MobileFilters(props: {
         className="text-ink-500 hover:text-primary-500 underline"
         onClick={clearFilters}
       >
-        Clear filters
+        Reset filters
       </button>
     </Col>
   )

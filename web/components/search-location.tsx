@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import { Row as rowFor } from 'common/supabase/utils'
 import { useEffect, useRef, useState } from 'react'
 import { OriginLocation } from './filters/location-filter'
 import { api } from 'web/lib/api'
