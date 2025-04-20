@@ -5,7 +5,6 @@ import { User } from 'common/user'
 import { first } from 'lodash'
 import { log } from 'shared/monitoring/log'
 import { getPrivateUser, getUser } from 'shared/utils'
-import { type JSONContent } from '@tiptap/core'
 import { APIError } from 'common/api/utils'
 import { broadcast } from 'shared/websockets/server'
 import { track } from 'shared/analytics'
@@ -17,26 +16,11 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-export const leaveChatContent = (userName: string) => ({
-  type: 'doc',
-  content: [
-    {
-      type: 'paragraph',
-      content: [{ text: `${userName} left the chat`, type: 'text' }],
-    },
-  ],
-})
-export const joinChatContent = (userName: string) => {
-  return {
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: [{ text: `${userName} joined the chat!`, type: 'text' }],
-      },
-    ],
-  }
-}
+export const leaveChatContent = (userName: string) =>
+  `${userName} left the chat`
+
+export const joinChatContent = (userName: string) =>
+  `${userName} joined the chat!`
 
 export const insertPrivateMessage = async (
   content: Json,
@@ -82,7 +66,7 @@ export const addUsersToPrivateMessageChannel = async (
 export const createPrivateUserMessageMain = async (
   creator: User,
   channelId: number,
-  content: JSONContent,
+  content: string,
   pg: SupabaseDirectClient,
   visibility: ChatVisibility
 ) => {
@@ -101,7 +85,7 @@ export const createPrivateUserMessageMain = async (
   await insertPrivateMessage(content, channelId, creator.id, visibility, pg)
 
   const privateMessage = {
-    content: content as Json,
+    content: content,
     channel_id: channelId,
     user_id: creator.id,
   }

@@ -29,6 +29,6 @@
   - [x] tiptap -> markdown
   - [x] markdown -> react
   - [ ] markdown -> editor component
-  - [ ] migrate mesages
+  - [x] migrate mesages
   - [ ] migrate comments
   - [ ] migrate profiles

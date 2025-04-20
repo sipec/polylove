@@ -43,7 +43,6 @@ export function Richify(props: {
         'empty:prose-p:-mt-px empty:prose-p:pt-px' // make empty paragraphs have height
       )}
     >
-      {/* <pre className="not-prose font-mono text-xs">{text}</pre> */}
       <Markdown
         remarkPlugins={[
           disableIndentCodeAndSetextHead,

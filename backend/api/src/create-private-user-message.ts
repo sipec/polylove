@@ -16,7 +16,7 @@ export const createPrivateUserMessage: APIHandler<
   return await createPrivateUserMessageMain(
     creator,
     channelId,
-    content as any,
+    content,
     pg,
     'private'
   )

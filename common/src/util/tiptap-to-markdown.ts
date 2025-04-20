@@ -134,8 +134,3 @@ const joinBlockChildren = (children: string[]) => {
   }
   return md.trim()
 }
-
-// join inline children: .join('')
-
-const sanitize = (text: string) =>
-  text.replace(/([#_*`[\]()<>{}+-.!|\\])/g, '\\$1')
