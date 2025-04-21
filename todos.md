@@ -7,7 +7,7 @@
 - [ ] Dev setup docs
 - [x] Analytics (posthog)
 - [ ] Grafana
-- [ ] Share profile to anyone with link
+- [x] Share profile to anyone with link
 - [ ] Relationships
 - [ ] Settings flow
 
