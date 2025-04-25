@@ -21,14 +21,17 @@ export function UserHandles(props: { links: Socials; className?: string }) {
   return (
     <Row
       className={clsx(
-        'text-ink-400 flex-wrap items-center gap-2 sm:gap-4',
+        'text-ink-400 flex-wrap items-center gap-2 sm:gap-x-4',
         className
       )}
     >
       {display.map(({ platform, label, url }) => (
         <a key={platform} target="_blank" href={url}>
           <Row className="items-center gap-1">
-            <SocialIcon site={platform as any} className="h-4 w-4" />
+            <SocialIcon
+              site={platform as any}
+              className="text-primary-700 h-4 w-4"
+            />
             <span className="text-ink-400 text-sm">{label}</span>
           </Row>
         </a>

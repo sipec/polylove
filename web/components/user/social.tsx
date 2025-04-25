@@ -1,21 +1,37 @@
 import { LinkIcon } from '@heroicons/react/solid'
-import clsx from 'clsx'
-import Foldy from 'web/public/manifold-logo.svg'
 import { Site } from 'common/socials'
+import { ReactNode } from 'react'
+import { LuBookmark } from 'react-icons/lu'
+import {
+  TbBrandBluesky,
+  TbBrandDiscord,
+  TbBrandFacebook,
+  TbBrandGithub,
+  TbBrandInstagram,
+  TbBrandLinkedin,
+  TbBrandMastodon,
+  TbBrandOnlyfans,
+  TbBrandSpotify,
+  TbBrandX,
+} from 'react-icons/tb'
+import Foldy from 'web/public/manifold-logo.svg'
 
 export const PLATFORM_ICONS: {
-  [key in Site]: (props: { className?: string }) => JSX.Element
+  [key in Site]: (props: { className?: string }) => ReactNode
 } = {
   site: LinkIcon,
-  x: (props) => <img {...props} src="/twitter-logo.svg" alt="x.com" />,
-  discord: (props) => <img {...props} src="/discord-logo.svg" alt="Discord" />,
-  manifold: ({ className, ...props }) => (
-    <Foldy
-      {...props}
-      className={clsx(className, 'stroke-indigo-700 dark:stroke-indigo-400')}
-      alt="Manifold"
-    />
-  ),
+  x: TbBrandX,
+  discord: TbBrandDiscord,
+  manifold: Foldy,
+  bluesky: TbBrandBluesky,
+  mastodon: TbBrandMastodon,
+  substack: LuBookmark,
+  onlyfans: TbBrandOnlyfans,
+  instagram: TbBrandInstagram,
+  github: TbBrandGithub,
+  linkedin: TbBrandLinkedin,
+  facebook: TbBrandFacebook,
+  spotify: TbBrandSpotify,
 }
 
 export const SocialIcon = (props: { site: string; className?: string }) => {

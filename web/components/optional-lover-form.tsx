@@ -106,10 +106,10 @@ export const OptionalLoveUserForm = (props: {
               .filter(([_, value]) => value != null)
               .map(([platform, value]) => (
                 <>
-                  <div className="col-span-3 mt-2 self-center sm:col-span-1">
+                  <div className="col-span-3 mt-2 flex items-center gap-2 self-center sm:col-span-1">
                     <SocialIcon
                       site={platform as any}
-                      className="mr-2 inline h-4 w-4"
+                      className="text-primary-700 h-4 w-4"
                     />
                     {PLATFORM_LABELS[platform as Site] ?? platform}
                   </div>
