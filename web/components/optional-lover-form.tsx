@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Title } from 'web/components/widgets/title'
 import { Col } from 'web/components/layout/col'
 import clsx from 'clsx'
@@ -105,7 +105,7 @@ export const OptionalLoveUserForm = (props: {
             {Object.entries(newLinks)
               .filter(([_, value]) => value != null)
               .map(([platform, value]) => (
-                <>
+                <Fragment key={platform}>
                   <div className="col-span-3 mt-2 flex items-center gap-2 self-center sm:col-span-1">
                     <SocialIcon
                       site={platform as any}
@@ -123,7 +123,7 @@ export const OptionalLoveUserForm = (props: {
                     <XIcon className="h-6 w-6" />
                     <div className="sr-only">Remove</div>
                   </IconButton>
-                </>
+                </Fragment>
               ))}
 
             {/* Spacer */}
