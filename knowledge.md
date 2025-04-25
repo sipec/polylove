@@ -5,6 +5,7 @@ This is a dating app. It has questions and profiles.
 ## Development Workflow
 
 - Current progress in todos.md
+- Global packages should be installed with `bun`, not npm or yarn.
 - Do not run build commands after each change unless specifically requested by me. Mostly, I'm typically already running a dev server.
   - HUMAN TODO: create a yarn precommit function that does basic formatting that normally happens on save, as well as lint and type checks.
 
@@ -249,91 +250,8 @@ export function broadcastUpdatedUser(user: Partial<User> & { id: string }) {
   broadcast(`user/${user.id}`, { user })
 }
 
-export function broadcastNewBets(
-  contractId: string,
-  visibility: Visibility,
-  bets: Bet[]
-) {
-  const payload = { bets }
-  broadcastMulti([`contract/${contractId}/new-bet`], payload)
-
-  if (visibility === 'public') {
-    broadcastMulti(['global', 'global/new-bet'], payload)
-  }
-
-  const newOrders = bets.filter((b) => b.limitProb && !b.isFilled) as LimitBet[]
-  broadcastOrders(newOrders)
-}
-
-export function broadcastOrders(bets: LimitBet[]) {
-  if (bets.length === 0) return
-  const { contractId } = bets[0]
-  broadcast(`contract/${contractId}/orders`, { bets })
-}
-
-export function broadcastNewComment(
-  contractId: string,
-  visibility: Visibility,
-  creator: User,
-  comment: ContractComment
-) {
-  const payload = { creator, comment }
-  const topics = [`contract/${contractId}/new-comment`]
-  if (visibility === 'public') {
-    topics.push('global', 'global/new-comment')
-  }
-  broadcastMulti(topics, payload)
-}
-
-export function broadcastNewContract(contract: Contract, creator: User) {
-  const payload = { contract, creator }
-  if (contract.visibility === 'public') {
-    broadcastMulti(['global', 'global/new-contract'], payload)
-  }
-}
-
-export function broadcastNewSubsidy(
-  contractId: string,
-  visibility: Visibility,
-  amount: number
-) {
-  const payload = { amount }
-  const topics = [`contract/${contractId}/new-subsidy`]
-  if (visibility === 'public') {
-    topics.push('global', 'global/new-subsidy')
-  }
-  broadcastMulti(topics, payload)
-}
-
-export function broadcastUpdatedContract(
-  visibility: Visibility,
-  contract: Partial<Contract> & { id: string }
-) {
-  const payload = { contract }
-  const topics = [`contract/${contract.id}`]
-  if (visibility === 'public') {
-    topics.push('global', 'global/updated-contract')
-  }
-  broadcastMulti(topics, payload)
-}
-
-export function broadcastNewAnswer(answer: Answer) {
-  const payload = { answer }
-  const topics = [`contract/${answer.contractId}/new-answer`]
-  // TODO: broadcast to global. we don't do this rn cuz too lazy get contract visibility to filter out unlisted
-  broadcastMulti(topics, payload)
-}
-
-export function broadcastUpdatedAnswers(
-  contractId: string,
-  answers: (Partial<Answer> & { id: string })[]
-) {
-  if (answers.length === 0) return
-
-  const payload = { answers }
-  const topics = [`contract/${contractId}/updated-answers`]
-  // TODO: broadcast to global
-  broadcastMulti(topics, payload)
+export function broadcastUpdatedComment(comment: Comment) {
+  broadcast(`user/${comment.onUserId}/comment`, { comment })
 }
 ```
 
@@ -361,10 +279,17 @@ runScript(async ({ pg }) => {
 })
 ```
 
-We recommend running scripts via `ts-node`. Example:
+Generally scripts should be run by me, especially if they modify backend state or schema.
+But if you need to run a script, you can use `bun`. For example:
 
 ```sh
-ts-node manicode.ts "Generate a page called cowp, which has cows that make noises!"
+bun run manicode.ts "Generate a page called cowp, which has cows that make noises!"
+```
+
+if that doesn't work, try
+
+```sh
+bun x ts-node manicode.ts "Generate a page called cowp, which has cows that make noises!"
 ```
 
 ---
@@ -413,7 +338,7 @@ And finally, you need to register the handler in `backend/api/src/routes.ts`
 import { placeBet } from './place-bet'
 ...
 
-const handlers: { [k in APIPath]: APIHandler<k> } = {
+const handlers = {
   bet: placeBet,
   ...
 }
@@ -456,6 +381,8 @@ export const getUniqueBettorIds = async (
   return res.map((r) => r.user_id as string)
 }
 ```
+
+(you may notice we write sql in lowercase)
 
 We have a few helper functions for updating and inserting data into the database.
 
@@ -513,15 +440,7 @@ Use these functions instead of string concatenation.
 
 ### Misc coding tips
 
-We have many useful hooks that should be reused rather than rewriting them again. For example, to get the live global bets, you should use
-
-```ts
-import { useSubscribeGlobalBets } from 'client-common/hooks/use-bets'
-
-...
-
-const bets = useSubscribeGlobalBets()
-```
+We have many useful hooks that should be reused rather than rewriting them again.
 
 ---
 
@@ -542,31 +461,5 @@ Instead of Sets, consider using lodash's uniq function:
 const betIds = uniq([])
 for (const id of betIds) {
   ...
-}
-```
-
----
-
-If you don't provide the type, it will default to unknown, and cause a type error
-
-```ts
-try {
-  await getUserDataDump(identifier)
-}
-} catch (error) {
-  console.error('Error:', error.message) // Type error accessing ".message" since error is unknown type.
-}
-```
-
-You can fix it by either adding a type annotation, or checking if a field is in the object (`'message' in error`) or by using instanceof:
-
-```ts
-try {
-  await getUserDataDump(identifier)
-} catch (error) {
-  console.error(
-    'Error:',
-    error instanceof Error ? error.message : String(error)
-  )
 }
 ```

@@ -123,9 +123,7 @@ export const API = (_apiTypeCheck = {
       username: z.string().trim().min(1).optional(),
       avatarUrl: z.string().optional(),
       bio: z.string().optional(),
-      website: z.string().optional(),
-      twitterHandle: z.string().optional(),
-      discordHandle: z.string().optional(),
+      link: z.record(z.string().nullable()).optional(),
       // settings
       optOutBetWarnings: z.boolean().optional(),
       isAdvancedTrader: z.boolean().optional(),
@@ -133,6 +131,14 @@ export const API = (_apiTypeCheck = {
       shouldShowWelcome: z.boolean().optional(),
       hasSeenContractFollowModal: z.boolean().optional(),
       hasSeenLoanModal: z.boolean().optional(),
+
+      // Legacy fields (deprecated)
+      /** @deprecated Use links.site instead */
+      website: z.string().optional(),
+      /** @deprecated Use links.x instead */
+      twitterHandle: z.string().optional(),
+      /** @deprecated Use links.discord instead */
+      discordHandle: z.string().optional(),
     }),
     returns: {} as FullUser,
   },
@@ -443,8 +449,7 @@ export const API = (_apiTypeCheck = {
     }),
   },
   'search-location': {
-    method: 'POST', // TODO: should be GET
-
+    method: 'POST',
     authed: false,
     returns: {} as any,
     props: z.object({
