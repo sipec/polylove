@@ -2,12 +2,13 @@ import { toUserAPIResponse } from 'common/api/user-types'
 import { RESERVED_PATHS } from 'common/envs/constants'
 import { cleanDisplayName, cleanUsername } from 'common/util/clean-username'
 import { removeUndefinedProps } from 'common/util/object'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, mapValues } from 'lodash'
 import { createSupabaseDirectClient } from 'shared/supabase/init'
 import { getUser, getUserByUsername } from 'shared/utils'
 import { APIError, APIHandler } from './helpers/endpoint'
 import { updateUser } from 'shared/supabase/users'
 import { broadcastUpdatedUser } from 'shared/websockets/helpers'
+import { strip } from 'common/socials'
 
 export const updateMe: APIHandler<'me/update'> = async (props, auth) => {
   const update = cloneDeep(props)
@@ -31,8 +32,43 @@ export const updateMe: APIHandler<'me/update'> = async (props, auth) => {
 
   const pg = createSupabaseDirectClient()
 
-  const { name, username, avatarUrl, ...rest } = update
+  const { name, username, avatarUrl, link = {}, ...rest } = update
   await updateUser(pg, auth.uid, removeUndefinedProps(rest))
+
+  if (update.website != undefined) link.site = update.website
+  if (update.twitterHandle != undefined) link.x = update.twitterHandle
+  if (update.discordHandle != undefined) link.discord = update.discordHandle
+
+  const stripped = mapValues(
+    link,
+    (value, site) => value && strip(site as any, value)
+  )
+
+  const adds = {} as { [key: string]: string }
+  const removes = []
+  for (const [key, value] of Object.entries(stripped)) {
+    if (value === null || value === '') {
+      removes.push(key)
+    } else if (value) {
+      adds[key] = value
+    }
+  }
+
+  let newLinks: any = null
+  if (Object.keys(adds).length > 0 || removes.length > 0) {
+    const data = await pg.oneOrNone(
+      `update users 
+      set data = jsonb_set(
+        data, '{link}',
+        (data->'link' || $(adds)) - $(removes)
+      )
+      where id = $(id)
+      returning data->'link' as link`,
+      { adds, removes, id: auth.uid }
+    )
+    newLinks = data?.link
+  }
+
   if (name || username || avatarUrl) {
     if (name) {
       await pg.none(`update users set name = $1 where id = $2`, [
@@ -51,9 +87,15 @@ export const updateMe: APIHandler<'me/update'> = async (props, auth) => {
     }
 
     broadcastUpdatedUser(
-      removeUndefinedProps({ id: auth.uid, name, username, avatarUrl })
+      removeUndefinedProps({
+        id: auth.uid,
+        name,
+        username,
+        avatarUrl,
+        link: newLinks ?? undefined,
+      })
     )
   }
 
-  return toUserAPIResponse({ ...user, ...update })
+  return toUserAPIResponse({ ...user, ...update, link: newLinks })
 }

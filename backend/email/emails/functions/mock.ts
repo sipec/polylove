@@ -21,6 +21,7 @@ export const sinclairUser: User = {
   // url: 'https://manifold.love/Sinclair',
   // isAdmin: true,
   // isTrustworthy: false,
+  link: {},
 }
 
 export const sinclairLover: LoverRow = {
@@ -114,6 +115,7 @@ export const jamesUser: User = {
   id: '5LZ4LgYuySdL1huCWe7bti02ghx2',
   username: 'JamesGrugett',
   name: 'James',
+  link: {},
 }
 
 export const jamesLover: LoverRow = {

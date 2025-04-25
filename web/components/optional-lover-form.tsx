@@ -6,10 +6,10 @@ import { MultiCheckbox } from 'web/components/multi-checkbox'
 import { Row } from 'web/components/layout/row'
 import { Input } from 'web/components/widgets/input'
 import { ChoicesToggleGroup } from 'web/components/widgets/choices-toggle-group'
-import { Button } from 'web/components/buttons/button'
+import { Button, IconButton } from 'web/components/buttons/button'
 import { colClassName, labelClassName } from 'web/pages/signup'
 import { useRouter } from 'next/router'
-import { updateLover } from 'web/lib/api'
+import { updateLover, updateUser } from 'web/lib/api'
 import { Column } from 'common/supabase/utils'
 import { User } from 'common/user'
 import { track } from 'web/lib/service/analytics'
@@ -18,6 +18,11 @@ import { Carousel } from 'web/components/widgets/carousel'
 import { tryCatch } from 'common/util/try-catch'
 import { LoverRow } from 'common/love/lover'
 import { removeNullOrUndefinedProps } from 'common/util/object'
+import { isEqual } from 'lodash'
+import { PlatformSelect } from 'web/components/widgets/platform-select'
+import { type Site, PLATFORM_LABELS, SITE_ORDER } from 'common/socials'
+import { PlusIcon, XIcon } from '@heroicons/react/solid'
+import { SocialIcon } from './user/social'
 
 export const OptionalLoveUserForm = (props: {
   lover: LoverRow
@@ -42,6 +47,13 @@ export const OptionalLoveUserForm = (props: {
       : undefined
   )
 
+  const [newLinks, setNewLinks] = useState<Record<string, string | null>>(
+    user.link
+  )
+
+  const [newLinkPlatform, setNewLinkPlatform] = useState('')
+  const [newLinkValue, setNewLinkValue] = useState('')
+
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const { bio: _, ...otherLoverProps } = lover
@@ -52,6 +64,14 @@ export const OptionalLoveUserForm = (props: {
       console.error(error)
       return
     }
+    if (!isEqual(newLinks, user.link)) {
+      const { error } = await tryCatch(updateUser({ link: newLinks }))
+      if (error) {
+        console.error(error)
+        return
+      }
+    }
+
     onSubmit && (await onSubmit())
     setIsSubmitting(false)
     track('submit love optional profile')
@@ -59,31 +79,87 @@ export const OptionalLoveUserForm = (props: {
       router.push(`/${user.username}${fromSignup ? '?fromSignup=true' : ''}`)
     else router.push('/')
   }
+
+  const updateUserLink = (platform: string, value: string | null) => {
+    setNewLinks((links) => ({ ...links, [platform]: value }))
+  }
+
+  const addNewLink = () => {
+    if (newLinkPlatform && newLinkValue) {
+      updateUserLink(newLinkPlatform.toLowerCase().trim(), newLinkValue.trim())
+      setNewLinkPlatform('')
+      setNewLinkValue('')
+    }
+  }
+
   return (
     <>
       <Title>More about me</Title>
       <div className="text-ink-500 mb-6 text-lg">Optional information</div>
 
       <Col className={'gap-8'}>
-        <Col className={clsx(colClassName)}>
-          <label className={clsx(labelClassName)}>
-            Website or date doc link
-          </label>
-          <Input
-            type="text"
-            onChange={(e) => setLover('website', e.target.value)}
-            className={'w-full sm:w-96'}
-            value={lover['website'] ?? undefined}
-          />
-        </Col>
-        <Col className={clsx(colClassName)}>
-          <label className={clsx(labelClassName)}>Twitter</label>
-          <Input
-            type="text"
-            onChange={(e) => setLover('twitter', e.target.value)}
-            className={'w-full sm:w-96'}
-            value={lover['twitter'] ?? undefined}
-          />
+        <Col className={clsx(colClassName, 'pb-4')}>
+          <label className={clsx(labelClassName)}>Socials</label>
+
+          <div className="grid w-full grid-cols-[8rem_1fr_auto] gap-2">
+            {Object.entries(newLinks)
+              .filter(([_, value]) => value != null)
+              .map(([platform, value]) => (
+                <>
+                  <div className="col-span-3 mt-2 self-center sm:col-span-1">
+                    <SocialIcon
+                      site={platform as any}
+                      className="mr-2 inline h-4 w-4"
+                    />
+                    {PLATFORM_LABELS[platform as Site] ?? platform}
+                  </div>
+                  <Input
+                    type="text"
+                    value={value!}
+                    onChange={(e) => updateUserLink(platform, e.target.value)}
+                    className="col-span-2 sm:col-span-1"
+                  />
+                  <IconButton onClick={() => updateUserLink(platform, null)}>
+                    <XIcon className="h-6 w-6" />
+                    <div className="sr-only">Remove</div>
+                  </IconButton>
+                </>
+              ))}
+
+            {/* Spacer */}
+            <div className="col-span-3 h-4" />
+
+            <PlatformSelect
+              value={newLinkPlatform}
+              onChange={setNewLinkPlatform}
+              className="h-full !w-full"
+            />
+            <Input
+              type="text"
+              placeholder={
+                SITE_ORDER.includes(newLinkPlatform as any) &&
+                newLinkPlatform != 'site'
+                  ? 'Username or URL'
+                  : 'Site URL'
+              }
+              value={newLinkValue}
+              onChange={(e) => setNewLinkValue(e.target.value)}
+              // disable password managers
+              autoComplete="off"
+              data-1p-ignore
+              data-lpignore="true"
+              data-bwignore="true"
+              data-protonpass-ignore="true"
+            />
+            <Button
+              color="gray-outline"
+              onClick={addNewLink}
+              disabled={!newLinkPlatform || !newLinkValue}
+            >
+              <PlusIcon className="h-6 w-6" />
+              <div className="sr-only">Add</div>
+            </Button>
+          </div>
         </Col>
 
         <Col className={clsx(colClassName)}>

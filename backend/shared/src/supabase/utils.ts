@@ -112,7 +112,10 @@ export async function bulkUpdateData<T extends TableName>(
 ) {
   if (updates.length > 0) {
     const values = updates
-      .map((update) => `('${update.id}', '${JSON.stringify(update)}'::jsonb)`)
+      .map(
+        ({ id, ...update }) =>
+          `('${id}', '${JSON.stringify(update).replace("'", "''")}'::jsonb)`
+      )
       .join(',\n')
 
     await db.none(

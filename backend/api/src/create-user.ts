@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin'
-import { PrivateUser, User } from 'common/user'
+import { PrivateUser } from 'common/user'
 import { randomString } from 'common/util/random'
 import { cleanDisplayName, cleanUsername } from 'common/util/clean-username'
 import { getIp, track } from 'shared/analytics'
@@ -82,12 +82,13 @@ export const createUser: APIHandler<'create-user'> = async (
     if (sameNameUser)
       throw new APIError(403, 'Username already taken', { username })
 
-    const user: Partial<User> = removeUndefinedProps({
+    const user = removeUndefinedProps({
       avatarUrl,
       isBannedFromPosting: Boolean(
         (deviceToken && bannedDeviceTokens.includes(deviceToken)) ||
           (ip && bannedIpAddresses.includes(ip))
       ),
+      link: {},
     })
 
     const privateUser: PrivateUser = {

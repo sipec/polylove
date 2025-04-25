@@ -1,3 +1,4 @@
+import { Socials } from './socials'
 import { notification_preferences } from './user-notification-preferences'
 
 export type User = {
@@ -10,9 +11,18 @@ export type User = {
 
   // For their user page
   bio?: string
+
+  // Social links
+  link: Socials
+
+  // Legacy fields (deprecated)
+  /** @deprecated Use link.site instead */
   website?: string
+  /** @deprecated Use link.x instead */
   twitterHandle?: string
+  /** @deprecated Use link.discord instead */
   discordHandle?: string
+  /** @deprecated Use link.manifold instead */
   manifoldHandle?: string
 
   isBannedFromPosting?: boolean
