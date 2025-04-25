@@ -9,12 +9,12 @@ import { getNotificationDestinationsForUser } from 'common/user-notification-pre
 import { Notification } from 'common/notifications'
 import { insertNotificationToSupabase } from 'shared/supabase/notifications'
 import { User } from 'common/user'
-import { richTextToString } from 'common/util/parse'
 import * as crypto from 'crypto'
 import { sendNewEndorsementEmail } from 'email/functions/helpers'
 import { type Row } from 'common/supabase/utils'
 import { broadcastUpdatedComment } from 'shared/websockets/helpers'
 import { convertComment } from 'common/supabase/comment'
+import { tiptapToMarkdown } from 'common/util/tiptap-to-markdown'
 
 export const MAX_COMMENT_JSON_LENGTH = 20000
 
@@ -49,7 +49,7 @@ export const createComment: APIHandler<'create-comment'> = async (
     await createNewCommentOnLoverNotification(
       onUser,
       creator,
-      richTextToString(content),
+      tiptapToMarkdown(content),
       comment.id,
       pg
     )

@@ -12,19 +12,13 @@
   "sideEffects": false,
   "dependencies": {
     "@supabase/supabase-js": "2.38.5",
-    "@tiptap/core": "2.3.2",
-    "@tiptap/extension-image": "2.3.2",
-    "@tiptap/extension-link": "2.3.2",
-    "@tiptap/extension-mention": "2.3.2",
-    "@tiptap/pm": "2.3.2",
-    "@tiptap/starter-kit": "2.3.2",
-    "@tiptap/suggestion": "2.3.2",
     "dayjs": "1.11.4",
     "lodash": "4.17.21",
     "string-similarity": "4.0.4",
     "zod": "3.21.4"
   },
   "devDependencies": {
+    "@tiptap/core": "2.3.2",
     "@types/jest": "29.2.4",
     "@types/lodash": "4.14.178",
     "@types/string-similarity": "4.0.0",

@@ -29,14 +29,6 @@
     "@google-cloud/secret-manager": "4.2.1",
     "@react-email/components": "0.0.33",
     "@supabase/supabase-js": "2.38.5",
-    "@tiptap/core": "2.3.2",
-    "@tiptap/extension-image": "2.3.2",
-    "@tiptap/extension-link": "2.3.2",
-    "@tiptap/extension-mention": "2.3.2",
-    "@tiptap/html": "2.3.2",
-    "@tiptap/pm": "2.3.2",
-    "@tiptap/starter-kit": "2.3.2",
-    "@tiptap/suggestion": "2.3.2",
     "colors": "1.4.0",
     "cors": "2.8.5",
     "dayjs": "1.11.4",
@@ -62,6 +54,7 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
+    "@tiptap/core": "2.3.2",
     "@types/cors": "2.8.17",
     "@types/marked": "4.0.7",
     "@types/twilio": "3.19.3",

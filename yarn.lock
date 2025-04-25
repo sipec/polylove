@@ -4785,13 +4785,6 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-text/-/extension-text-2.3.2.tgz#000c1c4d5ae21b8ddef777b8298b67260e13274f"
   integrity sha512-a3whwDyyOsrmOQbfeY+Fm5XypSRgT3IGqWgz0r4U7oko57/X6Env08F1Ie2e2UkQw9B1MoW9cm3dC6jvrdzzYA==
 
-"@tiptap/html@2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@tiptap/html/-/html-2.3.2.tgz#4fe5a921563330b242bf3f6c786bdcbde3c7f905"
-  integrity sha512-2pkdqFI4KqHb6/UJanSX5sXD72RlKWb6xjAP+TXwnbuy61M4koZFkQ+zTdVlyyur5Ar7DC9JSNskLWDlqkDmRA==
-  dependencies:
-    zeed-dom "^0.10.9"
-
 "@tiptap/pm@2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@tiptap/pm/-/pm-2.3.2.tgz#3da84a19bf141ebfbea7b38aec7fc2bbdf8b3690"
@@ -13896,13 +13889,6 @@ yoga-wasm-web@0.3.3, yoga-wasm-web@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/yoga-wasm-web/-/yoga-wasm-web-0.3.3.tgz#eb8e9fcb18e5e651994732f19a220cb885d932ba"
   integrity sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==
-
-zeed-dom@^0.10.9:
-  version "0.10.11"
-  resolved "https://registry.yarnpkg.com/zeed-dom/-/zeed-dom-0.10.11.tgz#36c7ded1aa4e638794049d90d1f6b0369000c9ac"
-  integrity sha512-7ukbu6aQKx34OQ7PfUIxOuAhk2MvyZY/t4/IJsVzy76zuMzfhE74+Dbyp8SHiUJPTPkF0FflP1KVrGJ7gk9IHw==
-  dependencies:
-    css-what "^6.1.0"
 
 zod@3.21.4:
   version "3.21.4"

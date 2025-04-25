@@ -14,7 +14,7 @@ import clsx from 'clsx'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { DisplayMention } from '../editor/user-mention/mention-extension'
 import { linkClass } from './site-link'
-import Iframe from 'common/util/tiptap-iframe'
+import Iframe from '../editor/iframe-extension'
 import { debounce, noop } from 'lodash'
 import { FloatingFormatMenu } from '../editor/floating-format-menu'
 import { StickyFormatMenu } from '../editor/sticky-format-menu'
@@ -24,9 +24,9 @@ import { EmojiExtension } from '../editor/emoji/emoji-extension'
 import { nodeViewMiddleware } from '../editor/nodeview-middleware'
 import { BasicImage, DisplayImage, MediumDisplayImage } from '../editor/image'
 import { usePersistentLocalState } from 'web/hooks/use-persistent-local-state'
-import { richTextToString } from 'common/util/parse'
 import { safeLocalStorage } from 'web/lib/util/local'
 import { Richify } from './richify'
+import { tiptapToMarkdown } from 'common/util/tiptap-to-markdown'
 
 const DisplayLink = Link.extend({
   renderHTML({ HTMLAttributes }) {
@@ -93,8 +93,8 @@ export function useTextEditor(props: {
 
   const save = useCallback(
     debounce((newContent: JSONContent) => {
-      const oldText = richTextToString(content)
-      const newText = richTextToString(newContent)
+      const oldText = content ? tiptapToMarkdown(content) : ''
+      const newText = tiptapToMarkdown(newContent)
       if (oldText.length === 0 && newText.length === 0) {
         safeLocalStorage?.removeItem(getEditorLocalStorageKey(key ?? ''))
       } else {
