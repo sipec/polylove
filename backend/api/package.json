@@ -40,10 +40,8 @@
     "colors": "1.4.0",
     "cors": "2.8.5",
     "dayjs": "1.11.4",
-    "expo-server-sdk": "3.6.0",
     "express": "4.18.1",
     "firebase-admin": "11.11.1",
-    "form-data": "4.0.0",
     "gcp-metadata": "6.1.0",
     "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
@@ -53,18 +51,13 @@
     "react-dom": "19.0.0",
     "react-email": "3.0.7",
     "resend": "4.1.2",
-    "sharp": "0.32.6",
     "string-similarity": "4.0.4",
-    "stripe": "8.194.0",
-    "twilio": "5.0.1",
     "twitter-api-v2": "1.15.0",
     "ws": "8.17.0",
     "zod": "3.21.4"
   },
   "devDependencies": {
     "@types/cors": "2.8.17",
-    "@types/marked": "4.0.7",
-    "@types/twilio": "3.19.3",
     "@types/ws": "8.5.10"
   }
 }

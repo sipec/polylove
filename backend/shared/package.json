@@ -12,12 +12,10 @@
   "dependencies": {
     "@google-cloud/monitoring": "4.0.0",
     "@google-cloud/secret-manager": "4.2.1",
-    "@stdlib/math-base-special-betaincinv": "0.2.1",
     "@tiptap/core": "2.3.2",
     "@tiptap/html": "2.3.2",
     "colors": "1.4.0",
     "dayjs": "1.11.4",
-    "expo-server-sdk": "3.6.0",
     "firebase-admin": "11.11.1",
     "gcp-metadata": "6.1.0",
     "lodash": "4.17.21",
