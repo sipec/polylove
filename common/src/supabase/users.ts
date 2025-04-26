@@ -5,7 +5,9 @@ export async function getUserForStaticProps(
   db: SupabaseClient,
   username: string
 ) {
-  const { data } = await run(db.from('users').select().eq('username', username))
+  const { data } = await run(
+    db.from('users').select().ilike('username', username)
+  )
   return convertUser(data[0] ?? null)
 }
 
@@ -18,7 +20,7 @@ export function convertUser(row: Row<'users'> | null): User | null {
     id: row.id,
     username: row.username,
     name: row.name,
-    createdTime: tsToMillis(row.created_time)
+    createdTime: tsToMillis(row.created_time),
   } as User
 }
 

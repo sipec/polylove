@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { removeUndefinedProps } from 'common/util/object'
 import { LovePage } from 'web/components/love-page'
 import { useLoverByUser } from 'web/hooks/use-lover'
 import { Button } from 'web/components/buttons/button'
@@ -15,26 +14,56 @@ import { BackButton } from 'web/components/back-button'
 import { useSaveReferral } from 'web/hooks/use-save-referral'
 import { getLoveOgImageUrl } from 'common/love/og-image'
 import { getLoverRow, LoverRow } from 'common/love/lover'
-import Custom404 from '../404'
 import { db } from 'web/lib/supabase/db'
 import { LoverProfile } from 'web/components/profile/lover-profile'
 import { User } from 'common/user'
 import { getUserForStaticProps } from 'common/supabase/users'
+import { type GetStaticProps } from 'next'
 
-export const getStaticProps = async (props: {
-  params: {
-    username: string
-  }
-}) => {
-  const { username } = props.params
+export const getStaticProps: GetStaticProps<
+  UserPageProps,
+  { username: string }
+> = async (props) => {
+  const { username } = props.params!
+
   const user = await getUserForStaticProps(db, username)
-  const lover = user ? await getLoverRow(user.id, db) : null
+
+  if (!user) {
+    return {
+      notFound: true,
+      props: {
+        customText:
+          'The One you are looking for is not on this site 😔\n...or perhaps you just mistyped?',
+      },
+    }
+  }
+
+  if (user.username !== username) {
+    // Found a case-insensitive match, redirect to correct casing
+    return {
+      redirect: {
+        destination: `/${user.username}`,
+        permanent: true,
+      },
+    }
+  }
+
+  if (user.userDeleted) {
+    return {
+      props: {
+        user: false,
+        username,
+      },
+    }
+  }
+
+  const lover = await getLoverRow(user.id, db)
   return {
-    props: removeUndefinedProps({
+    props: {
       user,
       username,
       lover,
-    }),
+    },
     revalidate: 15,
   }
 }
@@ -43,11 +72,31 @@ export const getStaticPaths = () => {
   return { paths: [], fallback: 'blocking' }
 }
 
-export default function UserPage(props: {
-  user: User | null
+type UserPageProps = DeletedUserPageProps | ActiveUserPageProps
+
+type DeletedUserPageProps = {
+  user: false
   username: string
-  lover: LoverRow | null
-}) {
+}
+type ActiveUserPageProps = {
+  user: User
+  username: string
+  lover: LoverRow
+}
+
+export default function UserPage(props: UserPageProps) {
+  if (!props.user) {
+    return <div>This account has been deleted</div>
+  }
+
+  if (props.user.isBannedFromPosting) {
+    return <div>This account is banned</div>
+  }
+
+  return <UserPageInner {...props} />
+}
+
+function UserPageInner(props: ActiveUserPageProps) {
   const { user, username } = props
   const router = useRouter()
   const { query } = router
@@ -62,19 +111,8 @@ export default function UserPage(props: {
   const [staticLover] = useState(
     props.lover && user ? { ...props.lover, user: user } : null
   )
-  const { lover: clientLover, refreshLover } = useLoverByUser(user ?? undefined)
+  const { lover: clientLover, refreshLover } = useLoverByUser(user)
   const lover = clientLover ?? staticLover
-
-  if (!user) {
-    return <Custom404 />
-  }
-  if (user.userDeleted) {
-    return <div>This account has been deleted</div>
-  }
-
-  if (user.isBannedFromPosting) {
-    return <div>This account is banned</div>
-  }
 
   return (
     <LovePage
