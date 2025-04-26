@@ -32,10 +32,13 @@ export function CopyLinkOrShareButton(props: {
 }) {
   const { url, size, children, className, iconClassName, tooltip, color } =
     props
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const onClick = () => {
     if (!url) return
     copyToClipboard(url)
+    setIsSuccess(true)
+    setTimeout(() => setIsSuccess(false), 2000) // Reset after 2 seconds
   }
 
   return (
@@ -47,16 +50,28 @@ export function CopyLinkOrShareButton(props: {
     >
       <Button
         onClick={onClick}
-        className={className}
+        className={clsx(
+          className,
+          'active:text-white',
+          isSuccess && 'text-green-500 duration-[25ms] hover:text-green-200'
+        )}
         disabled={!url}
         size={size}
         color={color ?? 'gray-white'}
       >
-        <LinkIcon
-          strokeWidth={'2.5'}
-          className={clsx(iconClassName ?? 'h-[1.1rem]')}
-          aria-hidden="true"
-        />
+        {isSuccess ? (
+          <CheckIcon
+            strokeWidth={'3'}
+            className={clsx(iconClassName ?? 'h-[1.1rem]')}
+            aria-hidden="true"
+          />
+        ) : (
+          <LinkIcon
+            strokeWidth={'2.5'}
+            className={clsx(iconClassName ?? 'h-[1.1rem]')}
+            aria-hidden="true"
+          />
+        )}
         {children}
       </Button>
     </ToolTipOrDiv>
