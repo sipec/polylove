@@ -48,7 +48,7 @@ export const OptionalLoveUserForm = (props: {
   )
 
   const [newLinks, setNewLinks] = useState<Record<string, string | null>>(
-    user.link
+    user.link ?? {}
   )
 
   const [newLinkPlatform, setNewLinkPlatform] = useState('')

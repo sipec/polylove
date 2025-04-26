@@ -13,7 +13,7 @@ export type User = {
   bio?: string
 
   // Social links
-  link: Socials
+  link?: Socials
 
   // Legacy fields (deprecated)
   /** @deprecated Use link.site instead */

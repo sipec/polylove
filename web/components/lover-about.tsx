@@ -86,7 +86,7 @@ export default function LoverAbout(props: { lover: Lover }) {
         text={lover.is_vegetarian_or_vegan ? 'Vegetarian/Vegan' : null}
       />
       <WantsKids lover={lover} />
-      <UserHandles links={lover.user.link} />
+      <UserHandles links={lover.user.link ?? {}} />
     </Col>
   )
 }
