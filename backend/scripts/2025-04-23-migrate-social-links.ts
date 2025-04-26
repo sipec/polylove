@@ -44,4 +44,16 @@ runScript(async ({ pg }) => {
     log('updating users ', (count += u.length))
     await bulkUpdateData(pg, 'users', u)
   }
+
+  log('initializing the other users')
+  await pg.none(
+    `update users
+    set data = jsonb_set(
+      data,
+      '{link}',
+      COALESCE((data -> 'link'), '{}'::jsonb),
+      true
+    )
+    where data -> 'link' is null`
+  )
 })
