@@ -16,6 +16,7 @@ import { DisplayUser, FullUser } from './user-types'
 import { PrivateMessageChannel } from 'common/supabase/private-messages'
 import { Notification } from 'common/notifications'
 import { arrify } from 'common/util/array'
+import { notification_preference } from 'common/user-notification-preferences'
 
 // mqp: very unscientific, just balancing our willingness to accept load
 // with user willingness to put up with stale data
@@ -147,6 +148,15 @@ export const API = (_apiTypeCheck = {
     authed: true,
     props: combinedLoveUsersSchema.partial(),
     returns: {} as LoverRow,
+  },
+  'update-notif-settings': {
+    method: 'POST',
+    authed: true,
+    props: z.object({
+      type: z.string() as z.ZodType<notification_preference>,
+      medium: z.enum(['email', 'browser', 'mobile']),
+      enabled: z.boolean(),
+    }),
   },
   'me/delete': {
     method: 'POST',

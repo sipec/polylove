@@ -1,8 +1,7 @@
-import { unsubscribe } from 'diagnostics_channel'
 import { PrivateUser } from './user'
 import { filterDefined } from './util/array'
 
-type notification_destination_types = 'email' | 'browser' | 'mobile'
+export type notification_destination_types = 'email' | 'browser' | 'mobile'
 export type notification_preference = keyof notification_preferences
 export type notification_preferences = {
   // Manifold.love
@@ -17,8 +16,8 @@ export type notification_preferences = {
   on_new_follow: notification_destination_types[]
 
   // General
-  onboarding_flow: notification_destination_types[]
-  thank_you_for_purchases: notification_destination_types[]
+  onboarding_flow: notification_destination_types[] // unused
+  thank_you_for_purchases: notification_destination_types[] // unused
   opt_out_all: notification_destination_types[]
 }
 
@@ -72,6 +71,6 @@ export const getNotificationDestinationsForUser = (
     sendToMobile:
       destinations.includes('mobile') && !opt_out.includes('mobile'),
     unsubscribeUrl: 'TODO',
-    urlToManageThisNotification: 'TODO',
+    urlToManageThisNotification: '/notifications',
   }
 }

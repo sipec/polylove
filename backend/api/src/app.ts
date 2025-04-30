@@ -50,6 +50,7 @@ import { createPrivateUserMessageChannel } from './create-private-user-message-c
 import { leavePrivateUserMessageChannel } from './leave-private-user-message-channel'
 import { updatePrivateUserMessageChannel } from './update-private-user-message-channel'
 import { getNotifications } from './get-notifications'
+import { updateNotifSettings } from './update-notif-setting'
 
 const allowCorsUnrestricted: RequestHandler = cors({})
 
@@ -119,6 +120,7 @@ const handlers: { [k in APIPath]: APIHandler<k> } = {
   me: getMe,
   'me/private': getCurrentPrivateUser,
   'me/update': updateMe,
+  'update-notif-settings': updateNotifSettings,
   'me/delete': deleteMe,
   'update-lover': updateLover,
   'like-lover': likeLover,

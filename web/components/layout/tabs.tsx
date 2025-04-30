@@ -304,6 +304,3 @@ export function QueryUncontrolledTabs(
     />
   )
 }
-
-// legacy code that didn't know about any other kind of tabs imports this
-export const Tabs = UncontrolledTabs

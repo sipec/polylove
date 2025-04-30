@@ -9,7 +9,7 @@
 - [ ] Grafana
 - [x] Share profile to anyone with link
 - [ ] Relationships
-- [ ] Settings flow
+- [x] Settings flow
 
 ## P2
 

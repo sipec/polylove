@@ -16,6 +16,7 @@ import { UserIcon } from '@heroicons/react/solid'
 import { Tooltip } from 'web/components/widgets/tooltip'
 import { track } from 'web/lib/service/analytics'
 import { shortenNumber } from 'common/util/format'
+import { sortBy } from 'lodash'
 
 export type CompatibilityAnswerSubmitType = Omit<
   rowFor<'love_compatibility_answers'>,
@@ -111,22 +112,6 @@ export function AnswerCompatibilityQuestionContent(props: {
     return null
   }
 
-  const onPrefChoiceClick = (n: number) => {
-    if (answer.pref_choices?.includes(n)) {
-      // If the number is already selected, remove it from the array
-      setAnswer({
-        ...answer,
-        pref_choices: answer.pref_choices.filter((c) => c !== n),
-      })
-    } else {
-      // If the number is not selected, add it to the array
-      setAnswer({
-        ...answer,
-        pref_choices: [...(answer.pref_choices ?? []), n],
-      })
-    }
-  }
-
   const multipleChoiceValid =
     answer.multiple_choice != null && answer.multiple_choice !== -1
 
@@ -172,59 +157,28 @@ export function AnswerCompatibilityQuestionContent(props: {
       >
         <Col className="gap-2">
           <span className="text-ink-500 text-sm">Your answer</span>
-          <RadioGroup
-            className={
-              'border-ink-300 text-ink-400 bg-canvas-0 inline-flex flex-col gap-2 rounded-md border p-1 text-sm shadow-sm'
-            }
+          <SelectAnswer
             value={answer.multiple_choice}
-            onChange={(choice: number) =>
+            setValue={(choice) =>
               setAnswer({ ...answer, multiple_choice: choice })
             }
-          >
-            {Object.entries(compatibilityQuestion.multiple_choice_options)
-              .sort((a, b) => a[1] - b[1])
-              .map(([choiceKey, choice]) => (
-                <RadioGroup.Option
-                  key={choiceKey}
-                  value={choice}
-                  className={({ disabled }) =>
-                    clsx(
-                      disabled
-                        ? 'text-ink-300 aria-checked:bg-ink-300 aria-checked:text-ink-0 cursor-not-allowed'
-                        : 'text-ink-700 hover:bg-ink-50 aria-checked:bg-primary-100 aria-checked:text-primary-900 cursor-pointer',
-                      'ring-primary-500 flex items-center rounded-md p-2 outline-none transition-all focus-visible:ring-2 sm:px-3'
-                    )
-                  }
-                >
-                  <RadioGroup.Label as="span">{choiceKey}</RadioGroup.Label>
-                </RadioGroup.Option>
-              ))}
-          </RadioGroup>
+            options={sortBy(
+              Object.entries(compatibilityQuestion.multiple_choice_options),
+              1
+            ).map(([label]) => label)}
+          />
         </Col>
         <Col className="gap-2">
           <span className="text-ink-500 text-sm">Answers you'll accept</span>
-          <Col
-            className={
-              'border-ink-300 text-ink-400 bg-canvas-0 inline-flex flex-col gap-2 rounded-md border p-1 text-sm shadow-sm'
+          <MultiSelectAnswers
+            values={answer.pref_choices ?? []}
+            setValue={(choice) =>
+              setAnswer({ ...answer, pref_choices: choice })
             }
-          >
-            {Object.entries(compatibilityQuestion.multiple_choice_options)
-              .sort((a, b) => a[1] - b[1])
-              .map(([choiceKey, choice]) => (
-                <button
-                  key={choiceKey}
-                  onClick={() => onPrefChoiceClick(choice)}
-                  className={clsx(
-                    answer.pref_choices?.includes(choice)
-                      ? 'bg-primary-100 text-primary-900'
-                      : 'text-ink-700 hover:bg-ink-50',
-                    'ring-primary-500 flex cursor-pointer items-center rounded-md p-2 text-left outline-none transition-all focus-visible:ring-2 sm:px-3'
-                  )}
-                >
-                  {choiceKey}
-                </button>
-              ))}
-          </Col>
+            options={Object.entries(
+              compatibilityQuestion.multiple_choice_options
+            ).map(([label]) => label)}
+          />
         </Col>
         <Col className="gap-2">
           <span className="text-ink-500 text-sm">Importance</span>
@@ -304,6 +258,78 @@ export function AnswerCompatibilityQuestionContent(props: {
           {isLastQuestion ? 'Finish' : 'Next'}
         </Button>
       </Row>
+    </Col>
+  )
+}
+
+export const SelectAnswer = (props: {
+  value: number
+  setValue: (value: number) => void
+  options: string[]
+}) => {
+  const { value, setValue, options } = props
+  return (
+    <RadioGroup
+      className={
+        'border-ink-300 text-ink-400 bg-canvas-0 inline-flex flex-col gap-2 rounded-md border p-1 text-sm shadow-sm'
+      }
+      value={value}
+      onChange={setValue}
+    >
+      {options.map((label, i) => (
+        <RadioGroup.Option
+          key={i}
+          value={i}
+          className={({ disabled }) =>
+            clsx(
+              disabled
+                ? 'text-ink-300 aria-checked:bg-ink-300 aria-checked:text-ink-0 cursor-not-allowed'
+                : 'text-ink-700 hover:bg-ink-50 aria-checked:bg-primary-100 aria-checked:text-primary-900 aria-checked:hover:bg-primary-50 cursor-pointer',
+              'ring-primary-500 flex items-center rounded-md p-2 outline-none transition-all focus-visible:ring-2 sm:px-3'
+            )
+          }
+        >
+          {label}
+        </RadioGroup.Option>
+      ))}
+    </RadioGroup>
+  )
+}
+
+// TODO: redo with checkbox semantics
+export const MultiSelectAnswers = (props: {
+  values: number[]
+  setValue: (value: number[]) => void
+  options: string[]
+}) => {
+  const { values, setValue, options } = props
+
+  return (
+    <Col
+      className={
+        'border-ink-300 text-ink-400 bg-canvas-0 inline-flex flex-col gap-2 rounded-md border p-1 text-sm shadow-sm'
+      }
+    >
+      {options.map((label, i) => (
+        <button
+          key={i}
+          className={clsx(
+            values.includes(i)
+              ? 'text-primary-700 bg-primary-100 hover:bg-primary-50'
+              : 'text-ink-700 hover:bg-ink-50',
+            'ring-primary-500 flex cursor-pointer items-center rounded-md p-2 outline-none transition-all focus-visible:ring-2 disabled:cursor-not-allowed sm:px-3'
+          )}
+          onClick={() =>
+            setValue(
+              values.includes(i)
+                ? values.filter((v) => v !== i)
+                : [...values, i]
+            )
+          }
+        >
+          {label}
+        </button>
+      ))}
     </Col>
   )
 }
