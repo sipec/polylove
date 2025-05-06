@@ -1,7 +1,10 @@
 import { RadioGroup } from '@headlessui/react'
+import { UserIcon } from '@heroicons/react/solid'
 import clsx from 'clsx'
 import { Row as rowFor, run } from 'common/supabase/utils'
 import { User } from 'common/user'
+import { shortenNumber } from 'common/util/format'
+import { sortBy } from 'lodash'
 import { useState } from 'react'
 import { Button } from 'web/components/buttons/button'
 import { Col } from 'web/components/layout/col'
@@ -9,14 +12,11 @@ import { SCROLLABLE_MODAL_CLASS } from 'web/components/layout/modal'
 import { Row } from 'web/components/layout/row'
 import { ExpandingInput } from 'web/components/widgets/expanding-input'
 import { RadioToggleGroup } from 'web/components/widgets/radio-toggle-group'
+import { Tooltip } from 'web/components/widgets/tooltip'
+import { QuestionWithCountType } from 'web/hooks/use-questions'
+import { track } from 'web/lib/service/analytics'
 import { db } from 'web/lib/supabase/db'
 import { filterKeys } from '../questions-form'
-import { QuestionWithCountType } from 'web/hooks/use-questions'
-import { UserIcon } from '@heroicons/react/solid'
-import { Tooltip } from 'web/components/widgets/tooltip'
-import { track } from 'web/lib/service/analytics'
-import { shortenNumber } from 'common/util/format'
-import { sortBy } from 'lodash'
 
 export type CompatibilityAnswerSubmitType = Omit<
   rowFor<'love_compatibility_answers'>,
@@ -112,6 +112,11 @@ export function AnswerCompatibilityQuestionContent(props: {
     return null
   }
 
+  const optionOrder = sortBy(
+    Object.entries(compatibilityQuestion.multiple_choice_options),
+    1
+  ).map(([label]) => label)
+
   const multipleChoiceValid =
     answer.multiple_choice != null && answer.multiple_choice !== -1
 
@@ -162,10 +167,7 @@ export function AnswerCompatibilityQuestionContent(props: {
             setValue={(choice) =>
               setAnswer({ ...answer, multiple_choice: choice })
             }
-            options={sortBy(
-              Object.entries(compatibilityQuestion.multiple_choice_options),
-              1
-            ).map(([label]) => label)}
+            options={optionOrder}
           />
         </Col>
         <Col className="gap-2">
@@ -175,9 +177,7 @@ export function AnswerCompatibilityQuestionContent(props: {
             setValue={(choice) =>
               setAnswer({ ...answer, pref_choices: choice })
             }
-            options={Object.entries(
-              compatibilityQuestion.multiple_choice_options
-            ).map(([label]) => label)}
+            options={optionOrder}
           />
         </Col>
         <Col className="gap-2">
