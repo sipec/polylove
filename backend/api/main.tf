@@ -33,6 +33,57 @@ provider "google" {
   zone    = local.zone
 }
 
+# Service account for the API instances
+resource "google_service_account" "api_service_account" {
+  account_id   = "${local.service_name}-sa"
+  display_name = "Service Account for ${local.service_name}"
+  description  = "Used by the API service instances"
+}
+
+# Grant minimal required permissions
+resource "google_project_iam_member" "api_sa_roles" {
+  for_each = toset([
+    "roles/secretmanager.secretAccessor",  # To access secrets
+    "roles/monitoring.metricWriter",       # To write metrics
+    "roles/logging.logWriter",             # To write logs
+    "roles/storage.objectViewer",          # To read from storage
+  ])
+  
+  project = local.project
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.api_service_account.email}"
+}
+
+# Service account for GitHub Actions
+resource "google_service_account" "github_actions" {
+  account_id   = "github-actions"
+  display_name = "GitHub Actions"
+  description  = "Used by GitHub Actions for CI/CD"
+}
+
+# Grant required permissions to GitHub Actions SA
+resource "google_project_iam_member" "github_actions_roles" {
+  for_each = toset([
+    "roles/compute.admin",           # To manage compute resources
+    "roles/artifactregistry.writer", # To push Docker images
+  ])
+  
+  project = local.project
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Create a service account key for GitHub Actions
+resource "google_service_account_key" "github_actions_key" {
+  service_account_id = google_service_account.github_actions.name
+}
+
+# Output the key (this will be sensitive)
+output "github_actions_key" {
+  value     = google_service_account_key.github_actions_key.private_key
+  sensitive = true
+}
+
 # Firebase Storage Buckets
 # Note you still have to deploy the rules: `firebase deploy --only storage`
 resource "google_storage_bucket" "public_storage" {
@@ -86,7 +137,8 @@ resource "google_compute_instance_template" "api_template" {
   }
 
   service_account {
-    scopes = ["cloud-platform"]
+    email  = google_service_account.api_service_account.email
+    scopes = ["cloud-platform"]  # We can be more restrictive here if needed
   }
   
   metadata = {
