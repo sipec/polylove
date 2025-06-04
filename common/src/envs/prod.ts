@@ -47,7 +47,7 @@ export const PROD_CONFIG: EnvConfig = {
     messagingSenderId: '226356461961',
     appId: '1:226356461961:web:ff99f7f74861454e146158',
   },
-  apiEndpoint: 'api.manifold.love',
+  apiEndpoint: 'api.poly.love',
   cloudRunId: 'nggbo3neva',
   cloudRunRegion: 'uc',
 

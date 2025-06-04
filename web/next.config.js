@@ -41,6 +41,7 @@ module.exports = {
     remotePatterns: [
       { hostname: 'manifold.markets' },
       { hostname: 'manifold.love' },
+      { hostname: 'poly.love' },
       { hostname: 'lh3.googleusercontent.com' },
       { hostname: 'i.imgur.com' },
       { hostname: 'firebasestorage.googleapis.com' },
