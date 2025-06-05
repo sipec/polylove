@@ -39,9 +39,9 @@ resource "google_storage_bucket" "public_storage" {
   name          = "polylove.firebasestorage.app"
   location      = "US-WEST1"
   force_destroy = false
-  
+
   uniform_bucket_level_access = true
-  
+
   cors {
     origin          = ["*"]
     method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
@@ -57,10 +57,10 @@ resource "google_compute_global_address" "api_lb_ip" {
 }
 
 resource "google_compute_managed_ssl_certificate" "api_cert" {
-  name = "api-lb-cert"
-  
+  name = "api-lb-cert-2"
+
   managed {
-    domains = ["api.manifold.love", "api.poly.love", ]
+    domains = ["api.poly.love"]
   }
 }
 
@@ -70,25 +70,25 @@ resource "google_compute_instance_template" "api_template" {
   machine_type = local.machine_type
 
   tags = ["lb-health-check"]
-  
+
   disk {
     source_image = "cos-cloud/cos-stable" # Container-Optimized OS
     auto_delete  = true
     boot         = true
   }
-  
+
   network_interface {
     network = "default"
     subnetwork = "default"
     access_config {
       network_tier = "PREMIUM"
-    } 
+    }
   }
 
   service_account {
     scopes = ["cloud-platform"]
   }
-  
+
   metadata = {
     gce-container-declaration = <<EOF
 spec:
@@ -103,7 +103,7 @@ spec:
         - containerPort: 80
 EOF
   }
-  
+
   lifecycle {
     create_before_destroy = true
   }
@@ -115,12 +115,12 @@ resource "google_compute_region_instance_group_manager" "api_group" {
   base_instance_name = "${local.service_name}-group"
   region               = local.region
   target_size        = 1
-  
+
   version {
     instance_template = google_compute_instance_template.api_template.id
     name = "primary"
   }
-  
+
   update_policy {
     type                  = "PROACTIVE"
     minimal_action        = "REPLACE"
@@ -157,9 +157,9 @@ resource "google_compute_backend_service" "api_backend" {
   protocol    = "HTTP"
   port_name   = "http"
   timeout_sec = 30
-  
+
   health_checks = [google_compute_health_check.api_health_check.id]
-  
+
   backend {
     group = google_compute_region_instance_group_manager.api_group.instance_group
   }
@@ -203,7 +203,7 @@ resource "google_compute_global_forwarding_rule" "api_https_forwarding_rule" {
 # HTTP-to-HTTPS redirect
 resource "google_compute_url_map" "api_http_redirect" {
   name = "${local.service_name}-http-redirect"
-  
+
   default_url_redirect {
     https_redirect         = true
     redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
@@ -229,12 +229,12 @@ resource "google_compute_global_forwarding_rule" "api_http_forwarding_rule" {
 resource "google_compute_firewall" "allow_health_check" {
   name    = "allow-health-check-${local.service_name}"
   network = "default"
-  
+
   allow {
     protocol = "tcp"
     ports    = ["80"]
   }
-  
+
   source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
   target_tags   = ["lb-health-check"]
 }
@@ -244,12 +244,12 @@ resource "google_compute_firewall" "default_allow_https" {
   network     = "default"
   priority    = 1000
   direction   = "INGRESS"
-  
+
   allow {
     protocol = "tcp"
     ports    = ["80", "443"] # ["443", "8090-8099"]
   }
-  
+
   source_ranges = ["0.0.0.0/0"]
 }
 
@@ -258,12 +258,12 @@ resource "google_compute_firewall" "default_allow_ssh" {
   network     = "default"
   priority    = 65534
   direction   = "INGRESS"
-  
+
   allow {
     protocol = "tcp"
     ports    = ["22"]
   }
-  
+
   source_ranges = ["0.0.0.0/0"]
 }
 
@@ -272,21 +272,21 @@ resource "google_compute_firewall" "default_allow_internal" {
   network     = "default"
   priority    = 65534
   direction   = "INGRESS"
-  
+
   allow {
     protocol = "tcp"
     ports    = ["0-65535"]
   }
-  
+
   allow {
     protocol = "udp"
     ports    = ["0-65535"]
   }
-  
+
   allow {
     protocol = "icmp"
   }
-  
+
   source_ranges = ["10.128.0.0/9"]
 }
 
@@ -296,10 +296,10 @@ resource "google_compute_firewall" "default_allow_icmp" {
   network     = "default"
   priority    = 65534
   direction   = "INGRESS"
-  
+
   allow {
     protocol = "icmp"
   }
-  
+
   source_ranges = ["0.0.0.0/0"]
 }
