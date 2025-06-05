@@ -1,3 +1,4 @@
+import { ENV_CONFIG } from 'common/envs/constants'
 import { LovePage } from 'web/components/love-page'
 import { SEO } from 'web/components/SEO'
 import { CopyLinkRow } from 'web/components/buttons/copy-link-button'
@@ -10,8 +11,8 @@ export default function ReferralsPage() {
   const user = useUser()
 
   const url = user
-    ? `https://manifold.love/?referrer=${user.username}`
-    : 'https://manifold.love'
+    ? `https://${ENV_CONFIG.domain}/?referrer=${user.username}`
+    : `https://${ENV_CONFIG.domain}/`
 
   return (
     <LovePage trackPageView={'love referrals'} className="items-center">

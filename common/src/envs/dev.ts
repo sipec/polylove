@@ -5,7 +5,6 @@ import { EnvConfig, PROD_CONFIG } from './prod'
 export const DEV_CONFIG: EnvConfig = {
   ...PROD_CONFIG,
   domain: 'dev.manifold.love',
-  domainAlternate: 'dev.manifoldlove.com',
   firebaseConfig: {
     apiKey: 'AIzaSyB_62i1KZ1_gk5vIlefi96G6lJ5dB0tXOo',
     authDomain: 'polylove-57eab.firebaseapp.com',

@@ -1,6 +1,5 @@
 export type EnvConfig = {
   domain: string
-  domainAlternate: string
   firebaseConfig: FirebaseConfig
   supabaseInstanceId: string
   supabaseAnonKey: string
@@ -32,7 +31,6 @@ type FirebaseConfig = {
 
 export const PROD_CONFIG: EnvConfig = {
   domain: 'manifold.love',
-  domainAlternate: 'manifoldlove.com',
   posthogKey: 'phc_7g8JXcONJQtsVEqOcSw4h2RzEEz5W40rD2WIjHC129h',
   supabaseInstanceId: 'lltoaluoavlzrgjplire',
   supabaseAnonKey:
