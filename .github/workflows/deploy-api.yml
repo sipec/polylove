@@ -1,0 +1,89 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main, test]
+    paths:
+      - 'backend/api/**'
+      - 'backend/shared/**'
+      - 'backend/email/**'
+      - 'common/**'
+      - '.github/workflows/deploy-api.yml'
+
+env:
+  REGION: us-west1
+  ZONE: us-west1-b
+  PROJECT_ID: polylove
+  SERVICE_NAME: api
+
+jobs:
+  deploy:
+    name: Deploy API
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '19'
+          cache: 'yarn'
+
+      # This caches node_modules based on yarn.lock hash
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/yarn
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies
+        working-directory: backend/api
+        run: yarn install --frozen-lockfile
+
+      - name: Build API
+        working-directory: backend/api
+        run: yarn build
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker for GCP
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Set deployment variables
+        run: |
+          echo "IMAGE_TAG=$(date +%s)-${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "IMAGE_URL=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/builds/${{ env.SERVICE_NAME }}:${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        working-directory: backend/api
+        run: |
+          docker build . --tag ${{ env.IMAGE_URL }} --platform linux/amd64
+          docker push ${{ env.IMAGE_URL }}
+
+      - name: Install OpenTofu
+        run: |
+          wget https://github.com/opentofu/opentofu/releases/download/v1.6.0/tofu_1.6.0_linux_amd64.zip
+          unzip tofu_1.6.0_linux_amd64.zip
+          sudo mv tofu /usr/local/bin/
+          tofu --version
+
+      - name: Deploy with OpenTofu
+        working-directory: backend/api
+        env:
+          TF_VAR_image_url: ${{ env.IMAGE_URL }}
+          TF_VAR_env: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        run: |
+          tofu init
+          tofu apply -auto-approve
