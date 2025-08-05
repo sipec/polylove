@@ -86,7 +86,7 @@ export class APIRealtimeClient {
       // to connect, so we need to turn on our reconnect in that case
       this.waitAndReconnect()
     }
-    this.ws.onopen = (_ev) => {
+    this.ws.onopen = () => {
       if (VERBOSE_LOGGING) {
         console.info('API websocket opened.')
       }
