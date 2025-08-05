@@ -407,7 +407,7 @@ function CompatibilityAnswerBlock(props: {
       <Row className="bg-canvas-50 w-fit gap-1 rounded px-2 py-1 text-sm">
         {answerText}
       </Row>
-      <Row className="px-2 -mt-4">
+      <Row className="-mt-4 px-2">
         {answer.explanation && (
           <Linkify className="" text={answer.explanation} />
         )}
@@ -419,7 +419,7 @@ function CompatibilityAnswerBlock(props: {
               ? 'Acceptable'
               : 'Also acceptable'}
           </div>
-          <Row className="flex-wrap gap-2 -mt-2">
+          <Row className="-mt-2 flex-wrap gap-2">
             {distinctPreferredAnswersText.map((text) => (
               <Row
                 key={text}
@@ -432,7 +432,6 @@ function CompatibilityAnswerBlock(props: {
         </Col>
       )}
       <Col>
-
         {comparedLover && (
           <Row className="w-full justify-end sm:hidden">
             <CompatibilityDisplay
