@@ -1,6 +1,6 @@
 import { Row, run, SupabaseClient } from 'common/supabase/utils'
 import { User } from 'common/user'
-import { Database } from 'common/supabase/schema'
+//import { Database } from 'common/supabase/schema'
 
 export type LoverRow = Row<'lovers'>
 export type Lover = LoverRow & { user: User }

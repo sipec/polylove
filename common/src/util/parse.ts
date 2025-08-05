@@ -2,7 +2,7 @@ import {
   getText,
   getSchema,
   getTextSerializersFromSchema,
-  Node,
+  //Node,
   JSONContent,
 } from '@tiptap/core'
 import { Node as ProseMirrorNode } from '@tiptap/pm/model'
