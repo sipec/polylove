@@ -16,6 +16,7 @@ export default {
       'common/*': ['./src/*', '../lib/*'],
     },
     resolveJsonModule: true,
+    esModuleInterop: true,
   },
   include: ['src/**/*.ts'],
 }
