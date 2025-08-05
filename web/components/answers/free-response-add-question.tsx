@@ -22,7 +22,7 @@ export function AddQuestionButton(props: {
   user: User
   refreshAnswers: () => void
 }) {
-  const { isFirstQuestion, questions, user, refreshAnswers } = props
+  const { /*isFirstQuestion,*/ questions, user, refreshAnswers } = props
   const [openModal, setOpenModal] = usePersistentInMemoryState(
     false,
     `add-question-${user.id}`

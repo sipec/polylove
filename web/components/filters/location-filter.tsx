@@ -28,7 +28,7 @@ export function LocationFilterText(props: {
   radius: number
   highlightedClass?: string
 }) {
-  const { location, youLover, radius, highlightedClass } = props
+  const { location, /*youLover,*/ radius, highlightedClass } = props
 
   if (!location) {
     return (
