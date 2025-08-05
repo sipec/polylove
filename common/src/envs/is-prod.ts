@@ -1,4 +1,4 @@
-import { admin } from 'firebase-admin'
+import admin from 'firebase-admin'
 
 export const isProd = () => {
   // For cloud run API service
