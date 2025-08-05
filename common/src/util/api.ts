@@ -15,7 +15,7 @@ export const typedAPICall = <P extends APIPath>(
 ) => {
   // parse any params that should part of the path (like market/:id)
   const newParams: any = {}
-  let url = getApiUrl(path)
+  let url: string = getApiUrl(String(path)); // `path` could be a string or number, we don't know
   forEach(params, (v, k) => {
     if (url.includes(`:${k}`)) {
       url = url.replace(`:${k}`, v + '')
