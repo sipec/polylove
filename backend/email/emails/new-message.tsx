@@ -15,7 +15,7 @@ import { type LoverRow } from 'common/love/lover'
 import {
   jamesLover,
   jamesUser,
-  sinclairLover,
+  //sinclairLover,
   sinclairUser,
 } from './functions/mock'
 import { DOMAIN } from 'common/envs/constants'

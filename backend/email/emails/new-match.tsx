@@ -159,9 +159,9 @@ const footerText = {
   fontFamily: 'Ubuntu, Helvetica, Arial, sans-serif',
 }
 
-const footerLink = {
+/*const footerLink = {
   color: 'inherit',
   textDecoration: 'none',
-}
+}*/
 
 export default NewMatchEmail
