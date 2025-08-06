@@ -25,7 +25,7 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
       - name: Run prettier
         run: yarn prettier . --check --ignore-unknown
   ESLint:
@@ -40,7 +40,7 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
       - name: Run ESLint
         run: yarn eslint .
   typecheck:
@@ -55,6 +55,6 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
       - name: Compile with tsc
         run: yarn tsc --noEmit --strict
