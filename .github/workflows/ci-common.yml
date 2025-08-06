@@ -1,0 +1,66 @@
+name: CI checks for common workspace
+
+on:
+  pull_request:
+    branches: ['main']
+    paths: ['common/**/*', '!**/*.{txt,md}']
+  push:
+    branches: ['main']
+    paths: ['common/**/*', '!**/*.{txt,md}']
+
+defaults:
+  run:
+    working-directory: 'common'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run tests
+        run: yarn test
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run ESLint
+        run: yarn eslint .
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run Prettier
+        run: yarn prettier . --check --ignore-unknown
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run tsc to check types
+        run: yarn tsc . --noEmit --strict
