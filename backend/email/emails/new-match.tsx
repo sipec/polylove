@@ -23,15 +23,12 @@ interface NewMatchEmailProps {
   unsubscribeUrl: string
 }
 
-export const NewMatchEmail = ({
-  onUser,
-  matchedWithUser,
-  matchedLover,
-  unsubscribeUrl,
-}: NewMatchEmailProps) => {
-  const name = onUser.name.split(' ')[0]
-  const userImgSrc = getLoveOgImageUrl(matchedWithUser, matchedLover)
-  const userUrl = `https://${DOMAIN}/${matchedWithUser.username}`
+export const NewMatchEmail = (newMatchEmailProps: NewMatchEmailProps) => {
+  const name: string = newMatchEmailProps.onUser.name.split(' ')[0]
+  const matchedWithUser: User = newMatchEmailProps.matchedWithUser
+  const matchedLover: LoverRow = newMatchEmailProps.matchedLover
+  const userImgSrc: string = getLoveOgImageUrl(matchedWithUser, matchedLover)
+  const userUrl: string = `https://${DOMAIN}/${matchedWithUser.username}`
 
   return (
     <Html>

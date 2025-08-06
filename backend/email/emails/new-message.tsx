@@ -29,17 +29,15 @@ interface NewMessageEmailProps {
   unsubscribeUrl: string
 }
 
-export const NewMessageEmail = ({
-  fromUser,
-  fromUserLover,
-  toUser,
-  channelId,
-  unsubscribeUrl,
-}: NewMessageEmailProps) => {
-  const name = toUser.name.split(' ')[0]
-  const creatorName = fromUser.name
-  const messagesUrl = `https://${DOMAIN}/messages/${channelId}`
-  const userImgSrc = getLoveOgImageUrl(fromUser, fromUserLover)
+export const NewMessageEmail = (newMessageEmailProps: NewMessageEmailProps) => {
+  const name: string = newMessageEmailProps.toUser.name.split(' ')[0]
+  const creatorName: string = newMessageEmailProps.fromUser.name
+  const channelId: number = newMessageEmailProps.channelId
+  const messagesUrl: string = `https://${DOMAIN}/messages/${channelId}`
+  const userImgSrc: string = getLoveOgImageUrl(
+    newMessageEmailProps.fromUser,
+    newMessageEmailProps.fromUserLover
+  )
 
   return (
     <Html>

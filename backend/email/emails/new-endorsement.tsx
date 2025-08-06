@@ -23,15 +23,14 @@ interface NewEndorsementEmailProps {
   unsubscribeUrl: string
 }
 
-export const NewEndorsementEmail = ({
-  fromUser,
-  onUser,
-  endorsementText,
-  unsubscribeUrl,
-}: NewEndorsementEmailProps) => {
-  const name = onUser.name.split(' ')[0]
+export const NewEndorsementEmail = (
+  newEndorsementEmailProps: NewEndorsementEmailProps
+) => {
+  const onUser: User = newEndorsementEmailProps.onUser
+  const fromUser: User = newEndorsementEmailProps.fromUser
+  const name: string = onUser.name.split(' ')[0]
 
-  const endorsementUrl = `https://${DOMAIN}/${onUser.username}`
+  const endorsementUrl: string = `https://${DOMAIN}/${newEndorsementEmailProps.onUser.username}`
 
   return (
     <Html>
@@ -65,7 +64,9 @@ export const NewEndorsementEmail = ({
                   />
                 </Column>
                 <Column>
-                  <Text style={endorsementTextStyle}>"{endorsementText}"</Text>
+                  <Text style={endorsementTextStyle}>
+                    "{newEndorsementEmailProps.endorsementText}"
+                  </Text>
                 </Column>
               </Row>
 
