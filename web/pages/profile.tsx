@@ -30,7 +30,10 @@ function ProfilePageInner(props: { user: User; lover: Lover }) {
     user,
   })
 
-  const setLoverState = <K extends Column<'lovers'>> (key: K, value: LoverRow[K] | undefined) => {
+  const setLoverState = <K extends Column<'lovers'>>(
+    key: K,
+    value: LoverRow[K] | undefined
+  ) => {
     setLover((prevState) => ({ ...prevState, [key]: value }))
   }
 

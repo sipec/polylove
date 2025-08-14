@@ -1,0 +1,60 @@
+name: CI checks for web workspace
+
+on:
+  push:
+    branches: ['main']
+    paths: ['web/**/*', '!**/*.{txt,md}']
+  pull_request:
+    branches: ['main']
+    paths: ['web/**/*', '!**/*.{txt,md}']
+
+defaults:
+  run:
+    working-directory: 'web'
+
+jobs:
+  Prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*' # TODO: determine version used in production server
+          cache: yarn
+          cache-dependency-path: 'yarn.lock'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Run prettier
+        run: yarn prettier . --check --ignore-unknown
+  ESLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: yarn
+          cache-dependency-path: 'yarn.lock'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Run ESLint
+        run: yarn eslint .
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: yarn
+          cache-dependency-path: 'yarn.lock'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Compile with tsc
+        run: yarn tsc --noEmit --strict

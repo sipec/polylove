@@ -13,8 +13,9 @@ const colorClasses = {
 
 export type ColorType = keyof typeof colorClasses
 
-export function ChoicesToggleGroup<T extends Record<string, string | number | boolean>>(
-  props: {
+export function ChoicesToggleGroup<
+  T extends Record<string, string | number | boolean>
+>(props: {
   currentChoice: T[keyof T] | undefined
   choicesMap: T
   disabled?: boolean

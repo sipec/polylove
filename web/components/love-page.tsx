@@ -45,7 +45,7 @@ export function LovePage(props: {
   const bottomNavOptions = user
     ? getBottomNavigation(user, lover)
     : signedOutNavigation()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  //const [isModalOpen, setIsModalOpen] = useState(false)
   const desktopSidebarOptions = getDesktopNav(user)
 
   const mobileSidebarOptions = user
@@ -55,7 +55,7 @@ export function LovePage(props: {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   trackPageView && useTracking(`view love ${trackPageView}`, trackPageProps)
   useOnline()
-  const [isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false)
+  const [, /*isAddFundsModalOpen*/ setIsAddFundsModalOpen] = useState(false)
 
   return (
     <>

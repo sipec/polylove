@@ -38,11 +38,11 @@ export const BrowseMatchesButton = (props: {
     placeholder: 'Write your introduction...',
   })
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting /*, setIsSubmitting*/] = useState(false)
 
   const submit = async () => {
-    const introduction =
-      (editor?.getCharacterCount() ?? 0) > 0 ? editor?.getJSON() : undefined
+    //const introduction =
+    ;(editor?.getCharacterCount() ?? 0) > 0 ? editor?.getJSON() : undefined
 
     // setIsSubmitting(true)
     // const result = await createMatch({
@@ -107,14 +107,14 @@ const BrowseMatchesDialog = (props: {
     lover,
     potentialLovers,
     compatibilityScores,
-    isSubmitting,
+    //isSubmitting,
     setOpen,
-    submit,
-    editor,
+    //submit,
+    //editor,
   } = props
 
   const [query, setQuery] = useState('')
-  const [error, setError] = useState<string | undefined>(undefined)
+  //const [error, setError] = useState<string | undefined>(undefined)
 
   const currentUser = useUser()
   const isCurrentUser = currentUser?.id === lover.user_id
