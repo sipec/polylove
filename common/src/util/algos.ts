@@ -5,7 +5,7 @@ export function binarySearch(
 ) {
   let mid = 0
   let i = 0
-  while (true) {
+  while (i <= 100000) {
     mid = min + (max - min) / 2
 
     // Break once we've reached max precision.

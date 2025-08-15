@@ -36,9 +36,9 @@ type APIGenericSchema = {
   cache?: string
 }
 
-let _apiTypeCheck: { [x: string]: APIGenericSchema }
+type apiTypeCheck = { [x: string]: APIGenericSchema }
 
-export const API = (_apiTypeCheck = {
+export const API: apiTypeCheck = {
   health: {
     method: 'GET',
     authed: false,
@@ -476,7 +476,7 @@ export const API = (_apiTypeCheck = {
       radius: z.number().min(1).max(500),
     }),
   },
-} as const)
+} as const
 
 export type APIPath = keyof typeof API
 export type APISchema<N extends APIPath> = (typeof API)[N]
