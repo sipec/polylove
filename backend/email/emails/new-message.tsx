@@ -15,7 +15,7 @@ import { type LoverRow } from 'common/love/lover'
 import {
   jamesLover,
   jamesUser,
-  sinclairLover,
+  //sinclairLover,
   sinclairUser,
 } from './functions/mock'
 import { DOMAIN } from 'common/envs/constants'
@@ -26,20 +26,18 @@ interface NewMessageEmailProps {
   fromUserLover: LoverRow
   toUser: User
   channelId: number
-  unsubscribeUrl: string
+  //unsubscribeUrl: string
 }
 
-export const NewMessageEmail = ({
-  fromUser,
-  fromUserLover,
-  toUser,
-  channelId,
-  unsubscribeUrl,
-}: NewMessageEmailProps) => {
-  const name = toUser.name.split(' ')[0]
-  const creatorName = fromUser.name
-  const messagesUrl = `https://${DOMAIN}/messages/${channelId}`
-  const userImgSrc = getLoveOgImageUrl(fromUser, fromUserLover)
+export const NewMessageEmail = (newMessageEmailProps: NewMessageEmailProps) => {
+  const name: string = newMessageEmailProps.toUser.name.split(' ')[0]
+  const creatorName: string = newMessageEmailProps.fromUser.name
+  const channelId: number = newMessageEmailProps.channelId
+  const messagesUrl: string = `https://${DOMAIN}/messages/${channelId}`
+  const userImgSrc: string = getLoveOgImageUrl(
+    newMessageEmailProps.fromUser,
+    newMessageEmailProps.fromUserLover
+  )
 
   return (
     <Html>
@@ -98,7 +96,7 @@ NewMessageEmail.PreviewProps = {
   fromUserLover: jamesLover,
   toUser: sinclairUser,
   channelId: 1,
-  unsubscribeUrl: 'https://manifold.love/unsubscribe',
+  //unsubscribeUrl: 'https://manifold.love/unsubscribe',
 } as NewMessageEmailProps
 
 const main = {

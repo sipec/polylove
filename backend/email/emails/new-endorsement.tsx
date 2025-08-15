@@ -6,7 +6,7 @@ import {
   Head,
   Html,
   Img,
-  Link,
+  //Link,
   Preview,
   Row,
   Section,
@@ -20,18 +20,17 @@ interface NewEndorsementEmailProps {
   fromUser: User
   onUser: User
   endorsementText: string
-  unsubscribeUrl: string
+  //unsubscribeUrl: string
 }
 
-export const NewEndorsementEmail = ({
-  fromUser,
-  onUser,
-  endorsementText,
-  unsubscribeUrl,
-}: NewEndorsementEmailProps) => {
-  const name = onUser.name.split(' ')[0]
+export const NewEndorsementEmail = (
+  newEndorsementEmailProps: NewEndorsementEmailProps
+) => {
+  const onUser: User = newEndorsementEmailProps.onUser
+  const fromUser: User = newEndorsementEmailProps.fromUser
+  const name: string = onUser.name.split(' ')[0]
 
-  const endorsementUrl = `https://${DOMAIN}/${onUser.username}`
+  const endorsementUrl: string = `https://${DOMAIN}/${newEndorsementEmailProps.onUser.username}`
 
   return (
     <Html>
@@ -65,7 +64,9 @@ export const NewEndorsementEmail = ({
                   />
                 </Column>
                 <Column>
-                  <Text style={endorsementTextStyle}>"{endorsementText}"</Text>
+                  <Text style={endorsementTextStyle}>
+                    "{newEndorsementEmailProps.endorsementText}"
+                  </Text>
                 </Column>
               </Row>
 
@@ -172,9 +173,9 @@ const footerText = {
   fontFamily: 'Ubuntu, Helvetica, Arial, sans-serif',
 }
 
-const footerLink = {
+/*const footerLink = {
   color: 'inherit',
   textDecoration: 'none',
-}
+}*/
 
 export default NewEndorsementEmail

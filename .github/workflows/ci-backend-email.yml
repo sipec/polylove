@@ -1,0 +1,50 @@
+name: CI checks for backend/email workspace
+
+on:
+  pull_request:
+    branches: ['main']
+    paths: ['backend/email/**/*', '!**/*.{txt,md,png}']
+  push:
+    branches: ['main']
+    paths: ['backend/email/**/*', '!**/*.{txt,md,png}']
+
+defaults:
+  run:
+    working-directory: backend/email
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run ESLint
+        run: yarn eslint .
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run prettier
+        run: yarn prettier . --check --ignore-unknown
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Use tsc to build
+        run: yarn tsc -b
+      - name: Use tsc to typecheck
+        run: yarn tsc --noEmit --strict

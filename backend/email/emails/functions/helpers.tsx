@@ -13,10 +13,8 @@ export const sendNewMatchEmail = async (
   privateUser: PrivateUser,
   matchedWithUser: User
 ) => {
-  const { sendToEmail, unsubscribeUrl } = getNotificationDestinationsForUser(
-    privateUser,
-    'new_match'
-  )
+  const { sendToEmail /*, unsubscribeUrl*/ } =
+    getNotificationDestinationsForUser(privateUser, 'new_match')
   if (!privateUser.email || !sendToEmail) return
   const lover = await getLover(privateUser.id)
   if (!lover) return
@@ -30,7 +28,7 @@ export const sendNewMatchEmail = async (
         onUser={lover.user}
         matchedWithUser={matchedWithUser}
         matchedLover={lover}
-        unsubscribeUrl={unsubscribeUrl}
+        /*unsubscribeUrl={unsubscribeUrl}*/
       />
     ),
   })
@@ -42,10 +40,8 @@ export const sendNewMessageEmail = async (
   toUser: User,
   channelId: number
 ) => {
-  const { sendToEmail, unsubscribeUrl } = getNotificationDestinationsForUser(
-    privateUser,
-    'new_message'
-  )
+  const { sendToEmail /*, unsubscribeUrl*/ } =
+    getNotificationDestinationsForUser(privateUser, 'new_message')
   if (!privateUser.email || !sendToEmail) return
 
   const lover = await getLover(fromUser.id)
@@ -65,7 +61,7 @@ export const sendNewMessageEmail = async (
         fromUserLover={lover}
         toUser={toUser}
         channelId={channelId}
-        unsubscribeUrl={unsubscribeUrl}
+        /*unsubscribeUrl={unsubscribeUrl}*/
       />
     ),
   })
@@ -77,10 +73,8 @@ export const sendNewEndorsementEmail = async (
   onUser: User,
   text: string
 ) => {
-  const { sendToEmail, unsubscribeUrl } = getNotificationDestinationsForUser(
-    privateUser,
-    'new_endorsement'
-  )
+  const { sendToEmail /*, unsubscribeUrl*/ } =
+    getNotificationDestinationsForUser(privateUser, 'new_endorsement')
   if (!privateUser.email || !sendToEmail) return
 
   return await sendEmail({
@@ -92,7 +86,7 @@ export const sendNewEndorsementEmail = async (
         fromUser={fromUser}
         onUser={onUser}
         endorsementText={text}
-        unsubscribeUrl={unsubscribeUrl}
+        /*unsubscribeUrl={unsubscribeUrl}*/
       />
     ),
   })
