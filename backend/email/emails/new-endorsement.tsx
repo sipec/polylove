@@ -20,7 +20,7 @@ interface NewEndorsementEmailProps {
   fromUser: User
   onUser: User
   endorsementText: string
-  unsubscribeUrl: string
+  //unsubscribeUrl: string
 }
 
 export const NewEndorsementEmail = (

@@ -20,7 +20,7 @@ interface NewMatchEmailProps {
   onUser: User
   matchedWithUser: User
   matchedLover: LoverRow
-  unsubscribeUrl: string
+  //unsubscribeUrl: string
 }
 
 export const NewMatchEmail = (newMatchEmailProps: NewMatchEmailProps) => {

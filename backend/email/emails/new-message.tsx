@@ -26,7 +26,7 @@ interface NewMessageEmailProps {
   fromUserLover: LoverRow
   toUser: User
   channelId: number
-  unsubscribeUrl: string
+  //unsubscribeUrl: string
 }
 
 export const NewMessageEmail = (newMessageEmailProps: NewMessageEmailProps) => {
@@ -96,7 +96,7 @@ NewMessageEmail.PreviewProps = {
   fromUserLover: jamesLover,
   toUser: sinclairUser,
   channelId: 1,
-  unsubscribeUrl: 'https://manifold.love/unsubscribe',
+  //unsubscribeUrl: 'https://manifold.love/unsubscribe',
 } as NewMessageEmailProps
 
 const main = {
